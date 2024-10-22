@@ -1,0 +1,43 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\allowdisplaybreaks[4]		% 数式等のページ分割をさせる
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 8.5 \ 導体中の電磁波}
+
+\begin{document}
+\maketitle
+
+Ohmの法則に従う導体の中での電磁波を考えたいが、
+このような導体中ではOhmの法則
+\begin{align}
+	\vec{i}_e = \sigma \vec{E} \tag{5.1} \label{5.1}
+\end{align}
+のために電流が存在し自由な電磁場を考えることができない。
+
+
+\end{document}

@@ -1,0 +1,63 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\renewcommand{\proofname}{証明}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\renewcommand{\thesubsubsection}{(\arabic{subsubsection})}
+
+\newtheorem{thm}{定理}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+
+\newtheorem*{thm*}{定理}
+\newtheorem*{dfn*}{定義}
+\newtheorem*{lem*}{補題}
+\newtheorem*{prop*}{命題}
+\newtheorem*{cor*}{系}
+\newtheorem*{ass*}{仮定}
+\newtheorem*{conj*}{予想}
+
+\title{\S 12.2 \ 点電荷と電磁場の共存系}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{2}
+
+\subsection{点電荷と電磁場の共存系}
+\setcounter{subsubsection}{1}
+
+\subsubsection{Hamilton形式}
+
+
+\end{document}

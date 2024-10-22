@@ -1,0 +1,65 @@
+\documentclass[a4paper,12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+
+\title{有効断面積からポテンシャルの推定}
+
+\begin{document}
+\maketitle
+
+(18.2)より
+\begin{equation}
+	{\varphi}_0 = \int_{r_{\rm min}}^{\infty} \cfrac{\rho \cfrac{{\rm d}r}{r^2}}
+	{\sqrt{1 - \cfrac{\rho^2}{r^2} - \cfrac{U}{E}}}
+	\label{eq:phi}
+\end{equation}
+である。
+ここで，この被積分関数は常に正であるから，
+$\varphi_0$は$r_{\rm min}$が減少することで増加する。
+$r_{\rm min}$は被積分関数の分母の根であるから，$\rho$が増加することで増加する。
+つまり，$\varphi_0$は$\rho$の単調減少関数になっている。
+$U$は斥力だから$0 < \varphi_0 < \pi/2$である。
+したがって，$\chi = \pi - 2\varphi_0$であり，
+$\chi$は$\rho$の単調増加関数になっている。
+
+これらを踏まえると，原点に向かって飛んできた（$\rho = 0$）粒子は$\chi = \pi$であり，
+今衝突パラメータが$\rho^{\prime}$である粒子が飛ぶ方向を$\chi^{\prime}$とすると，
+$0 < \rho < \rho^{\prime}$にある粒子は$\chi^{\prime} < \chi < \pi$の間に散乱する。
+そこで公式
+\begin{equation}
+	\int_{\chi^{\prime}}^{\pi} \dif{\sigma}{\chi} {\rm d}\chi
+	= \pi {\rho^{\prime}}^2
+\end{equation}
+が成り立つ。
+
+式(\eqref{eq:phi})において，
+\begin{equation}
+	s = \frac{1}{\rho}, \qquad x = \frac{1}{\rho},
+	\qquad w = \sqrt{1 - \frac{U}{E}}
+\end{equation}
+を用いると，
+\begin{equation}
+	\rho \int_0^{s_0} \frac{{\rm d}s}
+	{\sqrt{xw^2 - s^2}}
+\end{equation}
+となる。
+ここで，$s_0$は分母の根である。
+
+\end{document}

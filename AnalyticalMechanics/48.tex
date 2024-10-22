@@ -1,0 +1,460 @@
+\documentclass[a4paper,12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs=true} 	 % 相互参照した式のみに番号を振る(\eqrefを使う)
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+
+\begin{document}
+	\begin{center}
+		\Large{変数分離}
+	\end{center}
+	
+	この説明において積分定数はすべて無視する．
+	
+	\section{基本事項}
+	ハミルトン-ヤコビ方程式
+	\begin{equation}
+	\Phi \left( q, t, \pdif{S}{q}, \pdif{S}{t} \right)
+	= \pdif{S}{t} + H \left( q, \pdif{S}{q}, t \right)
+	= 0
+	\end{equation}
+	において，ある座標($q_1$)と$\partial S / \partial q_1$が
+	$\varphi \left( q_1, \pdif{S}{q_1} \right)$
+	(他の$q$や$\partial S / \partial q$と分離できる形)
+	でのみ依存している，すなわちハミルトン-ヤコビ方程式が
+	\begin{equation}
+	\Phi \left( q^{\prime}, t, \pdif{S}{q^{\prime}}, \pdif{S}{t}, 
+	\varphi \left( q_1, \pdif{S}{q_1} \right) \right) = 0 
+	\label{eq:H-J}
+	\end{equation}
+	と書ける場合を考える($q^{\prime}$は$q$から$q_1$を除いたもの)．
+	ここで
+	\begin{equation}
+	S(q, t) = S^{\prime}(q^{\prime}, t) + S_1(q_1)
+	\end{equation}
+	が解となる場合について解く．
+	これを式\eqref{eq:H-J}に代入すると，
+	\begin{equation}
+	\Phi \left( q^{\prime}, t, \pdif{S^{\prime}}{q^{\prime}}, \pdif{S^{\prime}}{t}, 
+	\varphi \left( q_1, \pdif{S_1}{q_1} \right) \right) = 0 \mbox{．}
+	\end{equation}
+	$S$が解である場合，この式は恒等式となるが，$q_1$が変更を受けた場合$\varphi$のみが変化する．
+	このときに恒等式であるためには，$\varphi$が定数である必要があるから，解は
+	\begin{align}
+	\begin{aligned}
+	&\varphi \left( q_1, \dif{S_1}{q_1} \right) = \alpha_1 \\
+	&\Phi \left( q^{\prime}, t, \pdif{S^{\prime}}{q^{\prime}},
+	\pdif{S^{\prime}}{t} \alpha_1 \right) = 0
+	\label{eq:sol}
+	\end{aligned}
+	\end{align}
+	を満たす．
+	他の変数$q^{\prime}$に対しても同じように変数分離できれば容易に完全解を得られる．
+	つまり解$S$は
+	\begin{equation}
+	S(q, t) = \sum_k S_k \left( q_k; \alpha_1, \cdots, \alpha_s \right)
+	+ S^{\prime} \left( t; \alpha_1, \cdots, \alpha_s \right)
+	\end{equation}
+	のようになる．
+	
+	上記のように変数分離できるときで，ハミルトニアン$H$に$q_k$が含まれていない，
+	すなわち$q_k$が循環座標である場合，
+	$q_k$に関しては$\partial S / \partial q_k$にのみ依存するから，
+	$\varphi = \partial S / \partial q_k$となる．
+	したがって，式\eqref{eq:sol}は
+	\begin{align}
+	&\pdif{S_1}{q_1} = \alpha_1 \\
+	&\Phi \left( q^{\prime}, t, \pdif{S^{\prime}}{q^{\prime}},
+	\pdif{S^{\prime}}{t} \alpha_1 \right) = 0
+	\end{align}
+	となる．
+	このとき$S_1 = \alpha_1 q_1$となるから，
+	\begin{equation}
+	S(q, t) = S^{\prime} (q^{\prime}, t) + \alpha_1 q_1
+	\end{equation}
+	である．
+	これは循環座標だけでなく，時間$t$に関しても同じである．
+	したがって保存場であるとき，明らかにハミルトニアン$H$は$t$に依らないから，
+	\begin{equation}
+	\pdif{S}{t} = -H = -E
+	\end{equation}
+	であり，
+	\begin{equation}
+	S = S^{\prime}(q) - Et
+	\end{equation}
+	となる．
+	また全ての$q$に対して変数分離できるとき，
+	\begin{equation}
+	S = \sum_k S_{k} \left( q_k; \alpha \right) - E \left( \alpha \right)t
+	\end{equation}
+	が解となる．
+	以後保存場を考える．
+	
+	\section{球座標}
+	ハミルトニアンを球座標$(r, \theta, \varphi)$を用いて書くと，
+	\begin{equation}
+	H = \frac{1}{2m} \left( p_r^2 + \frac{p_{\theta}^2}{r^2}
+	+ \frac{p_{\varphi}^2}{r^2 \sin^2 \theta} \right) + U(r, \theta, \varphi)
+	\end{equation}
+	であり，
+	\begin{equation}
+	U = a(r) + \frac{b(\theta)}{r^2} + \frac{c(\varphi)}{r^2 \sin^2 \theta}
+	\end{equation}
+	のとき全ての変数に対して変数分離が可能である．
+	
+	この場合，$S_0$に対するハミルトン-ヤコビ方程式は
+	\begin{equation}
+	\frac{1}{2m} \left( \pdif{S_0}{r} \right)^2 + a(r)
+	+ \frac{1}{2mr^2}
+	\left[ \left( \pdif{S_0}{\theta} \right)^2 + 2mb(\theta)
+	+ \frac{1}{\sin^2 \theta}
+	\left\{ \left( \pdif{S_0}{\varphi} \right)^2 + 2mc(\varphi) \right\}  \right]
+	= E \mbox{．}
+	\end{equation}
+	したがって，
+	\begin{align}
+	&\left( \pdif{S_0}{\varphi} \right)^2 + 2mc(\varphi) = \beta_{\varphi} \\
+	&\left( \pdif{S_0}{\theta} \right)^2 + 2mb(\theta)
+	+ \frac{\beta_{\varphi}}{\sin^2 \theta}
+	= \beta_{\theta} \\
+	& \frac{1}{2m} \left( \pdif{S_0}{r} \right)^2 + a(r)
+	+ \frac{\beta_{\theta}}{2mr^2}
+	= E
+	\end{align}
+	が得られる．
+	これらを積分することで，
+	\begin{equation}
+	S = -Et
+	+ \int {\rm d}\varphi \sqrt{\beta_{\varphi} - 2mc(\varphi)}
+	+ \int {\rm d}\theta \sqrt{\beta_{\theta} - 2mb(\theta)
+		- \frac{\beta_{\varphi}}{\sin^2 \theta}}
+	+ \int {\rm d}r \sqrt{2m[E-a(r)] - \frac{\beta_{\theta}}{r^2}}
+	\end{equation}
+	が解となる．
+	ここで$\beta_{\varphi}$，$\beta_{\theta}$，$E$は任意定数であり，
+	これらについて微分し，それがまた定数と等しいとすることで，運動の解が得られる．
+	
+	\section{放物線座標}
+	円柱座標$(\rho, \varphi, z)$から
+	\begin{equation}
+	z = \frac{1}{2}(\xi - \eta), \quad \rho = \sqrt{\xi\eta} \qquad
+	(0 \le \xi, \eta < \infty) \label{eq:parabola}
+	\end{equation}
+	を用いて放物線座標$(\xi, \eta, \varphi)$に変換する．
+	ここで$\xi, \eta$が$0$から$\infty$の間で動くのは，式\eqref{eq:parabola}を逆に解くと得られる
+	\begin{equation}
+	\xi = \pm \sqrt{z^2 + \rho^2} + z, \quad
+	\eta = \pm \sqrt{z^2 + \rho^2} - z, \qquad
+	\mbox{(複号同順)}
+	\end{equation}
+	を見れば分かる($\pm$のうち$+$を選べば良い)．
+	また$\xi, \eta$が一定の曲面は，
+	\begin{align}
+	&z = -\frac{1}{2\xi} \left( \rho^2 - \xi^2 \right) \\
+	&z = \frac{1}{2\eta} \left( \rho^2 - \eta^2 \right)
+	\end{align}
+	と書けるから，$z$軸を軸とした放物面になることが分かる．
+	したがってこの座標系は放物線座標を呼ばれる．
+	原点からの距離$r$を導入すると，
+	\begin{align}
+	&r = \sqrt{\rho^2 + z^2} = \frac{1}{2}(\xi + \eta) \\
+	&\xi = r + z, \quad \eta = r - z
+	\label{eq:r_parabola}
+	\end{align}
+	と表される．
+	
+	放物線座標$(\xi, \eta, \varphi)$を用いてラングランジアン$L$を書き表すと，
+	\begin{equation}
+	\dot{z} = \frac{1}{2} (\dot{\xi} - \dot{\eta}), \quad
+	\dot{\rho} = \frac{\dot{\xi}}{2} \sqrt{\frac{\eta}{\xi}}
+	+ \frac{\dot{\eta}}{2} \sqrt{\frac{\xi}{\eta}}
+	\end{equation}
+	であるから，
+	\begin{align}
+	L &= \frac{m}{2}
+	\left( \dot{\rho}^2 + \rho^2 \dot{\varphi}^2 + \dot{z}^2  \right) \\
+	&= \frac{m}{8}
+	( \xi + \eta )\left( \frac{\dot{\xi}^2}{\xi} + \frac{\dot{\eta}^2}{\eta} \right)
+	+ \frac{m}{2} \xi \eta \dot{\varphi}^2
+	- U(\rho, \varphi, z)
+	\end{align}
+	となる．
+	ここから角運動量は，
+	\begin{align}
+	&p_{\xi} = \pdif{L}{\dot{\xi}} = \frac{m}{4\xi}(\xi + \eta) \dot{\xi} \\
+	&p_{\eta} = \pdif{L}{\dot{\eta}} = \frac{m}{4\eta}(\xi + \eta) \dot{\eta} \\
+	&p_{\varphi} = \pdif{L}{\dot{\varphi}} = m \xi \eta \dot{\varphi}
+	\end{align}
+	であるから，ハミルトニアン$H$は
+	\begin{equation}
+	H = \frac{2}{m}
+	\frac{\xi p_{\xi}^2 + \eta p_{\eta}^2}{\xi + \eta}
+	+ \frac{p_{\varphi}^2}{2m\xi \eta}
+	+ U(\xi, \eta, \varphi)
+	\end{equation}
+	となる．
+	このときポテンシャル$U$が
+	\begin{equation}
+	U = \frac{a(\xi) + b(\eta)}{\xi + \eta} + \frac{c(\varphi)}{\xi \eta}
+	= \frac{a(r+z) + b(r-z)}{2r} + \frac{c(\varphi)}{\rho^2}
+	\end{equation}
+	と書けるとき，変数分離ができる．
+	
+	以上の状況でのハミルトン-ヤコビ方程式は
+	\begin{equation}
+	\frac{1}{m(\xi + \eta)}
+	\left\{ \left[ 2\xi \left( \pdif{S_0}{\xi} \right)^2 + ma(\eta) \right]
+	+ \left[ 2\eta\left( \pdif{S_0}{\eta} \right)^2 + mb(\eta) \right]
+	+ \frac{1}{2} \left(\frac{1}{\xi} + \frac{1}{\eta}\right)
+	\left[ \left( \pdif{S_0}{\varphi} \right)^2 + 2mc(\varphi) \right] \right\}
+	= E
+	\end{equation}
+	となるから，
+	\begin{align}
+	&\left(\pdif{S_0}{\varphi}\right)^2 + 2mc(\varphi) = \beta_{\varphi} \\
+	&2\xi \left(\pdif{S_0}{\xi}\right)^2
+	+ m[a(\xi) - E\xi] + \frac{\beta_{\varphi}}{2\xi}
+	= \beta \\
+	&2\eta \left(\pdif{S_0}{\eta}\right)^2
+	+ m[b(\eta) - E\eta] + \frac{\beta_{\varphi}}{2\eta}
+	= -\beta
+	\end{align}
+	が得られる．ここから，
+	\begin{align}
+	S &= -Et
+	+ \int {\rm d} \varphi \sqrt{\beta_{\varphi} - 2mc(\varphi)}
+	+ \int {\rm d} \xi \sqrt{\frac{\beta}{2\xi}
+		- m\frac{a(\xi)-E\xi}{2\xi} - \frac{\beta_{\varphi}}{4\xi^2}}
+	+ \int {\rm d} \eta \sqrt{-\frac{\beta}{2\eta}
+		- m\frac{b(\eta)-E\eta}{2\eta} - \frac{\beta_{\varphi}}{4\eta^2}}
+	\mbox{．}
+	\end{align}
+	ここで，$E$，$\beta_{\varphi}$，$\beta$は任意定数である．
+	
+	\section{楕円座標}
+	円柱座標$(\rho, \varphi, z)$と定数パラメータ$\sigma$から，
+	\begin{equation}
+	\rho = \sigma \sqrt{\left(\xi^2 - 1\right)\left(1 - \eta^2\right)}, \quad
+	z = \sigma \xi \eta \qquad
+	(1 \le \xi < \infty, -1 \le \eta \le 1)
+	\end{equation}
+	を用いて放物線座標$(\xi, \eta, \varphi)$に変換する．
+	ここで$z$軸上の$z=\sigma$，$z=-\sigma$である点$A_1,A_2$からの距離を$r_1,r_2$とすると，
+	\begin{align}
+	&r_1 = \sqrt{\left( z - \sigma \right)^2 + \rho^2}
+	= \sigma (\xi - \eta), \quad
+	r_2 = \sqrt{\left( z + \sigma \right)^2 + \rho^2}
+	= \sigma (\xi + \eta) \\
+	&\xi = \frac{r_2 + r_1}{2\sigma}, \quad
+	\eta = \frac{r_2 - r_1}{2\sigma}
+	\end{align}
+	であるから，$\xi$が一定の曲面は$A_1, A_2$を焦点とした楕円面，
+	$\eta$が一定の曲面は$A_1, A_2$を焦点とした双曲面となる．
+	
+	先程と同様に，
+	\begin{align}
+	&\dot{\rho}  = \sigma
+	\left[ \xi \dot{\xi} \sqrt{\frac{1-\eta^2}{\xi^2-1}}
+	- \eta \dot{\eta} \sqrt{\frac{\xi^2-1}{1-\eta^2}} \right] \\
+	&\dot{z} = \sigma \left( \dot{\xi} \eta + \xi \dot{\eta} \right)
+	\end{align}
+	を用いてラグランジアン$L$を書き直すと，
+	\begin{align}
+	L &= \frac{m}{2} \left( \dot{\rho}^2 + \rho^2 \dot{\varphi}^2 + z^2 \right) \\
+	&= \frac{m\sigma^2}{2} \left( \xi^2 - \eta^2 \right)
+	\left( \frac{\dot{\xi}^2}{\xi^2 - 1} + \frac{\dot{\eta}^2}{1 - \eta^2} \right)
+	+ \frac{m\sigma^2}{2}
+	\left( \xi^2 - 1 \right) \left( 1 - \eta^2 \right)\dot{\varphi}^2
+	- U(\xi, \eta, \varphi) \mbox{．}
+	\end{align}
+	ここから，角運動量は
+	\begin{align}
+	&p_{\xi} = m\sigma^2 \frac{\xi^2 - \eta^2}{\xi^2 - 1} \dot{\xi} \\
+	&p_{\eta} = m \sigma^2 \frac{\xi^2 - \eta^2}{1 - \eta^2} \dot{\eta} \\
+	&p_{\varphi} =
+	m \sigma^2 \left( \xi^2 - 1 \right) \left( 1 - \eta^2 \right) \dot{\varphi}
+	\end{align}
+	であるから，ハミルトニアン$H$は
+	\begin{align}
+	H &= \frac{1}{2m \sigma^2} \left[ \frac{\xi^2 - 1}{\xi^2 - \eta^2} p_{\xi}^2
+	+ \frac{1 - \eta^2}{\xi^2 - \eta^2} p_{\eta}^2
+	+ \frac{p_{\varphi}^2}
+	{\left( \xi^2 - 1 \right) \left( 1 - \eta^2 \right)} \right]
+	+ U(\xi, \eta. \varphi) \\
+	&= \frac{1}{2m \sigma^2 \left( \xi^2 - \eta^2 \right)} \left[
+	\left( \xi^2 - 1 \right) p_{\xi}^2 + \left( 1 - \eta^2 \right) p_{\eta}^2
+	+ \left(\frac{1}{\xi^2 - 1} + \frac{1}{1 - \eta^2}\right) p_{\varphi}^2 \right]
+	+ U(\xi, \eta. \varphi)
+	\end{align}
+	と書ける．
+	このときポテンシャル$U$が
+	\begin{equation}
+	U = \frac{a(\xi) + b(\eta)}{\xi^2 - \eta^2}
+	+ \frac{c(\varphi)}{\left( \xi^2 - 1 \right)\left( 1 - \eta^2 \right)}
+	= \frac{\sigma^2}{r_1 r_2}
+	\left[ a \left( \frac{r_2 + r_1}{2\sigma} \right)
+	+ b \left( \frac{r_2 - r_1}{2\sigma} \right) \right]
+	+ \frac{\sigma^2}{\rho^2} c(\varphi)
+	\end{equation}
+	であれば変数分離可能である．
+	
+	以上の状況で，ハミルトン-ヤコビ方程式は
+	\begin{align}
+	\frac{1}{2m \sigma^2 \left( \xi^2 - \eta^2 \right)} \left\{
+	\left[ \left( \xi^2 - 1 \right)
+	\left( \pdif{S_0}{\xi} \right)^2 + 2m \sigma^2 a(\xi) \right]
+	+ \left[ \left( 1 - \eta^2 \right) \left( \pdif{S_0}{\eta} \right)^2
+	+ 2m \sigma^2 b(\eta) \right] \right. & \\
+	\qquad \left. + \left( \frac{1}{\xi^2 - 1} + \frac{1}{1 - \eta^2}\right)
+	\left[ \left( \pdif{S_0}{\varphi} \right)^2
+	+ 2m\sigma^2 c(\varphi) \right]
+	\right\} &= E
+	\end{align}
+	となるから，
+	\begin{align}
+	&\left( \pdif{S_0}{\varphi} \right)^2 + 2m \sigma^2 \c(\varphi)
+	= \beta_{\varphi} \\
+	&\left( \xi^2 - 1 \right) \left( \pdif{S_0}{\xi} \right)^2
+	+ 2m \sigma^2 \left[ a(\xi) - E \left( \xi^2 - 1 \right) \right]
+	+ \frac{\beta_{\varphi}}{\xi^2 - 1} = \beta \\
+	&\left( 1 - \eta^2 \right) \left( \pdif{S_0}{\eta} \right)^2
+	+ 2m \sigma^2 \left[ b(\eta) - E \left( 1 - \eta^2 \right) \right]
+	+ \frac{\beta_{\varphi}}{1 - \eta^2} = -\beta
+	\end{align}
+	が得られる．
+	
+	したがって，
+	\begin{align}
+	S &= -Et
+	+ \int {\rm d} \varphi \sqrt{\beta_{\varphi} - 2m \sigma^2}
+	+ \int{\rm d} \xi \sqrt{2m \sigma^2 E
+		+ \frac{\beta - 2m \sigma^2 a(\xi)}{\xi^2 - 1}
+		- \frac{\beta_{\varphi}}{\left( \xi^2 - 1 \right)^2}} \\
+	&\qquad \int {\rm d} \eta \sqrt{2m \sigma^2 E
+		- \frac{\beta + 2m \sigma^2 b(\eta)}{1 - \eta^2}
+		- \frac{\beta_{\varphi}}{\left( 1 - \eta^2 \right)^2}}
+	\end{align}
+	(ここで$E, \beta_{\varphi}, \beta$は任意定数である)．
+	
+	\section{問題}
+	\subsection{}
+	\begin{equation}
+	U = \frac{\alpha}{r} - Fz = \frac{2\alpha - 2Frz}{2r}
+	=\frac{\left[ \alpha + \frac{F}{2}(r+z)^2 \right]
+		+ \left[ \alpha - \frac{F}{2}(r-z)^2 \right]}{2r}
+	\end{equation}
+	であるから，
+	\begin{equation}
+	a(\xi) = \alpha + \frac{F}{2}\xi^2, \qquad
+	b(\eta) = \alpha - \frac{F}{2}\eta^2
+	\end{equation}
+	とすることで，放物線座標を用いて変数分離が可能である．
+	\begin{equation}
+	\left(\pdif{S_0}{\varphi}\right)^2 = \beta_{\varphi} = p_{\varphi}^2
+	\end{equation}
+	とすればよい．
+	
+	\subsection{}
+	\begin{equation}
+	U = \frac{\alpha_1}{r_1} + \frac{\alpha_2}{r_2}
+	= \frac{\alpha_2 r_1 + \alpha_1 r_2}{r_1 r_2}
+	= \frac{\sigma^2}{r_1 r_2} \frac{\alpha_2 r_1 + \alpha_1 r_2}{\sigma^2}
+	= \frac{\sigma^2}{r_1 r_2}
+	\left[ \frac{\alpha_1 + \alpha_2}{\sigma}\left( r_2 + r_1 \right)
+	\frac{\alpha_1 - \alpha_2}{\sigma}\left( r_2 - r_1 \right) \right]
+	\end{equation}
+	であるから，
+	\begin{align}
+	a(\xi) = \frac{\alpha_1 + \alpha_2}{\sigma}\xi &, \qquad
+	b(\eta) = \frac{\alpha_1 - \alpha_2}{\sigma}\eta \\
+	\left(\pdif{S_0}{\varphi}\right)^2 &= \beta_{\varphi} = p_{\varphi}^2
+	\end{align}
+	とすればよい．
+	
+	\section{簡単な例}
+	\subsection{1次元自由粒子}
+	\subsubsection{ハミルトン-ヤコビ方程式}
+	ハミルトニアン$H$は
+	\begin{equation}
+	H = \frac{p^2}{2m}
+	\end{equation}
+	であるから，ハミルトン-ヤコビ方程式は
+	\begin{equation}
+	\frac{1}{2m} \left( \dif{S_0}{q} \right)^2 = E \mbox{．}
+	\end{equation}
+	
+	したがって，
+	\begin{equation}
+	S = -Et + q \sqrt{2mE}
+	\end{equation}
+	以上より，
+	\begin{align}
+	&\pdif{S}{E} = -t + q \sqrt{\frac{m}{2E}} = \beta \\
+	&q = \sqrt{\frac{2E}{m}} (\beta + t) = v (\beta + t)
+	\end{align}
+	
+	\subsubsection{作用}
+	ラグランジアン$L$が
+	\begin{equation}
+	L = \frac{m}{2} \dot{q^{\prime}}^2
+	\end{equation}
+	であるとき，オイラー・ラグランジュ方程式は
+	\begin{equation}
+	\dif{}{t^{\prime}} \pdif{L}{\dot{q^{\prime}}} = \pdif{L}{q^{\prime}}
+	\end{equation}
+	となる．
+	$t^{\prime} = t_0$のとき$q^{\prime} = q_0$，$t^{\prime} = t$のとき$q^{\prime} = q$
+	その解は
+	\begin{equation}
+	q^{\prime} = \frac{q - q_0}{t - t_0} (t^{\prime} - t_0) + q_0
+	\end{equation}
+	であるから，
+	\begin{equation}
+	S = \int_{t_0}^{t} \frac{m}{2} \left( \frac{q - q_0}{t - t_0} \right)^2
+	{\rm d}t^{\prime}
+	= \frac{m}{2} \frac{(q - q_0)^2}{t - t_0} \mbox{．}
+	\end{equation}
+	
+	ここから，
+	\begin{align}
+	&\pdif{S}{t} = -\frac{m}{2} \left( \frac{q - q_0}{t - t_0} \right)^2
+	= -\frac{1}{2}m \left( \dif{q^{\prime}}{t^{\prime}} \right)^2
+	= -E \\
+	&\pdif{S}{q} = m \frac{q - q_0}{t - t_0}
+	= m \dif{q^{\prime}}{t^{\prime}}
+	= p
+	\end{align}
+	
+	\subsection{1次元一様重力場}
+	先程と同様にハミルトニアン$H$は
+	\begin{equation}
+	H = \frac{p^2}{2m} + mgq
+	\end{equation}
+	であるから，ハミルトン-ヤコビ方程式は
+	\begin{equation}
+	\frac{1}{2m} \left( \dif{S_0}{q} \right)^2 + mgq = E \mbox{．}
+	\end{equation}
+	
+	したがって，
+	\begin{equation}
+	S = -Et - \int {\rm d}q \sqrt{2m(E - mgq)}
+	= -Et + \frac{2}{3mg} \sqrt{2m(E - mgq)^3}
+	\end{equation}
+	であるから，
+	\begin{align}
+	&\pdif{S}{E} = -t + \frac{1}{g} \sqrt{\frac{2(E - mgq)}{m}} = \beta \\
+	&q = \frac{E}{mg} - \frac{g}{2} (\beta + t)^2 \mbox{．}
+	\end{align}
+	
+\end{document}

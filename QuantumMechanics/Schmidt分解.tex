@@ -1,0 +1,109 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\title{Schmidt分解}
+\author{}
+
+\begin{document}
+\maketitle
+
+\begin{thm}{Schmidt分解}{Schmidt分解}
+	$N_A$準位系$A$と$N_B$準位系$B$の合成系の状態$\Ket{\Psi}_{AB}$は、
+	$A$系の正規直交基底$\{\Ket{n}\}_{n=1}^{N_A}$と
+	$B$系の正規直交基底$\{\Ket{u_n}\}_{n=1}^{N_B}$、
+	正の整数$1 \leq r \leq \min (N_A, N_B)$と、
+	$\sum_{n} p_n = 1$を満たす確率分布が存在して
+	\begin{align}
+		\Ket{\Psi}_{AB}
+		= \sum_{n=1}^{r} \sqrt{p_n} \Ket{n}_A \Ket{u_n}_B
+	\end{align}
+	とできる。
+\end{thm}
+\begin{proof}
+	一般性を失わずに$N_A \leq N_B$とできる。
+	$\{\Ket{\psi_n}\}_{n=1}^{N_A}$、$\{\Ket{\phi_n}\}_{n=1}^{N_B}$を
+	それぞれ$A$系、$B$系の正規直交基底とする。
+	すれば
+	\begin{align}
+		\Ket{\Psi}_{AB}
+		= \sum_{n, m} \alpha_{nm} \Ket{\psi_n}_A \Ket{\phi_m}_B
+	\end{align}
+	と展開できる。
+	ここで
+	\begin{align}
+		\Ket{\chi_n} \coloneqq \sum_{m=1}^{N_B} \alpha_{nm} \Ket{\phi_m}
+	\end{align}
+	を用いると
+	\begin{align}
+		\Ket{\Psi}_{AB}
+		= \sum_{n=1}^{N_A} \Ket{\psi_n}_A \Ket{\chi_n}_B
+	\end{align}
+	と書ける。
+	また$X = (x_{ij}) \eqqcolon \Braket{\chi_i | \chi_j}$で定義される
+	行列$X$を考えと
+	\begin{align}
+		\Braket{\eta | X | \eta}
+		&= \sum_{i,j} \Braket{\eta | e_i}
+		\Braket{e_i | X | e_j} \Braket{e_j | \eta} \\
+		&= \sum_{i,j} \Braket{\eta | e_i} \Braket{\chi_i | \chi_j}
+		\Braket{e_j | \eta} \\
+		&= \Braket{\sum_i \Braket{e_i | \eta} \chi_i |
+		\sum_j \Braket{e_j | \eta} \chi_j} \\
+		&= \left\| \sum_i \Braket{e_i | \eta} \chi_i \right\|^2 \\
+		&\geq 0
+	\end{align}
+	であるから、$X \geq 0$であることが分かる。
+	$X$を対角化するユニタリ行列を$U = (u_{ij})$として
+	\begin{gather}
+		\Ket{n} \coloneqq \sum_{i=1}^{N_A} u^*_{in} \Ket{\psi_i} \\
+		\Ket{u'_n} \coloneqq \sum_{i=1}^{N_A} u_{in} \Ket{\chi_i}
+	\end{gather}
+	を定めると、
+	$\{\Ket{n}\}_{n=1}^{N_A}$は正規直交基底をなすことが分かる。
+	また
+	\begin{align}
+		\Ket{\chi_i} = \sum_{n=1}^{N_A} u^*_{in} \Ket{u'_n}
+	\end{align}
+	である。
+
+	以上から
+	\begin{align}
+		\Ket{\Psi}_{AB}
+		&= \sum_{i=1}^{N_A} \Ket{\psi_i}_A \otimes
+		\sum_{n=1}^{N_A} u^*_{in} \Ket{u'_n}_B \\
+		&= \sum_{n=1}^{N_A} \Ket{n}_A \Ket{u'_n}
+	\end{align}
+	と書ける。
+	この$\Ket{u'_n}$に注目すると
+	\begin{align}
+		\Braket{u'_n | u'_m}
+		&= \sum_{i,j} u^*_{in} \Bra{\chi_i} u_{jm} \Ket{\chi_j} \\
+		&= \sum_{i,j} u^*_{in} x_{ij} u_{jm} \\
+		&= \left( U^\dagger X U \right)_{nm} \\
+		&= p_n \delta_{nm}
+	\end{align}
+	となる。
+	（$\because$ $U$は$X$を対角化する。）
+	また$X \geq 0$であったから$p_n \geq 0$である。
+	順番を並び替えて、
+	$1 \leq n \leq r$までは$p_n > 0$、
+	$r + 1 \leq n \leq N_A$では$p_n = 0$となるようにし、
+	$1 \leq n \leq r$について$\Ket{u_n} \coloneqq \Ket{u'_n} / \sqrt{p_n}$と
+	新しく取り替えると結局
+	\begin{align}
+		\Ket{\Psi}_{AB} = \sum_{n=1}^{r} \sqrt{p_n} \Ket{n}_A \Ket{u_n}_B
+	\end{align}
+	と書き直せる。
+	ここで規格化条件から
+	\begin{align}
+		\Braket{\Psi | \Psi}_{AB}
+		= \sum_{n=1}^{r} p_n
+		= 1
+	\end{align}
+	である。
+	また$B$系の基底については、
+	$\{u_n\}_{n=1}^{r}$に$N_B - r$個の基底を付け加えて新たな正規直交基底
+	$\{u_n\}_{n=1}^{N_B}$を作ることが出来る。
+\end{proof}
+
+\end{document}

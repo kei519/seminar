@@ -1,0 +1,143 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 4.2 \ 電荷分布による静電場}
+
+\begin{document}
+\maketitle
+
+無限に広がっている真空、または等質誘電体中（結局のところ誘電率が一定）の電荷分布$\rho_{\rm e}(\vec{x})$が与えられたときに、境界条件（普通無限遠で0となる）付きのPoisson方程式の特解、つまり静電ポテンシャルを求め、そこから電場を求める方法について考える。
+
+そのためにまず、一般にGreen関数と呼ばれる、点電荷のPoisson方程式
+\begin{align}
+	\Delta G(\vec{x}) = -\delta^3(\vec{x}) \label{eq:Green}
+\end{align}
+と境界条件を満たす関数を求めることを考える。
+この関数$G(\vec{x})$を用いると、積分と微分を交換できることから
+\begin{align}
+	\Delta_x \int \ddif^3 x^{\prime} G(\vec{x} - \vec{x}^{\prime}) \rho_{\rm e} (\vec{x}^{\prime})
+	&= \int \ddif^3 x^{\prime} \Delta_x G(\vec{x} - \vec{x}^{\prime}) \rho_{\rm e} (\vec{x}^{\prime}) \\
+	&= -\int \ddif^3 x^{\prime} \delta^3(\vec{x} - \vec{x}^{\prime}) \rho_{\rm e}(\vec{x}^{\prime}) \\
+	&= -\rho_{\rm e}(\vec{x})
+\end{align}
+となる。
+したがって、境界条件付きPoisson方程式
+\begin{align}
+	\Delta \phi(\vec{x}) = -\frac{1}{\varepsilon} \rho_{\rm e}(\vec{x}) \label{eq:Poisson}
+\end{align}
+の特解は
+\begin{align}
+	\phi(\vec{x}) = \frac{1}{\varepsilon} \int \ddif^3 x^{\prime} G(\vec{x} - \vec{x}^{\prime}) \rho_{\rm e} (\vec{x}^{\prime})
+\end{align}
+と書けることが分かる。
+これは微分方程式が線形になっていて、重ね合わせが成り立つことと関係しています。
+つまり、他の線形方程式もこの（微分作用素の形が変わるが）Green関数を求めれば、特解を積分で求められることになります。
+（たぶん電磁波のところで出てくる）
+結局のところ、この節での問題は\eqref{eq:Green}を満たすGreen関数$G(\vec{x})$を求めることに帰着される。
+
+そこで今から、Green関数$G(\vec{x})$を求めていくが、このGreen関数を求めるのに、またよく使われる方法があり、Fourier変換した関数$\tilde{G}(\vec{k})$を用いて
+\begin{align}
+	G(\vec{x}) = \frac{1}{(2\pi)^3} \int \ddif^3 k \tilde{G}(\vec{k}) e^{i\vec{k} \cdot \vec{x}}
+\end{align}
+と書いておくと、
+\begin{align}
+	\Delta G(\vec{x}) = \frac{1}{(2\pi)^3} \int \ddif^3 k \tilde{G}(\vec{k}) \Delta e^{i\vec{k} \cdot \vec{x}}
+	= -\frac{1}{(2\pi)^3} \int \ddif^3 k \vec{k}^2 \tilde{G}(\vec{k}) e^{i \vec{k} \cdot \vec{x}}
+\end{align}
+となることと、3次元デルタ関数$\delta^3{\vec{x}}$のFourier変換
+\begin{align}
+	\delta^3({\vec{x}}) = \frac{1}{(2\pi)^3} \int \ddif^3 k e^{i\vec{k} \cdot \vec{x}}
+\end{align}
+を用いると、\eqref{eq:Green}は
+\begin{align}
+	\frac{1}{(2\pi)^3} \int \ddif^3 k \left( -\vec{k}^2 \tilde{G}(\vec{k}) + 1 \right) e^{i \vec{k} \cdot \vec{x}} = 0
+\end{align}
+と書き換えられる。
+したがって$\tilde{G(\vec{k})}$は
+\begin{align}
+	\tilde{G}(\vec{k}) = \frac{1}{\vec{k}^2}
+\end{align}
+であるから、求めるGreen関数は
+\begin{align}
+	G(\vec{x}) = \frac{1}{(2\pi)^3} \int \ddif^3 k \frac{e^{i\vec{k} \cdot \vec{x}}}{\vec{k}^2}
+\end{align}
+と書けることになる。
+ここで$z$軸でなく、$\vec{x}$方向から方位角を測る極座標を取って積分を実行すると
+\begin{align}
+	G(\vec{x}) &= \frac{1}{(2\pi)^3} \int_0^{2\pi} \ddif \varphi \int_0^{\pi} \ddif \theta \int_0^{\infty} \ddif k k^2 \sin\theta \frac{e^{ikx \cos\theta}}{k^2} \\
+	&= \frac{1}{(2\pi)^2} \int_0^{\infty} \ddif k \int_{-1}^1 \ddif (\cos\theta) e^{ikx \cos\theta} \\
+	&= \frac{1}{(2\pi)^2} \frac{1}{ix} \int_0^{\infty} \ddif k \frac{e^{ik} - e^{-ik}}{k} \\
+	&= \frac{1}{(2\pi)^2} \frac{1}{2ix} \int_{-\infty}^{\infty} \ddif k \frac{e^{ik} - e^{-ik}}{k}
+\end{align}
+ここからも物理では多用される（？）やり方を用いる。
+この積分は複素平面で上半円もしくは下半円の経路で積分すると、外周部分の寄与が無限遠では消えて、実軸上の積分のみが残る。
+ここで留数定理を用いるが、この被積分関数の特異点は原点で、積分経路上にあるため実際には留数定理をそのまま適用することはできない。
+しかし、物理では経路もしくは特異点を微小距離$\varepsilon$だけ移動させるのは問題ないと考えて、
+\begin{align}
+	\int_{-\infty}^{\infty} \ddif k \frac{e^{ik} - e^{-ik}}{k - i\varepsilon}
+\end{align}
+の積分を計算して、最後に$\varepsilon \to 0$の極限を考えるということを行う。
+このやり方を用いると、$e^{ik}$は上半円$e^{-ik}$は下半円で積分して、
+\begin{align}
+	&\int_{-\infty}^{\infty} \frac{e^{ik}}{k - i\varepsilon}
+	= 2\pi i {\rm Res}\left( \frac{e^{ik}}{k - i\varepsilon}, i\varepsilon \right)
+	= 2\pi i e^{-\varepsilon} \xrightarrow{\varepsilon \to 0} 2\pi i \\
+	&\int_{-\infty}^{\infty} \frac{e^{-ik}}{k - i\varepsilon} = 0
+\end{align}
+が得られる。
+ここから
+\begin{align}
+	G(\vec{x}) = \frac{1}{4\pi x} = \frac{1}{4\pi} \frac{1}{|\vec{x}|}
+\end{align}
+となることが分かる。
+結局Poisson方程式\eqref{eq:Poisson}の解は
+\begin{align}
+	\phi(\vec{x}) = \frac{1}{4 \pi \varepsilon} \int \ddif^3 x^{\prime} \frac{\rho_{\rm e}(\vec{x}^{\prime})}{|\vec{x} - \vec{x}^{\prime}|}
+\end{align}
+となる。
+これを実際の電荷分布に関して積分すれば静電ポテンシャルが求まり、また微分すれば電場が得られる。
+またこれは結局いつもの静電ポテンシャルである。
+
+これが境界条件を満たしているか確認しておこう。
+物理的に考えれば電荷は無限遠には存在せず、ある有限の領域にのみ存在していると考えられる。
+これはつまりある$R$が存在して、$|\vec{x}| \ge R$であれば$\rho_{\rm e}=0$となるということである。
+つまり、
+\begin{align}
+	\phi(\vec{x}) = \frac{1}{4\pi\varepsilon} \int_{|\vec{x}^{\prime}| < R} \ddif^3 x^{\prime} \frac{\rho_{\rm e}(\vec{x}^{\prime})}{|\vec{x} - \vec{x}^{\prime}|}
+\end{align}
+このとき、三角不等式より
+\begin{align}
+	|\vec{x} - \vec{x}^{\prime}| \ge ||\vec{x}| - |\vec{x}^{\prime}|| > ||\vec{x}| - R|
+\end{align}
+であるから、
+\begin{align}
+	|\phi(\vec{x})| &< \frac{1}{4\pi\varepsilon} \int \ddif^3 x^{\prime} \frac{|\rho_{\rm e}(\vec{x}^{\prime})|}{||\vec{x}| - R|}
+	= \frac{\rm const}{4\pi \varepsilon} \frac{1}{||\vec{x}| - R|}
+	\xrightarrow{|\vec{x}| \to \infty} 0
+\end{align}
+であり、これは境界条件を満たす。
+
+\end{document}

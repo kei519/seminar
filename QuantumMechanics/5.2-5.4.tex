@@ -1,0 +1,559 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\DeclareMathOperator{\rank}{rank}
+
+\title{量子力学レジュメ 5.2-5.4}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{5}
+\setcounter{subsection}{1}
+
+\subsection{もつれていない状態}
+\subsubsection{LOCCと古典相関}
+量子力学は古典力学にはなかった相関を持ち得る。
+それが\textbf{量子もつれ}（quantum entanglement）である。
+その量子もつれについて議論するために、
+まず量子もつれを持たない状態を定義する。
+
+相関とその古典性、量子性は情報をやり取りする通信と、
+物理的な操作によって特徴づけられることを説明する。
+アリスが量子系$A$を持ち、
+アリスから遠くはなればボブが量子系$B$を持っている場合を考える。
+２人の間では量子系の交換はできず、
+0と1の古典ビット列のみを交換できる場合、
+この通信を\textbf{古典通信}と呼ぶ。
+また自分の系だけに物理的操作を施すことを\textbf{局所操作}と呼ぶ。
+局所操作のみを行った場合には２つの系$A$と$B$の間に相関はできない。
+そして古典通信と局所操作、
+略して\textbf{LOCC}(local operation and classical communication)を
+用いると相関を作ることが出来る。
+この相関を\textbf{古典相関}と呼ぶ。
+
+\subsubsection{任意の局所的状態の実現性}
+$z$軸方向上向きスピンの初期状態$\hat{\rho}_A (0) = \Ketbra{+}{+}$から、
+系$A$にのみ作用する局所操作を用いて、
+最終的に任意の密度演算子
+$\hat{\rho}_A (t)
+= p_0 \Ketbra{\psi_0}{\psi_0} + p_1 \Ketbra{\psi_1}{\psi_1}$
+（スペクトル分解）という状態を作ることが出来ることを示す。
+まず$p_0 + p_1 = 1$を満たす非負の固有値$p_0$、$p_1$を用いて、
+\begin{align}
+	\Ket{p_0} = \sqrt{p_0} \Ket{+} + \Ket{p_1} \Ket{-}, \quad
+	\Ket{p_1} = \sqrt{p_1} \Ket{+} - \Ket{p_0} \Ket{-}
+\end{align}
+という互いに直交する単位ベクトルを作っておき、
+\begin{align}
+	\hat{\sigma}_p = (+1) \Ketbra{p_0}{p_0} + (-1) \Ketbra{p_1}{p_1}
+\end{align}
+というエルミート演算子を考える。
+対応する物理量$\sigma_p$を測定すると、
+確率$\Tr \left[ \Ketbra{p_0}{p_0} \hat{\rho}_A (0) \right] = p_0$で
+$\sigma_p = 1$を、
+確率$\Tr \left[ \Ketbra{p_1}{p_1} \hat{\rho}_A (0) \right] = p_1$で
+$\sigma_p = -1$を観測する。
+これを何度も繰り返したものを溜め、
+そこからランダムに１つの粒子を取り出せば、
+その密度演算子$\hat{\rho}_A (t')$は
+\begin{align}
+	\hat{\rho}_A (t') = p_0 \Ketbra{p_0}{p_0} + p_1 \Ketbra{p_1}{p_1}
+\end{align}
+と書ける。
+$\Ket{p_0}$、$\Ket{p_1}$と$\Ket{\psi_0}$、$\Ket{\psi_1}$はそれぞれ
+正規直交基底であるから、
+あるユニタリ行列$\hat{U}$が存在して、
+$\hat{U} \Ket{p_i} = \Ket{\psi_i}$とできる。
+したがって$\hat{U}$に対応する物理操作を系$A$に対して行えば、
+\begin{align}
+	\hat{\rho}_A (t) = \hat{U} \hat{\rho}_A (t') \hat{U}^\dagger
+	= p_0 \Ketbra{\psi_0}{\psi_0} + p_1 \Ketbra{\psi_1}{\psi_1}
+\end{align}
+とできる。
+
+また初期状態が任意の状態$\hat{\rho}_A$という状態であっても、
+$\sigma_z$の測定を行えば、
+確率$\Braket{+ | \hat{\rho}_A | +}$で$\Ketbra{+}{+}$という状態、
+確率$\Braket{- | \hat{\rho}_A | -}$で$\Ketbra{-}{-}$という状態になる。
+ここで$-1$が観測されれたとき、
+つまり$\Ketbra{-}{-}$という状態が得られたときは、
+ユニタリ演算子でもある$\hat{\sigma}_x$に対応した物理操作を施せば、
+\begin{align}
+	\hat{\sigma}_x \Ketbra{-}{-} \hat{\sigma}_x^\dagger
+	= \left( \Ketbra{+}{-} + \Ketbra{-}{+} \right) \Ketbra{-}{-}
+	\left( \Ketbra{+}{-} + \Ketbra{-}{+} \right)
+	= \Ketbra{+}{+}
+\end{align}
+という状態が得られる。
+この方法によっていつでも$\Ketbra{+}{+}$という状態が用意できる。
+以上からいつでも任意の状態$\hat{\rho}_A (t)$が作れることが分かる。
+
+同じことを$B$系に対しても行うことができる。
+しかしこの操作を行っても、
+初期に$\hat{\rho}_A (0) \otimes \hat{\rho}_B (0)$であった状態からは
+$\hat{\rho} = \hat{\rho}_A \otimes \hat{\rho}_B$という状態しか用意できない。
+この状態は\textbf{直積状態}と呼ばれる$A$系、$B$系に相関が全くない状態となる。
+この状態に全く相関がないことは、
+相関係数が
+\begin{align}
+	\Braket{O_A O_B} = \Braket{O_A} \Braket{O_B}
+	&= \Tr \left[ \left( \hat{O}_A \otimes \hat{O}_B \right)
+	\left( \hat{\rho}_A \otimes \hat{\rho}_B \right) \right]
+	- \Tr_A \left[ \hat{O}_A \Tr_B \left[ \hat{\rho} \right] \right]
+	\Tr_B \left[ \hat{O}_B \Tr_A \left[ \hat{\rho} \right] \right] \\
+	&= \Tr \left[ \hat{O}_A \hat{\rho}_A \right]
+	\Tr \left[ \hat{O}_B \hat{\rho}_B \right]
+	- \Tr \left[ \hat{O}_A \hat{\rho}_A \right]
+	\Tr \left[ \hat{O}_B \hat{\rho}_B \right] \\
+	&= 0
+\end{align}
+となることから分かる。
+
+これが局所操作からは相関を作れないということの意味である。
+
+\subsubsection{分離可能状態}
+相関を作るために以下のようなLOCCを施すことを考える。
+まず初期状態を
+$\Ketbra{+}{+} \otimes \Ketbra{+}{+}$という相関がない状態を用意する。
+その後$\sigma_p$を測定する。
+すると、
+確率$p_0$で$+1$が観測され$\Ketbra{p_0}{p_0} \otimes \Ketbra{+}{+}$が得られる。
+そしてアリスが自分の持つ状態に物理操作を施し$\hat{\rho}^{(0)}_A$を作る。
+そのあとボブに観測結果$\sigma_p = +1 = (-1)^0$を意味する古典ビット0を送り、
+ボブはアリスと同様に局所操作を行い$\hat{\rho}^{(0)}_B$を作る。
+また確率$p_1$で$-1$が観測された場合には、
+アリスは自分の状態を$\hat{\rho}^{(1)}_A$にし、
+ボブに観測値$-1$を意味する古典ビット1を送り、
+ボブが$\hat{\rho}^{(1)}_B$を作る。
+
+このような操作の最後には平均状態として
+\begin{align}
+	\hat{\rho}_{AB}
+	= p_0 \hat{\rho}^{(0)}_A \otimes \hat{\rho}^{(0)}_B
+	+ p_1 \hat{\rho}^{(1)}_A \otimes \hat{\rho}^{(1)}_B
+	\label{eq:LOCC1}
+\end{align}
+が得られる。
+
+\begin{tcolorbox}[
+enhanced,
+colback = white,
+boxrule = 0.5pt,
+arc=2mm,
+breakable
+]
+	\underline{補足}
+
+	実際にこれを用意するためには、
+	以上のLOCC操作を行ったものを番号を付けて保存する操作を何度も繰り返し、
+	両者が観測結果を捨てたあとにランダムに選んだ番号の状態を取り出す必要がある。
+\end{tcolorbox}
+
+ここで例として
+\begin{align}
+	\hat{\rho}_{AB}
+	= p_0 \Ketbra{+}{+} \otimes \Ketbra{-}{-}
+	+ p_1 \Ketbra{-}{-} \otimes \Ketbra{+}{+}
+\end{align}
+という状態を作った場合を考える。
+もしこの$p_0$、$p_1$のどちらかが0でどちらかが1であれば、
+特に非自明な相関のない、
+$A$系の状態も$B$系の状態も確定してしまっている状態になる。
+しかし$p_0$が$1/2$に近付くにつれ相関が最大と言いたくなる状態になる。
+なぜなら、
+$p_0$が完全に$1/2$になった
+\begin{align}
+	\hat{\rho}_{AB}
+	= \frac{1}{2} \Ketbra{+}{+} \otimes \Ketbra{-}{-}
+	+ \frac{1}{2} \Ketbra{-}{-} \otimes \Ketbra{+}{+}
+	\label{eq:最大古典相関状態}
+\end{align}
+という状態では、
+$\sigma_{zA}$（$\sigma_{zB}$）を測定し$\pm 1$が出れば、
+$\sigma_{zB}$（$\sigma_{zA}$）を測定したときに
+確実に$\mp 1$が出ることを予言できるからである。
+状態が式\eqref{eq:最大古典相関状態}で与えられるとき、
+\begin{align}
+	&\Pr \left[ \sigma_A (\vec{n}) = s, \sigma_B (\vec{n}') = s' \right] \\
+	&= \Tr \left[ \frac{1}{2} \left( \Ketbra{+}{+} \otimes \Ketbra{-}{-}
+	+ \Ketbra{-}{-} \otimes \Ketbra{+}{+} \right)
+	\frac{1}{2} \left( \hat{I} + s \left( n_x \hat{\sigma}_x
+	+ n_y \hat{\sigma}_y + n_z \hat{\sigma}_z \right) \right) \otimes
+	\frac{1}{2} \left( \hat{I} + s' \left( n'_x \hat{\sigma}_x
+	+ n'_y \hat{\sigma}_y + n'_z \hat{\sigma}_z \right) \right) \right] \\
+	&= \frac{1}{8} \left[ \Braket{+ | \hat{I} + s \left( n_x \hat{\sigma}_x
+	+ n_y \hat{\sigma}_y + n_z \hat{\sigma}_z \right) | +} 
+	\Braket{- | \hat{I} + s' \left( n'_x \hat{\sigma}_x
+	+ n'_y \hat{\sigma}_y + n'_z \hat{\sigma}_z \right) | -} \right. \\
+	&\qquad \qquad \left. + \Braket{- | \hat{I} + s \left( n_x \hat{\sigma}_x
+	+ n_y \hat{\sigma}_y + n_z \hat{\sigma}_z \right) | -}
+	\Braket{+ | \hat{I} + s' \left( n'_x \hat{\sigma}_x
+	+ n'_y \hat{\sigma}_y + n'_z \hat{\sigma}_z \right) | +} \right] \\
+	&= \frac{1}{8} \left[ \left( 1 + sn_z \right) \left( 1  - s' n'_z \right)
+	+ \left( 1 - sn_z \right) \left( 1 + s' n'_z \right) \right] \\
+	&= \frac{1}{4} \left( 1 - ss' n_z n'_z \right)
+\end{align}
+であるから\footnote{\ref{app:計算}参照}、
+結局$z$軸方向に$A$系で$s$が、$B$系で$s'$が測定される確率は
+\begin{align}
+	\Pr \left[ \sigma_{zA} = s, \sigma_{zB} = s' \right]
+	= \frac{1}{2} \delta_{s+s', 0}
+\end{align}
+で与えられ、
+$xy$平面で観測される確率は$s$、$s'$に依らず$1/4$であることが分かる。
+後で見るように、
+この$z$軸以外で$s$、$s'$が観測される確率が、
+扱う量子もつれ状態との違いである。
+
+LOCCによる状態は式\eqref{eq:LOCC1}で与えられる状態だけではなく、
+古典ビットを何度もやり取りすることで、
+ビット列$\mu$に対して
+\begin{align}
+	\sum_\mu p_\mu = 1
+\end{align}
+を満たす非負の実数の組$\{ p_\mu \}$を用いて
+\begin{align}
+	\hat{\rho}_{AB}
+	= \sum_\mu p_\mu \hat{\rho}_A (\mu) \otimes \hat{\rho}_B (\mu)
+	\label{eq:分離可能状態}
+\end{align}
+という状態も作ることが出来る。
+これは最初のビットで
+\begin{align}
+	\hat{\rho}_{AB}=
+	\left( \sum_\nu p_{0\nu} \right)
+	\hat{\rho}_A (0) \otimes \hat{\rho}_B (0)
+	+ \left( \sum_\nu p_{1\nu} \right)
+	\hat{\rho}_A (1) \otimes \hat{\rho}_B (1)
+\end{align}
+という状態を作り、
+以後のビットを用いて同様のことを続ければ良いことから分かる。
+式\eqref{eq:分離可能状態}のように書けるとき、
+$\hat{\rho}_{AB}$は\textbf{分離可能状態}（separable state）と呼ばれる。
+
+分離可能状態には直積状態にはない相関が生まれている。
+しかしこの相関は古典通信によってのみ生成されたものであるから、
+古典相関しか持っていないと考えることが出来る。
+したがって分離可能状態であることが量子的にもつれていない状態の一般系と定義される。
+
+また分離可能状態の分解の仕方は一通りではない。
+明らかな例としては、
+$N$準位系において$N+1$以上の項を足したものは、
+スペクトル分解によって$N$項の和に書き直せる。
+
+\subsection{量子もつれ状態}
+\subsubsection{非分離可能状態としての量子もつれ状態}
+前節で見たように、
+直積状態とLOCCだけでは分離可能状態しか作ることはできない。
+そこで２体系において、
+式\eqref{eq:分離可能状態}のように書けない状態を
+\textbf{量子もつれ状態}と定義する。
+量子もつれ状態は、
+古典ビット列だけではなく量子系を交換する場合や、
+$A$と$B$の互いに力が及ぼし合うことで生成される。
+なお２つ以上の量子系が互いに力を及ぼし合うとき、
+それらの量子系は
+\textbf{相互作用}（interaction）すると言われる。
+
+\subsubsection{状態ベクトルのシュミット分解}
+$A$と$B$の２体系の純粋状態で分離可能状態であるのは、
+$\Ket{\psi}_A \Ket{\phi}_B$のような直積状態だけであり
+\footnote{\ref{app:分離可能状態}参照}、
+このように書けない状態は全て量子もつれ状態になっている。
+$N_A$準位の$A$系と$N_B$準位の$B$系の合成系全体の状態を考える。
+ここで$N_A \leq N_B$とする。
+もしこれが成り立っていなければ$A$と$B$のラベルを取り替えれば良いから、
+この仮定では一般性は失わない。
+$AB$系の純粋状態$\Ket{\Psi}_{AB}$は
+Schmidt分解することで、
+$A$系の正規直交基底$\{ \Ket{u_i} \}_{i=1}^{N_A}$、
+$B$系の正規直交基底$\{ \Ket{v_i} \}_{i=1}^{N_B}$を用いて
+\begin{align}
+	\Ket{\Psi}_{AB}
+	= \sum_{n=1}^{N_A} \sqrt{p_i} \Ket{u_n}_A \Ket{v_n}_B
+\end{align}
+と書くことが出来る。
+ここで$p_n$は$\sum_n p_n = 1$を満たす確率分布である。
+この$p_n$がある$n$だけで1を取り他が全て0の場合が直積状態であり、
+それ以外の場合は全て量子もつれ状態である。
+余談として$p_n = 1/N_A$の状態は
+最大もつれ状態（maximally entangled state, MES）と呼ばれる。
+
+\subsubsection{ベル状態}
+ここで２つの２準位スピンの合成系における
+\begin{align}
+	\Ket{\Phi_-}_{AB} = \frac{1}{\sqrt{2}} \left( 
+		\Ket{+}_A \Ket{-}_B - \Ket{-}_A \Ket{+}_B
+	 \right)
+\end{align}
+という量子もつれ状態について考えてみる。
+この状態について各方向のスピンの出現確率を見ると、
+\begin{align}
+	\Pr \left[ \sigma_A (\vec{n}) = s, \sigma_B (\vec{n}') = s' \right]
+	&= \frac{1}{4} \Braket{\Phi_- |
+	\left( \hat{I} + s \hat{\sigma}_A (\vec{n}) \right) \otimes
+	\left( \hat{I} + s' \hat{\sigma}_B (\vec{n}') \right) | \Phi_-} \\
+	&= \frac{1}{4} \left[ \Braket{\Phi_- | \Phi_-}
+	+ s \Braket{\Phi_- | \hat{\sigma}_A (\vec{n}) \otimes \hat{I} | \Phi_-}
+	+ s' \Braket{\Phi_- | \hat{I} \otimes \hat{\sigma}_B (\vec{n}') | \Phi_-}
+	\right. \\
+	&\qquad \qquad \left. + ss' \Braket{\Phi_- |
+	\hat{\sigma}_A (\vec{n}) \otimes \hat{\sigma}_B (\vec{n}')
+	| \Phi_-} \right]
+\end{align}
+である。
+この各項を計算すると
+\begin{align}
+	\Braket{\Phi_- | \hat{\sigma} (\vec{n}) \otimes \hat{I} | \Phi_-}
+	&= \frac{1}{2}
+	\left[ \Braket{+ | \hat{\sigma} (\vec{n}) | +} \Braket{- | -}
+	- \Braket{+ | \hat{\sigma} (\vec{n}) | -} \Braket{- | +} \right. \\
+	&\qquad \qquad \left.
+	- \Braket{- | \hat{\sigma} (\vec{n}) | +} \Braket{+ | -}
+	+ \Braket{- | \hat{\sigma} (\vec{n}) | -} \Braket{+ | +} \right] \\
+	&= \frac{1}{2} \left[ n_z - n_z \right] \\
+	&= 0 \\
+	\Braket{\psi | \hat{I} \otimes \hat{\sigma} (\vec{n'}) | \Phi_-}
+	&= 0 \\
+	\Braket{\Phi_- |
+	\hat{\sigma} (\vec{n}) \otimes \hat{\sigma} (\vec{n'}) | \Phi_-}
+	&= \frac{1}{2} \left[ \Braket{+ | \hat{\sigma} (\vec{n}) | +}
+	\Braket{- | \hat{\sigma} (\vec{n'}) | -}
+	- \Braket{+ | \hat{\sigma} (\vec{n}) | -}
+	\Braket{- | \hat{\sigma} (\vec{n'}) | +} \right. \\
+	&\qquad \qquad \left.
+	\Braket{- | \hat{\sigma} (\vec{n}) | +}
+	\Braket{+ | \hat{\sigma} (\vec{n'}) | -}
+	+ \Braket{- | \hat{\sigma} (\vec{n}) | -}
+	\Braket{+ | \hat{\sigma} (\vec{n'}) | +}
+	\right] \\
+	&= \frac{1}{2} \left[ -n_z n'_z - (n_x - in_y) (n'_x + in'_y)
+	- (n_x + in_y) (n'_x - in'_y) - n_z n'_z \right] \\
+	&= -\left[ n_x n'_x + n_y n'_y + n_z n'_z \right]
+\end{align}
+したがって最終的に
+\begin{align}
+	\Pr \left[ \sigma_A (\vec{n}) = s, \sigma_B (\vec{n}') = s' \right]
+	= \frac{1}{4}
+	\left[ 1 - ss' \left( n_x n'_x + n_y n'_y + n_z n'_z \right) \right]
+\end{align}
+が得られる。
+もし$\vec{n} = \vec{n}'$に取る、
+つまり$A$系も$B$系も同じ方向のスピンを測れば、
+\begin{align}
+	\Pr \left[ \sigma_A (\vec{n}) = s, \sigma_B (\vec{n}') = s' \right]
+	= \frac{1}{4} \left( 1 - ss' \right)
+	= \frac{1}{2} \delta_{s+s', 0}
+\end{align}
+となることが分かる。
+これは$\Ket{\Phi_-}_{AB}$という状態は、
+どの方向を測っても片方の結果から
+もう片方の結果を確実に予想できることを示している。
+この点が分離可能状態と異なる点である。
+そしてこの点で、
+この状態は最大もつれ状態と呼ばれる。
+
+２つの２準位系の最大もつれ状態は$\Ket{\Phi_-}_{AB}$以外にも多数存在し、
+それらは全て\textbf{ベル状態}と呼ばれる。
+ベル状態は何かしらの$A$系の物理量と$B$系の物理量の間に
+最大の相関を作る状態になっている。
+例えば
+\begin{gather}
+	\Ket{\Psi_+} = \frac{1}{\sqrt{2}} \left( \Ket{+}_A \Ket{+}_B
+	+ \Ket{-}_A \Ket{-}_A \right) \\
+	\Ket{\Psi_-}_{AB} = \frac{1}{\sqrt{2}} \left( \Ket{+}_A \Ket{+}_B
+	- \Ket{-}_A \Ket{-}_A \right) \\
+	\Ket{\Phi_+} = \frac{1}{\sqrt{2}} \left( \Ket{+}_A \Ket{-}_B
+	+ \Ket{-}_A \Ket{+}_A \right)
+\end{gather}
+などもベル状態であり、
+$\{ \Ket{\Psi_+}, \Ket{\Psi_-}, \Ket{\Phi}_+, \Ket{\Phi}_- \}$は
+４準位系の基底になっている。
+またベル状態はこの４つの状態のいずれかに
+局所操作$\hat{U}_{AB} = \hat{U}_A \hat{U_B}$を作用させることで作られる。
+ベル状態はベル不等式やCHSH不等式を破り、
+古典系では達成できない物理量感の相関を有しており、
+量子論の相関の強さの原理的な限界であるチレルソン限界も達成している。
+
+\appendix
+\section{計算に用いたこと} \label{app:計算}
+今回用いたためにいくつかの数式を確認しておく。
+式(2.26)（P.25）から
+\begin{gather}
+	\hat{P}_\pm
+	= \frac{1}{2} \left( \hat{I} \pm \hat{\sigma} (\vec{n}) \right)
+\end{gather}
+で与えられる。
+また
+\begin{align}
+	\hat{\sigma}_x
+	&= \left( \begin{array}{cc}
+		0 & 1 \\
+		1 & 0
+	\end{array} \right)
+	= \Ketbra{+}{-} + \Ketbra{-}{+} \\
+	\hat{\sigma}_y
+	&= \left( \begin{array}{cc}
+		0 & -i \\
+		i & 0
+	\end{array} \right)
+	= -i \Ketbra{+}{-} + i \Ketbra{-}{+} \\
+	\hat{\sigma}_z
+	&= \left( \begin{array}{cc}
+		1 & 0 \\
+		0 & -1
+	\end{array} \right)
+	= \Ketbra{+}{+} - \Ketbra{-}{-}
+\end{align}
+である。
+したがって
+\begin{gather}
+	\Braket{+ | \hat{\sigma}_x | +} = 0, \
+	\Braket{+ | \hat{\sigma}_x | -} = 1, \
+	\Braket{- | \hat{\sigma}_x | +} = 1, \
+	\Braket{- | \hat{\sigma}_x | -} = 0 \\
+	\Braket{+ | \hat{\sigma}_y | +} = 0, \
+	\Braket{+ | \hat{\sigma}_y | -} = -i, \
+	\Braket{- | \hat{\sigma}_y | +} = i, \
+	\Braket{- | \hat{\sigma}_y | -} = 0 \\
+	\Braket{+ | \hat{\sigma}_z | +} = 1, \
+	\Braket{+ | \hat{\sigma}_z | -} = 0, \
+	\Braket{- | \hat{\sigma}_z | +} = 0, \
+	\Braket{- | \hat{\sigma}_z | -} = -1
+\end{gather}
+が得られる。
+またここから
+\begin{gather}
+	\Braket{+ | \hat{\sigma} (\vec{n}) | +} = n_z \\
+	\Braket{+ | \hat{\sigma} (\vec{n}) | -} = n_x - in_y \\
+	\Braket{- | \hat{\sigma} (\vec{n}) | +} = n_x + in_y \\
+	\Braket{- | \hat{\sigma} (\vec{n}) | -} = -n_z
+\end{gather}
+である。
+
+\begin{thm}{観測値が$\pm 1$の場合の射影演算子}{射影演算子}
+	エルミート演算子$\hat{\sigma}$の固有値が$\pm 1$の場合、
+	その固有値に対応した射影演算子$\hat{P}_{\pm}$は
+	\begin{gather}
+		\hat{P}_{\pm} = \frac{1}{2} \left( \hat{I} \pm \hat{\sigma} \right)
+	\end{gather}
+	で与えられる。
+\end{thm}
+\begin{proof}
+	$\hat{\sigma}$はエルミート演算子であるから、
+	条件より正規直交基底$\{ \Ket{u_i} \}_{i=1}^d$を用いて
+	\begin{align}
+		\hat{\sigma} &= \sum_{i=1}^n \Ketbra{u_i}{u_i}
+		- \sum_{i=n+1}^d \Ketbra{u_i}{u_i} \\
+		&= \hat{P}_+ - \hat{P}_-
+	\end{align}
+	で与えられる。
+	ここで
+	\begin{gather}
+		\hat{P}_+ = \sum_{i=1}^n \Ketbra{u_i}{u_i} \\
+		\hat{P}_- = \sum_{i=n+1}^d \Ketbra{u_i}{u_i}
+	\end{gather}
+	である。
+	また完全性関係から
+	\begin{align}
+		\hat{I} &= \sum_{i=1}^d \Ketbra{u_i}{u_i} \\
+		&= \hat{P}_+ + \hat{P}_-
+	\end{align}
+	が分かる。
+	以上から定理が従う。
+\end{proof}
+
+\section{純粋状態の分離可能状態} \label{app:分離可能状態}
+まず以下の定理を確認しておく。
+\begin{thm}{量子状態とトレース}{}
+	２つの量子状態$\hat{\rho}$、$\hat{\sigma}$について、
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{\sigma} \right] = 1
+		\iff
+		\hat{\rho} = \hat{\sigma}
+		\ \text{かつ} \
+		\Tr \left[ \hat{\rho}^2 \right] = 1
+	\end{align}
+\end{thm}
+\begin{proof}
+	$(\impliedby)$明らか。
+
+	\noindent $(\implies)$
+	$\hat{\rho}$、$\hat{\sigma}$のスペクトル分解をそれぞれ
+	\begin{gather}
+		\hat{\rho}
+		= \sum_{i=1}^N p_i \Ketbra{u_i}{u_i} \\
+		\hat{\sigma}
+		= \sum_{i=1}^M q_i \Ketbra{v_i}{v_i}
+	\end{gather}
+	とすると、
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{\sigma} \right]
+		&= \sum_{i=1}^N p_i \Braket{u_i | \sigma | u_i} \\
+		&= \sum_{i=1}^N \sum_{j=1}^M p_i q_j
+		\left| \Braket{u_i | v_j} \right|^2 \\
+		&\leq \sum_{i=1} \sum_{j=1} p_i q_j \\
+		&= 1
+	\end{align}
+	が得られる。
+	この等号が成立するのは、
+	$p_i q_j \neq 0$である$i$、$j$について
+	$\Ket{v_j} = a_{i, j} \Ket{u_i}$（ただし$|a_{i, j}|^2 = 1$）
+	が成り立つことである。
+	しかしこれは$p_i q_j \neq 0$となる$i$が２つ以上存在した場合満たせない。
+	したがってある1以上$N$以下の整数$n$が存在して、
+	$p_n = 1$とならなければならない。
+	すると
+	\begin{align}
+		\hat{\rho} = \Ketbra{u_n}{u_n}
+	\end{align}
+	が得られる。
+	このとき$\Tr \left[ \hat{\rho}^2 \right] = 1$である。
+	また$\Ket{v_j} = a_{n, j} \Ket{u_n}$となるが、
+	すると
+	\begin{align}
+		\hat{\sigma}
+		&= \sum_{j=1}^M q_j a_{n, j} a^*_{n, j} \Ketbra{u_n}{u_n} \\
+		&= \Ketbra{u_n}{u_n} \\
+		&= \hat{\rho}
+	\end{align}
+	となる。
+\end{proof}
+
+ここまでを踏まえて、
+分離可能状態
+\begin{align}
+	\hat{\rho}_{AB}
+	= \sum_{i=1}^N p_i \hat{\rho}_A (i) \otimes \hat{\rho}_B (i)
+\end{align}
+が純粋状態である場合について考える。
+このとき
+\begin{align}
+	\Tr \left[ \hat{\rho}_{AB}^2 \right]
+	&= \sum_{i,j = 1}^N p_i p_j
+	\Tr \left[ \hat{\rho}_A (i) \hat{\rho}_A (j) \right]
+	\Tr \left[ \hat{\rho}_B (i) \hat{\rho}_B (j) \right] \\
+	&\leq \sum_{i, j = 1}^N p_i p_j \\
+	&= 1
+\end{align}
+となるが、
+この等号が成立するのは
+$\Tr \left[ \hat{\rho}_A (i) \hat{\rho}_A (j) \right] = 1$かつ
+$\Tr \left[ \hat{\rho}_B (i) \hat{\rho}_B (j) \right] = 1$、
+つまり$\hat{\rho}_A (i) = \hat{\rho}_A (j) \eqqcolon \hat{\rho}_A$、
+$\Tr \left[ \hat{\rho}_A^2 \right] = 1$かつ
+$\hat{\rho}_B (i) = \hat{\rho}_B (j) \eqqcolon \hat{\rho}_B$、
+$\Tr \left[ \hat{\rho}_B^2 \right] = 1$のときである。
+したがって
+\begin{align}
+	\hat{\rho}_{AB}
+	&= \sum_{i=1}^N p_i \hat{\rho}_A (i) \otimes \hat{\rho}_B (i) \\
+	&= \hat{\rho}_A \otimes \hat{\rho}_B \\
+	&= \Ketbra{\psi}{\psi}_A \otimes \Ketbra{\phi}{\phi}_B
+\end{align}
+と書けることが分かる。
+これは状態ベクトル$\Ket{\psi}_A \Ket{\phi}_B$という状態である。
+
+\end{document}

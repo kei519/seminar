@@ -1,0 +1,231 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 2.5 \ 運動量保存則}
+
+\begin{document}
+\maketitle
+
+はじめに式\eqref{eq:LorentzForce}と\eqref{eq:MaxwellEq}を再掲しておく。
+このLorentz力の表式における$V$は、今考えている$i$番目の粒子が入っている領域であれば、任意にとって良いことを注意しておく。
+\begin{gather}
+	\begin{aligned}
+		m_i \dif{\vec{v}_i(t)}{t} &= e_i\left[
+			\vec{E}(\vec{r}_i(t), t) + \dot{\vec{r}}_i(t) \times \vec{B}(\vec{r}(t),t)
+		\right] \\
+		&= \int_V \ddif x^3 e_i \delta\left(\vec{x} - \vec{r}(t)\right) \left[
+			\vec{E}(\vec{x}, t) + \dot{\vec{r}}_i(t) \times \vec{B}(\vec{x}, t)
+		\right]
+	\end{aligned}\tag{1.6} \label{eq:LorentzForce}\\
+	\\
+	\begin{gathered}
+		\Rot{\vec{E}(\vec{x}, t)} = -\pdif{\vec{B}(\vec{x}, t)}{t} \\
+		\Rot \vec{H}(\vec{x}, t) - \pdif{\vec{D}(\vec{x}, t)}{t} = \vec{i}(\vec{x}, t) \\
+		\Div \vec{D}(\vec{x}, t) = \rho(\vec{x}, t) \\
+		\Div \vec{B}(\vec{x}, t) = 0
+	\end{gathered} \tag{1.7} \label{eq:MaxwellEq}
+\end{gather}
+
+\eqref{eq:LorentzForce}と\eqref{eq:MaxwellEq}によって記述される物理体系、すなわち電磁気学的な運動について、運動量保存則が存在することを見る。
+ここから少し教科書と違う記述方法を行うが、こちらの方が実際の状況を掴みやすいのではないかと考えている。
+もっと正確に言うならば、教科書の方法では空間内に全電荷が存在しているのにも関わらず、外部から働く電磁場について考えており、個人的には気持ちが悪いので、それをなくして、外部電場は外部の粒子が作るものとして考えようという話である。
+
+まず、いま考えたい時間間隔において、粒子数が一定であるような領域$V$を取ってくる。
+そして$V$の内部に存在している粒子についてのみ式\eqref{eq:LorentzForce}で和をとると、
+\begin{align}
+	\sum_{\vec{r}_i \in V} m_i \dif{\vec{v}_i(t)}{t}
+	= \sum_{\vec{r}_i \in V} \int_V \ddif x^3 e_i
+	\delta\left(\vec{x} - \vec{r}(t)\right) \left[
+		\vec{E}(\vec{x}, t) + \dot{\vec{r}}_i(t) \times \vec{B}(\vec{x}, t)
+	\right]
+\end{align}
+となる。
+ここで、
+\begin{align}
+	\rho(\vec{x}, t) &= \sum_i e_i \delta(\vec{x} - \vec{r}_i(t)) \\
+	\vec{j}(\vec{x}, t) &= \sum_i e_i \dot{\vec{r}}_i(t) \delta(\vec{x} - \vec{r}_i(t))
+\end{align}
+と書けることと、任意の関数$f_i(\vec{x}, t)$について
+\begin{align}
+	\sum_i \int_V \ddif x^3 f_i(\vec{x}, t) \delta(\vec{x} - \vec{r}_i(t))
+	= \sum_{\vec{r}_i \in V} \int_V \ddif x^3 f_i(\vec{x}, t) \delta(\vec{x} - \vec{r}_i(t))
+\end{align}
+となることに注意すると、式\eqref{eq:MaxwellEq}を用いることで、
+\begin{align}
+	\sum_{\vec{r}_i \in V} m_i \dif{\vec{v}_i(t)}{t}
+	&= \int_V \ddif x^3 \left[
+		\rho(\vec{x}, t) \vec{E}(\vec{x}, t) + \vec{j}(\vec{x}, t) \times \vec{B}(\vec{x}, t)
+	\right] \\
+	&= \int_V \ddif x^3 \left[
+		\vec{E}(\vec{x}, t) \Div \vec{D}(\vec{x}, t) + \left(
+			\Rot \vec{H}(\vec{x}, t) - \pdif{\vec{D}(\vec{x}, t)}{t}
+		\right) \times \vec{B}(\vec{x}, t)
+	\right] \tag{5.1} \label{eq:5.1}
+\end{align}
+を得る。
+ここで注意すべきは、ここに現れる電場や磁場は、領域$V$に限らず全空間に存在する電荷からの影響を含んでいることである。
+
+ここから先は、流石に書くのも面倒だし、そもそも見難さもだいぶあるので、引数はすべて省略する。
+\eqref{eq:MaxwellEq}を用いて得られる
+\begin{align}
+	\pdif{}{t} ( \vec{D} \times \vec{B})
+	&= \pdif{\vec{D}}{t} \times \vec{B} + \vec{D} \times \pdif{\vec{B}}{t} \\
+	&= \pdif{\vec{D}}{t} \times \vec{B} - \vec{D} \times \Rot \vec{E}
+\end{align}
+を\eqref{eq:5.1}に用いると、
+\begin{align}
+	\sum_{\vec{r}_i \in V} m_i \dif{\vec{v}_i(t)}{t}
+	= \int_V \ddif x^3 \left[
+		\vec{E} \Div \vec{D} + \Rot \vec{H} \times \vec{B}
+		- \pdif{}{t} (\vec{D} \times \vec{B}) - \vec{D} \times \Rot \vec{E}
+	\right]
+\end{align}
+したがって、真空中では
+\begin{align}
+	&\vec{D} = \epsilon_0 \vec{E}, \quad \vec{B} = \mu_0 \vec{H}, \quad
+	\epsilon_0 \mu_0 = \frac{1}{c^2} \label{eq:vacuum}
+\end{align}
+であることを用いると、
+\begin{align}
+	\vec{D} \times \vec{B} = \frac{1}{c^2} \vec{E} \times \vec{H}
+	= \frac{1}{c^2} \vec{S}
+\end{align}
+となるから、
+\begin{align}
+	\dif{}{t} \left( \vec{G}_m + \frac{1}{c^2} \int_V \ddif x^3 \vec{S} \right)
+	= \int_V \ddif x^3 \left[
+		\vec{E} \Div \vec{D} - \vec{D} \times \Rot \vec{E}
+		- \vec{B} \times \Rot \vec{H}
+	\right] \tag{5.3} \label{eq:5.3}
+\end{align}
+が成り立つことが分かる。
+ここで$\vec{G}_m(t)$を、領域$V$内の粒子の全運動量
+\begin{align}
+	\vec{G}_m(t) = \sum_{\vec{r}_i \in V} m_i \vec{v}_i(t)
+\end{align}
+として定義した。
+
+ここからも教科書とは逆で計算する。
+理由としては、天下りはまあ多少もやもやするのと、まあゼミだし違う方法も試しておくかみたいなところがあります。
+式\eqref{eq:5.3}の右辺を見ると、$\vec{E}, \vec{D}$と$\vec{H}, \vec{B}$という組の間になんとなく対称性がありそうな形になっているのが分かる。
+そこで足りない項として、$\vec{H} \Div \vec{B}$という項を考えると、\eqref{eq:MaxwellEq}より、$\Div \vec{B} = 0$であるから、別に右辺に加えてもいいことが分かる。
+そうすると、右辺には
+\begin{align}
+	\vec{E} \Div \vec{D} - \vec{D} \times \Rot \vec{E} 
+	&= \epsilon_0 (\vec{E} \Div \vec{E} - \vec{E} \times \Rot \vec{E}) \\
+	\vec{H} \Div \vec{B} - \vec{B} \times \Rot \vec{H}
+	&= \frac{1}{\mu_0} (\vec{B} \Div \vec{B} - \vec{B} \times \Rot \vec{B})
+\end{align}
+という形で、$\vec{E}$と$\vec{B}$について定数倍を除いて全く同じものが出てくることが分かる。
+そこで$\vec{E}$の第$i$成分を求めることを考えると、面倒なので各成分についての和記号は省略すると、
+\begin{align}
+	(\vec{E} \Div \vec{E} - \vec{E} \times \Rot \vec{E})_i
+	&= E_i \pdif{E_j}{x_j} - \epsilon_{ijk} E_j (\Rot \vec{E})_k \\
+	&= E_i \pdif{E_j}{x_j} - \epsilon_{ijk} E_j \epsilon_{klm} \pdif{E_m}{x_l}
+\end{align}
+
+ここでエディントンのイプシロンについて、
+\begin{align}
+	\epsilon_{ijk} \epsilon_{klm} &= \epsilon_{kij} \epsilon_{klm} \\
+	&= \delta_{il} \delta_{jm} - \delta_{im} \delta_{jl} \label{eq:delta}
+\end{align}
+が成り立つことを説明しておく。
+左辺は、$i=j$または$l=m$のとき恒等的に0になる。
+これは右辺と一致する。
+$i \ne j$かつ$l \ne m$のときは、$(i, j)$と$(l, m)$に含まれる数字が同じであれば、左辺にはそれらと違う$k$の項だけが残って、$(i, j)$、$(l, m)$が同じとき\eqref{eq:delta}の左辺は1になり、右辺と一致する。
+また、逆のとき左辺は$-1$になり、これも右辺と一致する。
+最後に$(i, j)$と$(l, m)$に含まれる数字に異なるものがあったときであるが、このときは$\epsilon_{kil}$と$\epsilon_{klm}$が0でなくなる$k$が異なるため、右辺は0であり、これもまた右辺と一致する。
+以上より示された。
+
+これを用いると、
+\begin{align}
+	(\vec{E} \Div \vec{E} - \vec{E} \times \Rot \vec{E})_i
+	&= E_i \pdif{E_j}{x_j} - (\delta_{il} \delta_{jm} - \delta_{im} \delta_{jl}) E_j \pdif{E_m}{x_l} \\
+	&= E_i \pdif{E_j}{x_j} + E_j \pdif{E_i}{x_j} - E_j \pdif{E_j}{x_i} \\
+	&= \pdif{}{x_j} (E_i E_j) - \frac{1}{2} \pdif{}{x_i} (E_j E_j) \\
+	&= \pdif{}{x_j} (E_i E_j) - \frac{1}{2} \pdif{}{x_j} \delta_{ij} \vec{E}^2 \\
+	&= \pdif{}{x_j} \left( E_i E_j - \frac{1}{2} \delta_{ij} \vec{E}^2 \right)
+\end{align}
+となることが分かる。
+そこで、新たに
+\begin{align}
+	{T^e}_{ij}(\vec{x}, t) &= \epsilon_0 \left( E_i(\vec{x}, t) E_j(\vec{x}, t) - \frac{1}{2} \vec{E}^2(\vec{x}, t) \right)
+	\tag{5.5} \label{eq:5.5} \\
+	{T^m}_{ij}(\vec{x}, t) &= \frac{1}{\mu_0} \left( B_i(\vec{x}, t) B_j(\vec{x}, t) - \frac{1}{2} \vec{B}^2(\vec{x}, t) \right)
+	\tag{5.6} \label{eq:5.6} \\
+	T_{ij}(\vec{x}, t) &= {T^e}_{ij}(\vec{x}, t) + {T^m}_{ij}(\vec{x}, t)
+	\tag{5.7} \label{eq:5.7}
+\end{align}
+という量を定義すれば、\eqref{eq:5.3}は
+\begin{align}
+	\dif{}{t} \left( \vec{G}_m(t) + \vec{G}_f(t) \right)
+	&=\int_V \ddif x^3 \pdif{}{x_j} T_{ij} \\
+	&= \int_{\partial V} \ddif S T_{ij} n_j \tag{5.11} \label{eq:5.11}
+\end{align}
+と書き直せる。
+ここで$\vec{G}_f(t)$を、領域$V$内の電磁場の運動量と解釈できる量として
+\begin{align}
+	\vec{G}_f(t) = \frac{1}{c^2} \int_V \ddif x^3 \vec{S}(\vec{x}, t)
+	\tag{5.12} \label{eq:5.12}
+\end{align}
+で定義した。
+
+そう考えると、\eqref{eq:5.11}は領域内の全運動量$(\vec{G}_m + \vec{G}_f)$の変化量が、$T_{ij}n_j$の表面積分であるという式であり、$T_{ij}n_j$が領域表面$\partial V$の単位面積あたりに外部からかかる電磁気的な応力と取れることが分かる。
+これは近接作用の理論における、`真空のゆがみ'を定式化したものである。
+またここからは、外部からの電磁気的な応力が0のとき、つまり孤立系であるとき（例えば$V$として全空間を選んだとき）は、全運動量が保存することが分かる。
+
+最後に$T_ij$自身の性質について少しだけ補足を行う。
+2.2節において、電場や磁場のように空間回転によって
+\begin{align}
+	A^{\prime}_i(x^{\prime}, t) = a_{ij} A_j(x, t)
+\end{align}
+のように変換するものを、ベクトルと定義したが、これによると$T_{ij}$は同じ変換において、定義より
+\begin{align}
+	T^{\prime}_{ij}(x^{\prime}, t) = a_{ik} a_{jl} T_{kl}(x, t)
+\end{align}
+のように変換する。
+このような変換がなされる量を、2階のテンソルという。
+一般に回転変換によって、この$a_{ij}$についての和が$n$回取られるとき、その量を$n$階テンソルと呼ぶ。
+これに合わせて、$T_{ij}$は先程述べたように、電磁気的な応力になっているから、Maxwellの応力テンソルと呼ばれている。
+
+また応力テンソルは、定義から明らかなように対称、つまり$T_{ij}=T_{ji}$である。
+ここでベクトル解析からのアナロジーとして、
+\begin{align}
+	(\Div \vec{T})_j = \pdif{T_{ij}}{x_i}
+\end{align}
+のように定義されることがある。
+（ここで縮約をどちらの添字でとるのか決まっているのかは、よく知らない。ただ、こういう計算をするときは基本そのテンソル量は対称な気がするから、どちらでも良いのではないかという気がする。）
+ベクトル$\vec{v}$に対して$\Div \vec{v}$はスカラー量を作るが、実際に計算してみれば分かるように、テンソル$\vec{T}$に対して$\Div \vec{T}$はベクトル量になる。
+この表記を使うと、\eqref{eq:5.11}は
+\begin{align}
+	\dif{\vec{G}}{t} &= \int_V \ddif x^3 \Div \vec{T} \\
+	&= \int_{\partial V} \ddif S \vec{T} \cdot \vec{n}
+\end{align}
+のように書ける。
+（ここも内積（縮約）をどちらの添字でとるのかはよくわからない。
+まあこれもだいたいどっちでも良いんだろうなあ。）
+
+\end{document}

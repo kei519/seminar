@@ -1,0 +1,255 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\title{４準位系の状態について}
+\author{}
+
+\begin{document}
+\maketitle
+
+４準位系について、
+２準位系スピン２つの実験からの考察が教科書5.1節にあったが、
+$N$準位系の一般論を適応しても同じことが言えるか考えてみる。
+ここで$\hat{\sigma}_0 = \hat{I}$、$\hat{\sigma}_1 = \hat{\sigma}_x$、
+$\hat{\sigma}_2 = \hat{\sigma}_y$、$\hat{\sigma}_3 = \hat{\sigma}_z$
+としておく。
+
+まず２次元エルミート行列の基底は$\{\hat{\sigma}_a\}_{a=0}^3$が張ることから、
+４次元エルミート行列、
+つまり２次元エルミート行列同士のテンソル積の基底は
+$\{ \hat{\sigma}_a \otimes \hat{\sigma}_b \}_{a,b = 0}^3$で与えられる。
+（$N$次元エルミート行列は実$N^2$次元ベクトル空間であることからも、
+これは基底であることが分かる。）
+そこで４準位系の密度行列は
+\begin{align}
+	\hat{\rho} = \frac{1}{4}
+	\sum_{a,b = 0}^4 \alpha_{ab} \hat{\sigma}_a \otimes \hat{\sigma}_b
+\end{align}
+で与えられる。
+
+次に密度演算子の性質から係数$\alpha_{ab}$の条件を求めていく。
+まず$\Tr \left[ \hat{\rho} \right] = 1$であるから、
+\begin{align}
+	\Tr \left[ \hat{\rho} \right]
+	= \frac{1}{4} \alpha_{00} \Tr \left[ \hat{I} \otimes \hat{I} \right]
+	= \alpha_{00}
+	= 1
+\end{align}
+が得られる。
+また
+\begin{align}
+	\Tr \left[ \hat{\rho}^2 \right]
+	&= \frac{1}{16} \sum_{a,a',b,b'} \alpha_{ab} \alpha_{a'b'}
+	\Tr \left[ \hat{\sigma}_a \hat{\sigma}_{a'} \right]
+	\Tr \left[ \hat{\sigma}_b \hat{\sigma}_{b'} \right] \\
+	&= \frac{1}{4} \sum_{a,b = 0}^3 \alpha_{ab}^2 \\
+	&\leq 1
+\end{align}
+から
+\begin{align}
+	\sum_{a \neq 0 \lor b \neq 0} \alpha^2_{ab} \leq 3
+\end{align}
+が得られる。
+最後に非負性であるが、
+ここで単位ベクトルを考えても一般性を失わないから、
+\begin{gather}
+	\Ket{\Psi} = \mu_{++} \Ket{+} \Ket{+} + \mu_{+-} \Ket{+} \Ket{-}
+	+ \mu_{-+} \Ket{-} \Ket{+} + \mu_{--} \Ket{-} \Ket{-} \\
+	\left| \mu_{++} \right|^2 + \left| \mu_{+-} \right|^2
+	+ \left| \mu_{-+} \right|^2 + \left| \mu_{--} \right|^2 = 1
+\end{gather}
+に対して
+\begin{align}
+	\Braket{\Psi | \hat{\rho} | \Psi} \geq 0
+\end{align}
+という条件を考える。
+これを頑張って計算すると
+\begin{align}
+	\frac{1}{4} &\left[ 1
+	+ \left| \mu_{++} \right|^2 \left( \alpha_{03} + \alpha_{30} + \alpha_{33}
+	\right)
+	+ \left| \mu_{+-} \right|^2 \left( \alpha_{30} - \alpha_{03} - \alpha_{33}
+	\right)
+	+ \left| \mu_{-+} \right|^2 \left( \alpha_{03} - \alpha_{30} - \alpha_{33}
+	\right)
+	+ \left| \mu_{--} \right|^2 \left( \alpha_{33} - \alpha_{03} - \alpha_{30}
+	\right) \right. \\
+	&\quad + 2 \Re \left( \mu_{++}^* \mu_{+-} \right)
+	\left( \alpha_{01} + \alpha_{31} \right)
+	+ 2 \Im \left( \mu_{++}^* \mu_{+-} \right)
+	\left( \alpha_{02} + \alpha_{32} \right) \\
+	&\quad + 2 \Re \left( \mu_{++}^* \mu_{-+} \right)
+	\left( \alpha_{10} + \alpha_{13} \right)
+	+ 2 \Im \left( \mu_{++}^* \mu_{-+} \right)
+	\left( \alpha_{20} + \alpha_{23} \right) \\
+	&\quad + 2 \Re \left( \mu_{++}^* \mu_{--} \right)
+	\left( \alpha_{11} - \alpha_{22} \right)
+	+ 2 \Im \left( \mu_{++}^* \mu_{--} \right)
+	\left( \alpha_{12} + \alpha_{21} \right) \\
+	&\quad + 2 \Re \left( \mu_{+-}^* \mu_{-+} \right)
+	\left( \alpha_{11} + \alpha_{22} \right)
+	+ 2 \Im \left( \mu_{+-}^* \mu_{-+} \right)
+	\left( \alpha_{21} - \alpha_{12} \right) \\
+	&\quad + 2 \Re \left( \mu_{+-}^* \mu_{--} \right)
+	\left( \alpha_{10} - \alpha_{13} \right)
+	+ 2 \Im \left( \mu_{+-}^* \mu_{--} \right)
+	\left( \alpha_{20} - \alpha_{23} \right) \\
+	&\quad \left. + 2 \Re \left( \mu_{-+}^* \mu_{--} \right)
+	\left( \alpha_{01} - \alpha_{31} \right)
+	+ 2 \Im \left( \mu_{-+}^* \mu_{--} \right)
+	\left( \alpha_{02} - \alpha_{32} \right)
+	\right]
+	\geq 0 \label{eq:condition}
+\end{align}
+を得る。
+ここで
+\begin{align}
+	\begin{cases}
+		\left| \mu_{++} \right|^2 = 1 \text{とすると} &
+		1 + \alpha_{03} + \alpha_{30} + \alpha_{33} \geq 0 \\
+		\left| \mu_{+-} \right|^2 = 1 \text{とすると} &
+		1 + \alpha_{30} - \alpha_{03} - \alpha_{33} \geq 0 \\
+		\left| \mu_{-+} \right|^2 = 1 \text{とすると} &
+		1 + \alpha_{03} - \alpha_{30} - \alpha_{33} \geq 0 \\
+		\left| \mu_{--} \right|^2 = 1 \text{とすると} &
+		1 + \alpha_{33} - \alpha_{03} - \alpha_{30} \geq 0
+	\end{cases}
+\end{align}
+これらを用いると
+\begin{align}
+	-1 \leq \alpha_{03}, \alpha_{30}, \alpha_{33} \leq 1
+\end{align}
+が得られる。
+また
+\begin{align}
+	\begin{cases}
+		\displaystyle \Ket{\Psi} = \frac{1}{\sqrt{2}}
+		\left( \Ket{+}\Ket{+} + \Ket{+} \Ket{-} \right) \text{とすると} &
+		1 + \alpha_{30} + \alpha_{01} + \alpha_{31} \geq 0 \\
+		\displaystyle \Ket{\Psi} = \frac{1}{\sqrt{2}}
+		\left( \Ket{+}\Ket{+} - \Ket{+} \Ket{-} \right) \text{とすると} &
+		1 + \alpha_{30} - \alpha_{01} - \alpha_{31} \geq 0 \\
+		\displaystyle \Ket{\Psi} = \frac{1}{\sqrt{2}}
+		\left( \Ket{-}\Ket{+} + \Ket{-} \Ket{-} \right) \text{とすると} &
+		1 - \alpha_{30} + \alpha_{01} - \alpha_{31} \geq 0 \\
+		\displaystyle \Ket{\Psi} = \frac{1}{\sqrt{2}}
+		\left( \Ket{-}\Ket{+} - \Ket{-} \Ket{-} \right) \text{とすると} &
+		1 - \alpha_{30} - \alpha_{01} + \alpha_{31} \geq 0
+	\end{cases}
+\end{align}
+から
+\begin{align}
+	-1 \leq \alpha_{01}, \alpha_{31} \leq 1
+\end{align}
+が得られる。
+同様にして
+\begin{align}
+	-1 \leq \alpha_{ab} \leq 1
+\end{align}
+が得られる（と思う）。
+
+また変数同士の関係も式\eqref{eq:condition}から制限される。
+その具体例をチレルソン不等式の上限を満たす場合で考えてみる。
+その前にパウリ演算子をブラケットで挟んだ場合に吐く数字を考える。
+\begin{align}
+	\hat{\sigma}_0 &= \Ketbra{+}{+} + \Ketbra{-}{-} \\
+	\hat{\sigma}_1 &= \Ketbra{+}{-} + \Ketbra{-}{+} \\
+	\hat{\sigma}_2 &= -i \Ketbra{+}{-} + i \Ketbra{-}{+} \\
+	\hat{\sigma}_3 &= \Ketbra{+}{+} - \Ketbra{-}{-}
+\end{align}
+であるから、
+\begin{align}
+	\Braket{+ | \hat{\sigma}_a | +} &= \delta_{a0} + \delta_{a3} \\
+	\Braket{+ | \hat{\sigma}_a | -} &= \delta_{a1} -i \delta_{a2} \\
+	\Braket{- | \hat{\sigma}_a | +} &= \delta_{a1} + i \delta_{a2} \\
+	\Braket{- | \hat{\sigma}_a | -} &= \delta_{a0} - \delta_{a3}
+\end{align}
+が分かる。
+したがって
+\begin{align}
+	\hat{D} = \sqrt{2} \hat{\sigma}_y \otimes \hat{\sigma}_y
+	+ \sqrt{2} \hat{\sigma}_z \otimes \hat{\sigma}_z
+\end{align}
+について、
+その上限を達成する状態つまり
+\begin{align}
+	\Tr \left[ \hat{\rho} \left( \hat{\sigma}_y \hat{\sigma}_y \right) \right]
+	= 1
+\end{align}
+を満たすとき
+\begin{align}
+	&\quad \Tr \left[ \hat{\rho} \left( -\Ketbra{+}{-} \otimes \Ketbra{+}{-}
+	+ \Ketbra{+}{-} \otimes \Ketbra{-}{+}
+	+ \Ketbra{-}{+} \otimes \Ketbra{+}{-}
+	- \Ketbra{-}{+} \otimes \Ketbra{-}{+} \right) \right] \\
+	&=\sum_{a,b} \frac{\alpha_{ab}}{4} \cdot 4\delta_{a2} \delta_{b2} \\
+	&= \alpha_{22}
+	= 1
+\end{align}
+でなければならない。
+同様に
+\begin{align}
+	\Tr \left[ \hat{\rho}
+	\left( \hat{\sigma}_z \otimes \hat{\sigma}_z \right) \right]
+	= \alpha_{33}
+	= 1
+\end{align}
+が得られる。
+ここで式\eqref{eq:condition}に戻って
+$\displaystyle \Ket{\Psi} = \frac{1}{\sqrt{2}} \left( \Ket{+} \Ket{-}
+- \Ket{-}\Ket{+} \right)$を代入すると、
+\begin{align}
+	1 - \alpha_{11} - \alpha_{22} - \alpha_{33}
+	= -1 - \alpha_{11} \geq 0
+\end{align}
+でなければならないことが分かるから、
+結局$\alpha_{11} = -1$でなければならない。
+すると
+\begin{align}
+	\sum_{a,b} \alpha_{ab}^2 \leq 4
+	\label{純粋度}
+\end{align}
+の条件から、
+$a \neq b$のとき$\alpha_{ab} = 0$である。
+以上をまとめると、
+\begin{align}
+	\hat{\rho} = \frac{1}{4} \left( \hat{I} \otimes \hat{I}
+	- \hat{\sigma}_{x} \otimes \hat{\sigma}_x
+	+ \hat{\sigma}_y \otimes \hat{\sigma}_y
+	+ \hat{\sigma}_z \otimes \hat{\sigma}_z \right)
+\end{align}
+がチレルソン不等式の上限、
+つまり
+\begin{align}
+	\Braket{D} = \Tr \left[ \hat{D} \hat{\rho} \right]
+	= 2\sqrt{2}
+\end{align}
+を満たす状態である。
+これは式\eqref{純粋度}の等号を成立させる条件だから純粋状態である。
+実際ブラケットを用いて書くと
+\begin{align}
+	\hat{\rho}
+	&= \frac{1}{4} \left[ \left( \Ketbra{+}{+} + \Ketbra{-}{-} \right)
+	\otimes \left( \Ketbra{+}{+} + \Ketbra{-}{-} \right)
+	- \left( \Ketbra{+}{-} + \Ketbra{-}{+} \right) \otimes
+	\left( \Ketbra{+}{-} + \Ketbra{-}{+} \right) \right. \\
+	&\qquad \qquad \left.
+	+ \left( -i \Ketbra{+}{-} +i \Ketbra{-}{+} \right) \otimes
+	\left( -i \Ketbra{+}{-} +i \Ketbra{-}{+} \right)
+	+ \left( \Ketbra{+}{+} - \Ketbra{-}{-} \right) \otimes
+	\left( \Ketbra{+}{+} - \Ketbra{-}{-} \right) \right] \\
+	&= \frac{1}{2} \left[ \Ketbra{+}{+} \otimes \Ketbra{+}{+}
+	- \Ketbra{+}{-} \otimes \Ketbra{+}{-}
+	- \Ketbra{-}{+} \otimes \Ketbra{-}{+}
+	+ \Ketbra{-}{-} \otimes \Ketbra{-}{-} \right] \\
+	&= \frac{1}{\sqrt{2}} \left( \Ket{+} \Ket{+} - \Ket{-} \Ket{-} \right)
+	\cdot \frac{1}{\sqrt{2}} \left( \Bra{+} \Bra{+} - \Bra{-} \Bra{-} \right)
+	\\
+	&= \Ketbra{\Psi_-}{\Psi_-}
+\end{align}
+であることが分かる。
+
+\end{document}

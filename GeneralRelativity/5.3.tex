@@ -1,0 +1,92 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 5.3 \ ブラックホールの定義}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{5}
+\setcounter{subsection}{2}
+\subsection{ブラックホールの定義}
+
+無限遠に信号を送ることのできない漸近的に平坦な時空としてのブラックホールを、今から正確に定義する。
+$\mathcal{I}^{+}$はいま考えている非物理的な時空$(\bar{M}, \bar{g})$の部分集合であるから、$J^{-} (\mathcal{I}^{+}) \subset \bar{M}$を定義することができる。
+$\mathcal{I}^{+}$に信号を送ることができる$M$上の点の集合は$M \cap J^{-}(\mathcal{I}^{+})$である。
+いま我々は、ブラックホールの領域を、この領域の補集合であるとして定義し、future event horizonをブラックホール領域の境界とする。
+
+\begin{description}
+	\item[定義] $(M, g)$をnull infinity（null無限遠）で漸近的に平坦であるような時空とする。
+	$J^{-}(\mathcal{I}^{+})$が非物理的な時空$(\bar{M}, \bar{g})$上で定義されているとき、ブラックホール領域を$\mathcal{B}=M \backslash [M \cap J^{-}(\mathcal{I}^+)]$とする。
+	また、future event horizonを$\mathcal{H}^+ = \dot{\mathcal{B}}$（$M$上での$\mathcal{B}$の境界）とする（これは$\mathcal{H}^+ = M \cap \dot{J}^-(\mathcal{I}^+)$と同じ）。
+	同様に、ホワイトホール領域を$\mathcal{W} = M \backslash [M \cap J^+(\mathcal{I}^-)]$、past event horizonを$\mathcal{H}^- = \dot{\mathcal{W}} = M \cap \dot{J}^+(\mathcal{I}^-)$とする。
+\end{description}
+
+non-emptyなブラックホール領域を持つ時空の例は、Minkowski時空から点の集合を取り除くことで、簡単に作ることができる。
+しかし、初期値において漸近的に平坦に、幾何学的に完全になるように最大拡張した時空のみを考えることで、そのような自明な例を取り除くことができる。
+
+Kruskal時空では、IIもしくはIVの領域から出たどの因果曲線も$\mathcal{I}^+$には到達しない。
+したがって、$\mathcal{B}$はIIとIVをあわせた領域（$U=$つまり$t=2M$である境界を含む）となる。
+また、$\mathcal{H}^-$は$V=0$となる。
+図5.7を見よ。
+
+4.11節の定理2と3から、$\mathcal{H}^{\pm}$がnull超曲面であると分かる。
+また定理3から、$\mathcal{H}^+$のgeneratorはfuture endpointを持てないことも分かる。
+しかし、past endpointは持てる。
+同じことがPenroseダイアグラムを用いた、球対称崩壊にも言える。
+
+$\mathcal{H}^+$のgeneratorは、ブラックホールが作られる点$p$にpast endpointを持つ。
+したがって、null generatorは$\mathcal{H}^+$に入ることはできるが、出ることはできない。
+ここで、この時空においては集合$\mathcal{W}$と$\mathcal{H}^-$は空であることに注意しておく。
+
+\begin{description}
+	\item[定義] 漸近的に平坦な時空$(M, g)$は、ある開領域$\bar{V} \subset \bar{M}$があって、$M \cap J^-(\mathcal{I}^+) \subset \bar{V}$かつ$(\bar{V}, \bar{g})$がglobally hyperbolicであれば、strongly asymptotically predictableと呼ばれる。
+\end{description}
+
+この定義は、$(M \cap \bar{V}, g)$が$M$のglobally hyperbolicな部分集合担っているということを言っている。
+大雑把に言えば、$\mathcal{B}$に含まれず、その境界$\mathcal{H}^+$の近傍に含まれる領域から構成される時空で、globally hyperbolicな領域$M \cap \bar{V}$が存在するということである。
+したがって、$\mathcal{H}^+$の上でも外でも物理学的な予測ができることが保証される。
+この定義による単純な帰結は、ブラックホールは2分岐できないということである。
+
+\begin{description}
+	\item[定理] $(M, g)$をstrongly asymptotically predictableとし、$\Sigma_1, \Sigma_2$を$\Sigma_2 \subset I^+(\Sigma_1)$で$\bar{V}$におけるCauchy surfaceとする。
+	また、$B$を$\mathcal{B} \cap \Sigma_1$の連結成分とする。
+	すると、$J^+(B) \cap \Sigma_2$は$\mathcal{B} \cap \Sigma_2$の連結成分に含まれる。
+
+	\item[証明] （図5.8を見よ）
+	Globally hyperbolicであることから、すべての$\Sigma_1$から出る因果曲線は$\Sigma_2$と交わり、また逆も然りである。
+	$J^+(B) \subset \mathcal{B}$であることから、$J^+(B) \cap \Sigma_2 \subset \mathcal{B} \cap \Sigma_2$であることに注意しておく。
+	$J^+(B) \cap \Sigma_2$は単一の連結成分$\mathcal{B} \cap \Sigma_2$に含まれていないと仮定する。
+	すると、互いに素な開集合$O, O^{\prime} \subset \Sigma_2$で、$J^+(B) \cap \Sigma_2 \subset O \cup O^{\prime}$で、$J^+(B) \cap O \ne \emptyset$かつ$J^+(B) \cap O^{\prime} \ne \emptyset$となるものがある。
+	（結局$J^+(B) \cap \Sigma_2$が連結でないことを言っているなあ。）
+	このとき、$B \cap I^-(O)$と$B \cap I^-(O^{\prime})$は空ではなく、$B \subset I^-(O) \cup I^-(O^{\prime})$となる。
+	いま、$p \in B$は$I^-(O)$と$I^-(O^{\prime})$の両方に存在することはできない。
+	というのも、そうでなければ、$p$から出るfuture-directedなtimelike測地線を、$O, O^{\prime}$のどちらと交差するかによって2つの集合に分けることができ、$p$におけるfuture-directedなtimelikeベクトルを互いに素な2つの開集合に分割できることになり、$p$における未来光円錐の連結性と矛盾するからである。
+	以上より、開集合$B \cap I^-(O)$と$B \cap I^-(O^{\prime})$は、和集合が$B$である互いに素な開集合となる。
+	これは$B$の連結性に矛盾する。
+\end{description}
+
+\end{document}

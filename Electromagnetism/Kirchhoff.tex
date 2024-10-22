@@ -1,0 +1,209 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\title{Kirchhoffの積分表示について}
+\author{}
+
+\begin{document}
+\maketitle
+
+\section{導出と体積積分項についての考察}
+Greenの定理
+\begin{align}
+	\int_V \ddif^3 x' \left( \phi(\vec{x}', t') \Delta' \psi(\vec{x}', t')
+	- \psi(\vec{x}', t') \Delta' \phi(\vec{x}', t') \right)
+	= \int_{\partial V} \ddif S'
+	\left( \phi(\vec{x}', t') \pdif{\psi(\vec{x}', t')}{n'}
+	- \psi(\vec{x}', t') \pdif{\phi(\vec{x}', t')}{n'} \right)
+\end{align}
+から
+\begin{align}
+	&\int_{t_0}^{t_1} \ddif t' \int_V \ddif^3 x'
+	\Bigl( D_{\rm ret}(\vec{x} - \vec{x}', t-t') \Delta' \psi(\vec{x}', t')
+	- \psi(\vec{x}', t') \Delta' D_{\rm ret}(\vec{x} - \vec{x}', t-t') \Bigr) \\
+	= &\int_{t_0}^{t_1} \ddif t' \int_{\partial V} \ddif S'
+	\left( D_{\rm ret}(\vec{x} - \vec{x}', t-t') \pdif{\psi(\vec{x}', t')}{n'}
+	- \psi(\vec{x}', t') \pdif{}{n'} D_{\rm ret}(\vec{x} - \vec{x}', t-t') \right)
+\end{align}
+となる。
+ここで$\psi(\vec{x}, t)$は波動方程式
+\begin{align}
+	\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \psi(\vec{x}, t) = 0
+\end{align}
+を満たす。
+では両辺を評価していく。
+まず左辺から考えると
+\begin{align}
+	(\mbox{左辺}) &=
+	\frac{1}{c^2} \int_{t_0}^{t_1} \ddif t' \int_V \ddif^3 x'\left[
+		D_{\rm ret}(\vec{x} - \vec{x}', t-t') \pdif{^2}{t'^2}
+		\psi(\vec{x}', t')
+		- \psi(\vec{x}', t')
+		\left( \pdif{^2}{t'^2} D_{\rm ret}(\vec{x} - \vec{x}', t-t')
+		- \delta(t-t') \delta(\vec{x} - \vec{x}') \right)
+	\right]
+\end{align}
+となるから、$t_0 < t < t_1$かつ$\vec{x} \in V$であれば
+\begin{align}
+	(\mbox{左辺}) &= \frac{1}{c^2} \psi(\vec{x}, t)
+	+ \frac{1}{c^2} \int_V \ddif^3 x' \int_{t_0}^{t_1} \ddif t' \pdif{}{t'}
+	\left[ D_{\rm ret}(\vec{x} - \vec{x}', t-t') \pdif{}{t'} \psi(\vec{x}', t')
+		- \psi(\vec{x}', t') \pdif{}{t'} D_{\rm ret}(\vec{x} - \vec{x}', t-t')
+	\right]
+\end{align}
+となる。
+ここで第2項には
+\begin{align}
+	\left[ D_{\rm ret}(\vec{x} - \vec{x}', t-t') \pdif{}{t'} \psi(\vec{x}', t')
+		- \psi(\vec{x}', t') \pdif{}{t'} D_{\rm ret}(\vec{x} - \vec{x}', t-t')
+	\right]_{t' = t_0}^{t_1}
+\end{align}
+という項が現れるが、
+\begin{align}
+	D_{\rm ret}(\vec{x} - \vec{x}', t-t')
+	= \frac{1}{4\pi c} \frac{1}{|\vec{x} - \vec{x}'|}
+	\delta \left( |\vec{x} - \vec{x}'| - c(t-t') \right)
+\end{align}
+であることと$t_0 < t < t_1$であることを思い出せば
+\begin{align}
+	(\mbox{左辺}) = \frac{1}{c^2} \psi(\vec{x}, t)
+	- \frac{1}{c^2} \int_V \ddif^3 x'
+	\left[ D_{\rm ret}(\vec{x} - \vec{x}', t-t_0) \pdif{}{t'} \psi(\vec{x}', t_0)
+		- \psi(\vec{x}', t_0) \pdif{}{t_0} D_{\rm ret}(\vec{x} - \vec{x}', t-t_0)
+	\right]
+\end{align}
+が得られる。
+右辺の被積分関数には
+\begin{align}
+	\delta\left( \frac{R}{c} - t + t' \right)
+\end{align}
+という項があり、$t_0 < t - R/c < t_1$であれば（今$t_1$は自由に取れる）、
+教科書の通り
+\begin{align}
+	(\mbox{右辺})
+	= \frac{1}{4\pi c^2} \int_{\partial V} \ddif S' \vec{n}' \cdot
+	\left( \frac{\nabla' \psi(\vec{x'}, t')}{R}
+	- \frac{\vec{R}}{R^3} \psi(\vec{x}', t') - \frac{\vec{R}}{cR^2}
+	\pdif{\psi(\vec{x}', t')}{t'} \right)_{t' = t - \frac{R}{c}}
+\end{align}
+である。
+したがってKirchhoffの積分表示
+\begin{align}
+	\psi(\vec{x}, t) = &\int_V \ddif^3 x'
+	\left[ D_{\rm ret}(\vec{x} - \vec{x}', t-t_0) \pdif{\psi(\vec{x}', t)}{t_0}
+	+ \pdif{}{t_0} D_{\rm ret}(\vec{x}
+	- \vec{x}', t-t_0) \psi(\vec{x}', t_0) \right] \\
+	&\quad + \frac{1}{4\pi} \int_{\partial V} \ddif S' \vec{n}' \cdot
+	\left( \frac{\nabla' \psi(\vec{x'}, t')}{R}
+	- \frac{\vec{R}}{R^3} \psi(\vec{x}', t') - \frac{\vec{R}}{cR^2}
+	\pdif{\psi(\vec{x}', t')}{t'} \right)_{t' = t - \frac{R}{c}}
+\end{align}
+が得られる。
+ただしこの表式のためには境界上で$t_0 < t - R/c$が必要であるから
+\begin{align}
+	|\vec{x} - \vec{x}'| < c(t-t_0) \quad (\vec{x}' \in \partial V)
+\end{align}
+でなければならない。
+つまり点$\vec{x}$から見て境界よりも遠い領域が$V$内にない場合は
+体積積分が消えることになる
+（つまり$V$が有限の場合は必ず体積積分は消える？）。
+
+と思ったが、無限の場合も無限遠点が境界に含まれ、
+外の体積積分は寄与しないのでは？とも思ったり。
+そう考えるならば、無限遠の境界を無視しているわけではなく、
+計算すると寄与がなくなる必要があるなと思った。
+ということで、8.7節の例題の解である$\psi$が無限遠でどうなっているか考えることにする。
+ここでは$\psi$は導出されるものであるから、最初に無限遠の寄与を含めていないということは、
+無限遠の境界で面積積分が0になるものを選んでいるということである。
+つまり解もそうなっていなければならないはずである。
+例題では
+\begin{align}
+	\psi(\vec{x}, t) = \frac{f(\theta)}{r}
+	e^{i(kr - \omega t)}
+\end{align}
+であり、面積積分の被積分関数（の定数倍）は$\vec{R} = \vec{x} - \vec{x}'$として
+\begin{align}
+	&\vec{n}' \cdot \left( 
+		\frac{\nabla'\psi(\vec{x}', t')}{R}
+		- \frac{\vec{R}}{R^3} \psi(\vec{x}', t')
+		- \frac{\vec{R}}{cR^2} \pdif{\psi(\vec{x}', t')}{t'}
+	\right) \\
+	=& \vec{n}' \left[
+		\frac{1}{R} \left\{
+			\left( ik \psi - \frac{1}{r'} \psi \right) \vec{e}_{r'}
+			+ \left( \frac{1}{r'} 
+			\pdif{f(\theta')}{\theta'} e^{i(kr - \omega t)} \right)
+			\vec{e}_{\theta'}
+		\right\}
+	\right]
+\end{align}
+
+\section{境界値について}
+また境界値問題については初めに、
+$V$の境界$S$上での境界値付き波動方程式
+\begin{gather}
+	\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \psi(\vec{x}, t) = 0
+	\label{eq:wave} \\
+	\psi(\vec{x}, t) = f(\vec{x}, t) \quad (\vec{x} \in S)
+\end{gather}
+について考える。
+偏微分$\nabla$を超曲面$S$上での偏微分$\nabla'$を用いて
+\begin{gather}
+	\nabla = \vec{e}_n \pdif{}{n} + \nabla' \\
+	\Delta = \pdif{^2}{n^2} + \Delta'
+\end{gather}
+のように分解すると、上の方程式の解はもちろん波動方程式\eqref{eq:wave}の解であるから、
+$S$上において
+\begin{align}
+	\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \psi(\vec{x}, t)
+	&= \left( \Delta' - \frac{1}{c^2} \pdif{^2}{t^2} \right) \psi(\vec{x}, t)
+	+ \pdif{^2}{n^2} \psi(\vec{x}, t) \\
+	&= \left( \Delta' - \frac{1}{c^2} \pdif{^2}{t^2} \right) f(\vec{x}, t)
+	+ \pdif{^2}{n^2} \psi(\vec{x}, t) \\
+	&= 0
+\end{align}
+が成り立たなければならない。
+この第1項はある与えられた関数であり、
+$\partial \psi / \partial n$で考えればこれはただの1階常微分方程式となるから、
+与えられた$f$によって解が決定する
+（\textcolor{red}{1点の情報しかないし微妙な気もする}）。
+またすでに$\nabla' \psi$の値は確定しているから、$\nabla \psi$の値は確定する。
+次に境界値問題
+\begin{gather}
+	\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \psi(\vec{x}, t) = 0 \\
+	\nabla \psi(\vec{x}, t) = \vec{g}(\vec{x}, t) \quad (\vec{x} \in S)
+\end{gather}
+を考えると、$\psi$は$S$上では方程式
+\begin{align}
+	\nabla' \psi(\vec{x}, t) = \vec{g}_{\parallel} (\vec{x}, t)
+\end{align}
+を満たす必要があり、恐らく$S$が閉じていることから
+定数分の不定性を除いて$S$常で$\psi$が決定されるのではないかと想像される。
+
+\end{document}

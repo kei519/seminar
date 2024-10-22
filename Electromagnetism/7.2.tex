@@ -1,0 +1,84 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 7.2 \ 線状回路}
+
+\begin{document}
+\maketitle
+
+閉曲線$C_i$中に、$\vec{t}$に沿う方向の長さが
+他の方向よりも小さくなるような微小体積$\Delta V$を取ってきて、
+そこで$\Div \vec{i}_e$を積分すると、
+\begin{align}
+	\int_{\Delta V} \Div \vec{i}_e \ddif^3 x
+	&= \int_{\partial \Delta V} \vec{i}_e \cdot \ddif \vec{S} \\
+	&\simeq \vec{i}_e (\vec{x} + \ddif \vec{x})
+	\cdot \vec{t}(\vec{x} + \ddif \vec{x}) S(\vec{x} + \ddif \vec{x})
+	- \vec{i}_e (\vec{x}) \cdot \vec{t}(\vec{x}) S(\vec{x}) \\
+	&= 0
+\end{align}
+となるから、これを閉曲線$C_i$全体でつなげて実行すれば
+\begin{align}
+	I_i = \vec{i}_e (\vec{x}) \cdot \vec{t}(\vec{x}) S(\vec{x})
+\end{align}
+が閉曲線内では位置に依らないことが分かる。
+
+5章の
+\begin{gather}
+	N_i = L_{ij} I_j\\
+	W_m = \frac{1}{2} I_i N_i = \frac{1}{2} L_{ij} I_i I_j
+\end{gather}
+という関係の導出に用いた関係は
+\begin{gather}
+	\vec{B} = \Rot \vec{A}  \iff \Div \vec{B} = 0 \\
+	\Rot \vec{H} = \vec{i}_e
+\end{gather}
+とBiot-Savartの法則
+（これは上の2つが成り立つ状況で$\Div \vec{A} = 0$というゲージを選べば達成される）
+だけであるから、今の状況でも同じ関係を用いることができる。
+
+コンデンサーの電位差を起電力として足す式に加えることを考えているから、
+$C_i$の向きに沿って、負極$\rightarrow$正極と並べることを考えているのだろうと推定すると、
+\begin{align}
+	I = - \dif{Q}{t}
+\end{align}
+となる。
+
+% この節での目標は、準定常電流での法則を線状回路に適用することで回路方程式を得ることです。
+% \begin{gather}
+% 	\Rot \vec{E} = -\pdif{\vec{B}}{t} \label{1.1} \tag{1.1} \\
+% 	\vec{i}_e = \sigma (\vec{E} + \vec{E}_{ex}) \label{1.13} \tag{1.13}
+% \end{gather}
+% を用いると
+% \begin{align}
+% 	\Rot \left( \vec{E}_{ex} - \frac{1}{\sigma} \vec{i}_e \right)
+% 	= \pdif{\vec{B}}{t}
+% \end{align}
+% が得られ、これを閉回路のうちの1つ$C_i$で囲まれる
+
+\end{document}

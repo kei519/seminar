@@ -1,0 +1,248 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{\S\ 30.\ 角速度}
+
+\begin{document}
+\maketitle
+
+この章においては，剛体の運動について見る．
+剛体とは形を変えない，すなわち各粒子の位置関係が不変であるような粒子のかたまり，
+と定義する．
+現実の系はこのような条件を満たしはしないが，
+大体の固体は形を全体の運動に比べてほとんど変えないため，
+固体全体の運動を考える分には，剛体とみなしても問題がない．
+
+現実の力学において剛体の運動は，その内部構造に依らず，そのため剛体を連続体とみなす．
+しかし以後剛体を離散的な粒子の集まりとみなすことがある．
+これは各粒子において離散的な値を取る量（例えば質量$m$）を，
+連続量（場の量，例えば密度$\rho$）に置き換えた上で，
+全粒子についての和($\sum$）を剛体全体における積分（$\int$）に置き換えるだけで，
+連続体の議論に移行できる．
+\begin{screen}
+	\underline{補足}
+
+	簡単のために，一辺の長さ$L$の立方体の中に，
+	等間隔で$N^3$個の粒子が入っている場合を考える．
+	そこで各粒子が物理量$f$を持つとする．
+	ある頂点から延びた辺のそれぞれに$x$，$y$，$z$軸と名前をつける．
+	粒子の位置を，それぞれの軸の何番目に位置しているか，
+	つまり$(n_x, n_y, n_z)$で指定する．
+	またその粒子が持つ$f$を，
+	粒子の位置すなわち$(n_x, n_y, n_z)L/N$で指定する．
+
+	すると，物理量$f$についての和は
+	\begin{align}
+		\sum_{n_x, n_y, n_z = 1}^N f \left(
+			\frac{L}{N}n_x, \frac{L}{N}n_y, \frac{L}{N}n_z
+		\right)
+		&= \sum_{n_x, n_y, n_z = 1}^N
+		\left( \frac{L}{N} \right)^3
+		\cfrac{f\left(
+			\cfrac{L}{N}n_x, \cfrac{L}{N}n_y, \cfrac{L}{N}n_z
+		\right)}
+		{\left( \cfrac{L}{N} \right)^3}
+	\end{align}
+	と表せられる．
+	ここで連続化，すなわち$N \rightarrow \infty$を考えると，
+	区分求積法より，
+	\begin{align}
+		\int_{0}^{L} \ddif z \int_{0}^{L} \ddif y \int_{0}^{L} \ddif x
+		\rho_f \left( \vec{r} \right)
+		= \int_{V} \ddif V \rho_f (\vec{r})
+	\end{align}
+	と書ける．
+	ここで，
+	\begin{align}
+		\rho_f ( \vec{r} ) = \frac{f(\vec{r})}{(L/N)^3}
+	\end{align}
+	であり，これは各粒子の物理量$f$を，
+	その``微小体積''$(L/N)^3$で割ったものであるから，
+	物理量$f$の密度である．
+	また，立方体の内部を$V$で表した．
+\end{screen}
+
+ここから剛体の運動を記述していく．
+そのために，剛体に対する静止座標系$(X, Y, Z)$と，
+剛体に結びつき共に運動する運動座標系$(x, y, z)$
+もしくは$(x_1, x_2, x_3)$を導入する．
+また運動座標系の原点は慣性中心に一致させる
+（わざわざ慣性中心に選ぶのは，あとで並進と回転のエネルギーを分離するためである）．
+ここで運動座標系に2つの表記を用意するのは，
+普段良く用いられるのは前者だが，和を取るときなどには後者のほうが便利だからである．
+以後静止系で見たときの状況を考える
+（ここまでではまだ静止系から見る以外の方法が与えられていない）．
+
+この状況で剛体の状況を決めるには，
+運動系の原点の位置（動径ベクトル$\vec{R}$と，
+静止系に対する軸の回転度合いを決めれば良い．
+この2つはそれぞれ3つの自由度を持つから，結局剛体は6つの自由度を持つことになる．
+
+まず，準備として剛体のある点$P$の運動系における位置を$\vec{r}$，
+静止系における位置を$\vec{\tau}$と表すことにする．
+ここで，剛体の無限小時間$\ddif t$における，
+任意の無限小変位$\ddif \vec{\tau}$を考える．
+それは，9節で与えられた，大きさが微小回転角，
+方向が回転の右ねじの方向であるようなベクトル$\ddif \vec{\varphi}$を用いると，
+運動系の軸を固定したままの無限小並進（剛体の並進）$\ddif \vec{R}$と，
+原点を固定したままの無限小回転（剛体の慣性中心周りの回転）
+$\left[ \ddif \vec{\varphi} \cdot \vec{r} \right]$に分けられる．
+したがって
+\begin{align}
+	\ddif \vec{\tau} = \ddif \vec{R}
+	+ \left[ \ddif \vec{\varphi} \cdot \vec{r} \right]
+\end{align}
+と書ける．
+\begin{align}
+	&\dif{\vec{\tau}}{t} = \vec{v} \qquad \mbox{（点$P$の速度）}\\
+	&\dif{\vec{R}}{t} = \vec{V} \qquad \mbox{（並進運動の速度）} \\
+	&\dif{\vec{\varphi}}{t} = \vec{\Omega} \qquad \mbox{（角速度）}
+\end{align}
+を導入すると，
+\begin{align}
+	\vec{v} = \vec{V} + \left[ \vec{\Omega} \vec{r} \right]
+\end{align}
+と書き直せる．
+つまり，剛体の各点の速度は，剛体の並進速度と角速度を用いて表すことが出来る．
+
+先の議論では特に運動系の中心が慣性中心であることは用いていない．
+そのため，これは慣性中心以外を原点にとっても成り立つ．
+そこで原点を$\vec{a}$だけずらすことを考える．
+そのときの並進速度を$\vec{V}^{\prime}$，
+角速度を$\vec{\Omega}^{\prime}$と表すと，
+同様に運動系での位置が$\vec{r^{\prime}}$である点$P$の速度$v$は
+\begin{align}
+	\vec{v} = \vec{V}^{\prime}
+	+ \left[ \vec{\Omega}^{\prime} \vec{r}^{\prime} \right]
+	\label{eq:v}
+\end{align}
+と表されるはずであるが，$\vec{r} = \vec{r}^{\prime} + \vec{a}$を用いると，
+元の座標系で
+\begin{align}
+	\vec{v} = \vec{V} + \left[ \vec{\Omega} \vec{a} \right]
+	+ \left[ \vec{\Omega} \vec{r}^{\prime} \right]
+\end{align}
+とも書ける．
+以上を用いると，
+\begin{align}
+	&\vec{V}^{\prime} = \vec{V} + \left[ \vec{\Omega} \vec{a} \right]
+	\\ \label{eq:V}
+	&\vec{\Omega}^{\prime} = \vec{\Omega}
+\end{align}
+を得る．
+つまり，剛体の角速度は運動座標系の選び方に依らない．
+\begin{screen}
+	\underline{補足}
+
+	先の式より
+	\begin{align}
+		\vec{0} &= \vec{v} - \vec{v} \\
+		&= \vec{V}^{\prime} - \vec{V} - \left[ \vec{\Omega} \vec{a} \right]
+		+ \left[
+			\left( \vec{\Omega}^{\prime} - \vec{\Omega} \right)
+			\vec{r}^{\prime}
+		\right]
+	\end{align}
+	が成り立つ必要がある．
+	これは任意の$\vec{a}$，$\vec{r}^{\prime}$で成り立つはずである．
+	したがって，$\vec{r}^{\prime} = \vec{0}$を選ぶと
+	\begin{align}
+		\vec{V}^{\prime} = \vec{V} + \left[ \vec{\Omega} \vec{a} \right]
+	\end{align}
+	の成立が必要になる．
+\end{screen}
+
+ここからは，瞬間的にただ回転しているだけとみなせる座標系が存在することを紹介する．
+ある瞬間においてある運動系で$\vec{V}$と$\vec{\Omega}$が垂直ならば，
+$[\vec{\Omega} \vec{a}]$も$\vec{\Omega}$と垂直だから，
+式\eqref{eq:V}より別の運動座標系においても，
+$\vec{V}^{\prime}$と$\vec{\Omega}^{\prime}$が垂直になる．
+このとき式\ref{eq:v}より，
+どの運動座標系においても$\vec{v}$が$\vec{\Omega}$に対して垂直になるから，
+剛体の運動は$\vec{\Omega}$に垂直な面内でのみ運動（回転）を行う．
+そこで，$\vec{a}$は好きに選べるから，
+$\vec{V}^{\prime}$が$\vec{0}$になるように選ぶと，
+その瞬間においては，剛体がその原点を通る回転軸があり，
+その軸回りをただ回転しているのみの状態を表せられる．
+このとき，この軸を剛体の\textbf{瞬間的回転軸}と呼ぶ．
+
+$\vec{V}$と$\vec{\Omega}$が垂直でない場合は，
+$\vec{\Omega}$に平行な単位ベクトル$\vec{e}_{\Omega}$を用いて，
+$\vec{V}$を
+\begin{align}
+	\vec{V} = ( \vec{V} \cdot \vec{e}_{\Omega}) \vec{e}_{\Omega}
+	+ \vec{V}_{\perp}
+\end{align}
+と分解すると，
+\begin{align}
+	\vec{V} \cdot \vec{e}_{\Omega} = \vec{V} \cdot \vec{e}_{\Omega}
+	+ \vec{V}_{\perp} \cdot \vec{e}_{\Omega}
+\end{align}
+となるから，$\vec{V}_{\perp}$は$\vec{\Omega}$に垂直になる．
+したがって先程と同じことをすれば，
+座標系の選び方によって$\vec{V}_{\perp}=\vec{0}$とできる．
+これは結局，与えられた瞬間に剛体が並進移動し，
+角速度がその向きを向いた運動を剛体がしているとみなせることを意味する．
+
+今後は，運動座標系の原点が慣性中心である場合を考える．
+またこのとき，剛体の回転軸も慣性中心を通る．
+（「仮定する」とは？）
+
+\begin{screen}
+	\underline{補足}
+
+	この角速度の定義が微妙だと思った場合は，次のように定義することも出来る．
+	\begin{align}
+		\vec{\Omega} = \frac{\vec{r}}{r} \times \frac{\dot{\vec{r}}}{r}
+	\end{align}
+	このように定義すると，
+	\begin{align}
+		\vec{\Omega} \times \vec{r} &= \left(
+			\frac{\vec{r}}{r} \times \frac{\dot{\vec{r}}}{r}
+		\right) \times \vec{r} \\
+		&= \frac{1}{r^2} \left[
+			\left( \vec{r} \cdot \vec{r} \right) \dot{\vec{r}}
+			- \left( \dot{\vec{r}} \cdot \vec{r} \right) \vec{r}
+		\right] \\
+		&= \dot{\vec{r}} -
+		\left( \dot{\vec{r}} \cdot \vec{e}_{r} \right) \vec{e}_r
+	\end{align}
+	最後の$\vec{e}_r$は$r$方向の単位ベクトルである．
+	ここで，
+	\begin{align}
+		\left[
+			\dot{\vec{r}} -
+			\left( \dot{\vec{r}} \cdot \vec{e}_r \right)\vec{e}_r
+		\right] \cdot \vec{e}_r
+		= 0
+	\end{align}
+	であるから，結局$\vec{\Omega} \times \vec{r}$は$r$に垂直な方向の速度になる．
+	剛体の場合は，原点からの距離は変化しないから，これがまさに速度となる．
+	つまり，$\vec{\Omega}$は角速度である．
+	また一般の場合でも，$\vec{\Omega}$は動径方向に垂直な方向に
+	どれだけの速度を持っているかという情報を持っていることになり
+	（$\vec{r}$と外積を取れば分かる），期待する角速度の性質を持っていると考えられる．
+	すなわち，これが一般の角速度の定義であると考えられる．
+\end{screen}
+
+\end{document}

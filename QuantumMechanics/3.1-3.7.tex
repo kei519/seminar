@@ -1,0 +1,843 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\title{量子力学レジュメ 3.1-3.7}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{2}
+
+\section{多準位系の量子力学}
+これまでは2準位系を扱ってきたが、
+以後は3個以上の異なる状態を持つ量子系を考える。
+量子力学では$N \geq 3$となる一般の$N$準位系でも隠れた変数は存在せず、
+状態は実験から分かる物理量の確率分布と期待値によって定まると考える。
+
+\subsection{基準測定}
+一般の$N$準位系でも、
+2準位スピン粒子におけるSG実験の測定のように、
+$N$個の異なる状態を区別できる測定実験が少なくとも1つは存在することを
+量子力学では仮定する。
+そのような測定実験が存在しなければ、
+そもそも我々には状態を区別することなどできないから、
+この仮定は自然である。
+（逆に、そのような測定があるものしか扱わない、
+扱えないという意味でもある。）
+また、この測定は測定直後に同じ測定を繰り返したときに、
+1回目と2回目の結果は変わらない必要がある。
+これは測定の後にはその測定に関しての固有状態に遷移しているはずだろうという、
+2準位系の類推から来るものである。
+この1、2回目の測定結果が変わらないことを\textbf{反復可能性}と呼ぶ。
+以上のような測定を、
+状態の定義（区別）に使える基準という意味で\textbf{基準測定}と呼ぶ。
+基準測定で区別される状態を$k = 1, 2, \dots, N$でラベルし、
+$k$番目の状態が観測される確率を$p(k)$とする。
+この基準測定では$N$個の状態の区別しかできないから、
+$N$個の状態の出現確率は1になっているはずであり、
+$p(k)$は規格化条件
+\begin{align}
+	\sum_{k=1}^N p(k) = 1
+	\label{規格化条件}
+\end{align}
+を満たす必要がある。
+
+状態を同定するためには、
+全ての物理量の確率分布を知る必要がある。
+2準位系ではこれらの確率を有限個
+（具体的にはどこかの軸方向のスピン、例えば$\sigma_z$という1個）の
+物理量の期待値から求められたが、
+一般の$N$準位でもそのようなことが可能であると
+思われるということをこれから説明する。
+このようなことが可能であって欲しいのは、
+実験で確かめられる値から状態を決めたいからである。
+
+\subsubsection{基準測定で測られる物理量}
+まずは基準測定で$k$番目の状態が観測される確率を、
+$N-1$個の基準測定の期待値から求められるということを説明する。
+（実際には1つの測定だけであっても、
+$k$番目の状態が現れた数を全てメモしておけば、
+確率分布を定められるはずであるから、
+期待値から求める必要があるのかはわからない。）
+この$N-1$個の基準測定は、
+1つの測定で$k$番目の状態が観測されたら、
+残りの$N-2$個の測定でもそうなっていなければならない。
+つまりこの$N-1$個の物理量だけは、
+同時に決まった値を持つ必要がある。
+
+この$N-1$個の物理量を$\lambda_a$、
+その期待値を$\Braket{\lambda_a}$と書く。
+ここで$a = 1, 2, \dots, N-1$である。
+また$k$番目の状態が観測されたときの物理量$\lambda_a$は
+実数値$\lambda_a(k)$を取るとする。
+この$\lambda_a(k)$は基本的に自由に取っていいが、
+ここでは便利のために
+\begin{align}
+	\sum_{k=1}^N \lambda_a(k) = 0
+	\label{総和が0} \\
+	\sum_{k=1}^N \lambda_a(k) \lambda_{a'}(k) = N \delta_{aa'}
+	\label{直交性}
+\end{align}
+となるように$\lambda_a(k)$を選んでおく。
+常にこのようにできるかという問題があるが、
+これは
+$\vec{e}_a = \frac{1}{\sqrt{N}}
+^t\!(\lambda_a(1), \lambda_a(2), \dots, \lambda_a(k))$
+（規格化もしくは正規化）と思うと、
+式\eqref{総和が0}は$\vec{e}_0 = \frac{1}{\sqrt{N}} ^t\!(1, 1, \dots, 1)$
+と$\vec{e}_a$の直交性を、
+式\eqref{直交性}は$\vec{e}_a$と$\vec{e}_{a'}$が直交していることを
+表していると思える。
+すると、
+$N$次元ベクトル空間で$N$個のベクトルが直交するように取れるかという問題になるが、
+これは$N$次元空間では$N$個の正規直交基底が存在することから、
+可能であることが分かる。
+
+このようにすれば、
+期待値$\Braket{\lambda_a}$は
+\begin{align}
+	\Braket{\lambda_a} = \sum_{k=1}^N \lambda_a(k) p(k)
+	\label{期待値}
+\end{align}
+で書かれる。
+この$N-1$個の式と、
+式\eqref{規格化条件}を合わせて行列で書くと、
+\begin{align}
+	\left( \begin{array}{c}
+		\Braket{\lambda_1} \\
+		\Braket{\lambda_2} \\
+		\vdots \\
+		\Braket{\lambda_{N-1}} \\
+		1
+	\end{array} \right)
+	&= \left( \begin{array}{ccccc}
+		\lambda_1(1) & \lambda_1(2) & \cdots & \lambda_1(N-1) & \lambda_1(N) \\
+		\lambda_2(1) & \lambda_2(2) & \cdots & \lambda_2(N-1) & \lambda_2(N) \\
+		\vdots & \vdots & \ddots & \vdots & \vdots \\
+		\lambda_{N-1}(1) & \lambda_{N-1}(2) & \cdots & \lambda_{N-1}(N-1)
+		& \lambda_{N-1}(N) \\
+		1 & 1 & \cdots & 1 & 1
+	\end{array} \right) \left( \begin{array}{c}
+		p(1) \\
+		p(2) \\
+		\vdots \\
+		p(N-1) \\
+		p(N)
+	\end{array} \right) \label{連立方程式} \\
+	&= \sqrt{N} \textcolor{red}{
+	\underbrace{\textcolor{black}{\left( \begin{array}{c}
+		^t\!\vec{e}_1 \\
+		^t\!\vec{e}_2 \\
+		\vdots \\
+		^t\!\vec{e}_{N-1} \\
+		^t\!\vec{e}_0
+	\end{array} \right)}}_A} \left( \begin{array}{c}
+		p(1) \\
+		p(2) \\
+		\vdots \\
+		p(N-1) \\
+		p(N)
+	\end{array} \right)
+\end{align}
+と書ける。
+ここで$A$の各列ベクトルは全て直交する実数の単位ベクトルであるから、
+$A$は直交行列であり、その逆行列は$^t\!A$で与えられる。
+したがって
+\begin{align}
+	\left( \begin{array}{c}
+		p(1) \\
+		p(2) \\
+		\vdots \\
+		p(N-1) \\
+		p(N)
+	\end{array} \right)
+	= \frac{1}{\sqrt{N}} \left( \begin{array}{ccccc}
+		\vec{e}_1 & \vec{e}_2 & \cdots & \vec{e}_{N-1} & \vec{e}_0
+	\end{array} \right) \left( \begin{array}{c}
+		\Braket{\lambda_1} \\
+		\Braket{\lambda_2} \\
+		\vdots \\
+		\Braket{\lambda_{N-1}} \\
+		1
+	\end{array} \right)
+\end{align}
+と書けるから、
+\begin{align}
+	p(k) &= \frac{1}{N} \left( 
+		\sum_{a=1}^{N-1} \left( \vec{e}_a \right)_k \Braket{\lambda_a}
+		+ \left( \vec{e}_0 \right)_k \cdot 1
+	\right) \\
+	&= \frac{1}{N} \left(
+		1 + \sum_{a=1}^{N-1} \lambda_a (k) \Braket{\lambda_a}
+	\right)
+	\label{確率}
+\end{align}
+という形で確率$p(k)$を決定することができる。
+これが$N-1$個の基準測定が必要な理由である。
+つまり、各$k$について$p(k)$を決めるためには、
+$N$個の条件が必要であり、
+確率の和が1という条件があるから、
+残り$N-1$個の条件が必要だったということである。
+
+\subsubsection{基準測定に付随した基底ベクトルと実対角行列}
+次に2準位系と同様にベクトル空間を導入する。
+$N$次元複素ベクトル空間$\mathcal{S}$を考える。
+2準位系では$\sigma_z$測定で決まった状態を
+正規直交基底$\Ket{+}$、$\Ket{-}$で書けたことから、
+$\mathcal{S}$の正規直交基底
+\begin{align}
+	\Ket{1} = \left( \begin{array}{c}
+		1 \\ 0 \\ 0 \\ \vdots \\ 0
+	\end{array} \right),
+	\Ket{2} = \left( \begin{array}{c}
+		0 \\ 1 \\ 0 \\ \vdots \\ 0
+	\end{array} \right),
+	\cdots,
+	\Ket{N} = \left( \begin{array}{c}
+		0 \\ 0 \\ 0 \\ \vdots \\ 1
+	\end{array} \right)
+	\label{ket{k}}
+\end{align}
+に注目する。
+そして基準測定での$k$番目の状態に$\Ket{k}$を対応させることにする。
+また$\hat{\sigma}_z$をその固有状態$\Ket{+}$、$\Ket{-}$で展開できたことから、
+固有状態が$\Ket{k}$で与えられるような物理量$\lambda_a$に実対角行列
+\begin{align}
+	\hat{\lambda}_a = \sum_{k=1}^N \lambda_a(k) \Ketbra{k}{k}
+	= \left( \begin{array}{ccccc}
+		\lambda_a(1) & 0 & 0 & \cdots & 0 \\
+		0 & \lambda_a(2) & 0 & \cdots & 0 \\
+		0 & 0 & \lambda_a(3) & \cdots & 0 \\
+		\vdots & \vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & 0 & \cdots & \lambda_a(N)
+	\end{array} \right)
+\end{align}
+を対応させる。
+このようにすると定義から、
+エルミート性
+\begin{align}
+	\hat{\lambda}_a^\dagger = \hat{\lambda}_a
+\end{align}
+可換性
+\begin{align}
+	\left[ \hat{\lambda}_a, \hat{\lambda}_{a'} \right] = 0
+\end{align}
+が成り立つ。
+また
+\begin{gather}
+	\Tr \left[ \hat{\lambda}_a \right]
+	= \sum_{k=1}^N \lambda_a(k)
+	= 0 \quad \left( \because \eqref{総和が0} \right) \\
+	\Tr \left[ \hat{\lambda}_a \hat{\lambda}_{a'} \right]
+	= \sum_{k=1}^N \lambda_a(k) \lambda_{a'}(k)
+	= N\delta_{aa'} \quad \left( \because \eqref{直交性} \right)	
+\end{gather}
+というトレースの性質も成り立つ。
+
+\subsection{物理操作としてのユニタリー行列}
+ここまでの話で用いることのできる測定方法は基準測定のみであるが、
+次節以降で見るように、
+ある任意の単位ベクトル$\Ket{\psi}$という状態であるかどうか
+というのを調べたい時がある。
+これは2準位系のときのことを思い出せば納得できる。
+$\sigma_z$測定（基準測定）後の純粋状態であれば
+$\Ket{+}$、$\Ket{-}$だけで表すことができた。
+しかし任意の純粋状態は$\Ket{+}$、$\Ket{-}$以外の
+単位ベクトル$\Ket{\psi}$で表される場合もあった。
+したがって任意の状態についてその状態を知るには、
+状態$\Ket{\psi}$かどうか調べる必要があるだろうということである。
+
+数学的には任意の単位ベクトル$\Ket{\psi}$は、
+ユニタリ演算子$\hat{U}^{(N)}$を用いて
+$\Ket{\psi} = \hat{U}^{(N)} \Ket{k}$と表すことができる。
+この$\hat{U}^{(N)}$を作用させるという数学的な演算に対応した物理操作が存在すれば、
+基準測定によって$k$番目の状態が現れれば、
+$\hat{U}$に対応した物理操作を施すことで状態$\Ket{\psi}$を用意できる。
+また、この逆を考えれば任意の状態について、
+基準測定を用いて同定することができる。
+したがって、ユニタリ行列$\hat{U}^{(N)}$というのに、
+実験で実現できるなんらかの物理操作が対応するかというのは、
+量子力学において大切な原理的問題である。
+
+この節では、
+このような操作が実現可能だろうと納得できる理由を述べる。
+まずベクトル空間$\mathcal{S}$で
+2本のベクトル$\Ket{k}$と$\Ket{k'}$が張る
+部分ベクトル空間$\mathcal{H}_{k, k'}$にだけ注目すれば、
+$\mathcal{H}_{k, k'}$は2準位系の状態ベクトル空間とみなせるだろう。
+そこで$\mathcal{H}_{k, k'}$には変化を与えて、
+残りの$N-2$次元部分ベクトル空間は変化させない
+2準位ユニタリ行列$\hat{U}^{(k, k')}$を考える。
+前提としてスピンに限らず2準位系の量子系は（2準位系に限らず$N$準位系でも）、
+測定値などが異なるだけで全て同じ（数学を用いて記述できる）だろうと考えているので、
+この$\hat{U}^{(k, k')}$も2準位スピン系の時と同様に、
+なんらかの物理操作によって実現できるだろうと仮定するのは自然である。
+ここで任意$N$次元ユニタリ行列$\hat{U}^{(N)}$が
+\begin{align}
+	\hat{U}^{(N)} = e^{i\delta}
+	\left( \hat{U}^{(1, 2)} \cdots \hat{U}^{1, N} \right)
+	\left( \hat{U}^{(2, 3)} \cdots \hat{U}^{(2, N)} \right) \cdots
+	\left( \hat{U^{(N-2, N-1)}} \hat{U}^{(N-2, N)} \right)
+	\left( \hat{U}^{(N-1, N)} \right)
+	\label{分解}
+\end{align}
+という形に分解可能、
+すなわち$N(N-1)/2$個の2準位ユニタリ行列$\hat{U}^{(k, k')}$を
+順番に掛けたものになるということを踏まえると、
+たとえ$N$準位系であっても、
+任意のユニタリ行列$\hat{U}^{(N)}$に対応する物理的な操作は実現可能だろうと
+思われる。
+したがって以後これを量子力学の理論の前提として仮定する。
+しかしこの前提（、全ての$N$準位系は等価という前提）は
+各系において実験的に確かめられるべきものである。
+そしてそれは量子力学の理論の検証となる。
+この前提のもとでは、
+節の最初で述べたような任意の単位ベクトル$\Ket{\psi} = \hat{U}^{(N)}\Ket{k}$も
+状態ベクトルと見なせ、
+実験的に同定可能だということになる。
+\begin{problem}
+	任意の3次元ユニタリ行列$\hat{U}^{(3)}$は、
+	位相因子$e^{i\delta}$と
+	\begin{gather}
+		\hat{U}^{(1,2)}
+		= \left( \begin{array}{ccc}
+			a^{(1,2)} & b^{(1,2)} & 0 \\
+			c^{(1,2)} & d^{(1,2)} & 0 \\
+			0 & 0 & 1
+		\end{array} \right) \\
+		\hat{U}^{(1,3)}
+		= \left( \begin{array}{ccc}
+			a^{(1,3)} & 0 & b^{(1,3)} \\
+			0 & 1 & 0 \\
+			c^{(1,3)} & 0 & d^{(1,3)}
+		\end{array} \right) \\
+		\hat{U}^{(2,3)}
+		= \left( \begin{array}{ccc}
+			1 & 0 & 0 \\
+			0 & a^{(2,3)} & b^{(2,3)} \\
+			0 & c^{(2,3)} & d^{(2,3)}
+		\end{array} \right)
+	\end{gather}
+	という3次元2準位ユニタリ行列を用いて、
+	$\hat{U}^{(3)}
+	= e^{i\delta} \hat{U}^{(1,2)} \hat{U}^{(1,3)} \hat{U}^{(2,3)}$
+	と分解できることを示せ。
+	この証明の自然な拡張で、
+	$N$次元ユニタリ行列に対する\eqref{分解}も示せる。
+
+	\tcblower
+
+	\begin{align}
+		\hat{U}^{(3)} = \left( \begin{array}{ccc}
+			u_{11} & u_{12} & u_{13} \\
+			u_{21} & u_{22} & u_{23} \\
+			u_{31} & u_{32} & u_{33}
+		\end{array} \right)
+	\end{align}
+	とする。
+	まず
+	\begin{align}
+		\hat{U}^{(1,2)} =
+		\frac{1}{\sqrt{|u_{11}|^2 + |u_{21}|^2}} \left( \begin{array}{ccc}
+			u_{11} & u_{21}^* & 0 \\
+			u_{21} & -u_{11}^* & 0 \\
+			0 & 0 & \sqrt{|u_{11}|^2 + |u_{21}|^2}
+		\end{array} \right)
+	\end{align}
+	とし、
+	$\hat{U}^{(1,2)\dagger} \hat{U}^{(3)}$を計算すると、
+	$(2,1)$成分は必ず0になる。
+	つまり
+	\begin{align}
+		\hat{U}^{(1,2)\dagger} \hat{U}^{(3)} = \left( \begin{array}{ccc}
+			u'_{11} & u'_{12} & u'_{13} \\
+			0 & u'_{22} & u'_{23} \\
+			u'_{31} & u'_{32} & u'_{33}
+		\end{array} \right)
+	\end{align}
+	と書ける。
+	この状況で次に
+	\begin{align}
+		\hat{U}^{(1,3)} = \left( \begin{array}{ccc}
+			u'_{11} & 0 & u_{31}^{\prime *} \\
+			0 & \sqrt{|u'_{11}|^2 + |u'_{31}|^2} & 0 \\
+			u'_{31} & 0 & -u_{11}^{\prime *}
+		\end{array} \right)
+	\end{align}
+	とし、
+	$\hat{U}^{(1,3)\dagger} \hat{U}^{(1,2)\dagger} \hat{U}^{(3)}$を計算すると、
+	$(2,1)$成分、$(3,1)$成分は必ず0になる。
+	つまり
+	\begin{align}
+		\hat{U}^{(1,3)\dagger} \hat{U}^{(1,2)\dagger} \hat{U}^{(3)}
+		= \left( \begin{array}{ccc}
+			u''_{11} & u''_{12} & u''_{13} \\
+			0 & u''_{22} & u''_{23} \\
+			0 & u''_{32} & u''_{33}
+		\end{array} \right)
+	\end{align}
+	を得る。
+	ここでユニタリ行列の各縦ベクトルが正規直交基底となっていることを用いると、
+	まず1列目が規格化されていることを用いると$|u''_{11}| = 1$が分かる。
+	つまり実数$\delta$を用いて$u''_{11} = e^{i\delta}$と書ける。
+	また1列目と2、3列目が直交していることから、
+	$u''_{12} = u''_{13} = 0$を得る。
+	（もちろん、確認してはいないが真面目に計算しても出る。）
+	したがって、
+	\begin{align}
+		\hat{U}^{(1,3)\dagger} \hat{U}^{(1,2)\dagger} \hat{U}^{(3)}
+		&= \left( \begin{array}{ccc}
+			e^{i\delta} &0 & 0 \\
+			0 & u''_{22} & u''_{23} \\
+			0 & u''_{32} & u''_{33}
+		\end{array} \right) \\
+		&= e^{i\delta} \left( \begin{array}{ccc}
+			1 &0 & 0 \\
+			0 & u''_{22}e^{-i\delta} & u''_{23}e^{-i\delta} \\
+			0 & u''_{32}e^{-i\delta} & u''_{33}e^{-i\delta}
+		\end{array} \right)
+	\end{align}
+	となることが分かる。
+	この右辺の行列部分を$\hat{U}^{(2,3)}$とすれば、
+	主張は示される。
+	
+	一般の場合、つまり
+	\begin{align}
+		\hat{U}^{(N)} = \left( \begin{array}{cccc}
+			u^{(1)}_{11} & u^{(1)}_{12} & \cdots & u^{(1)}_{1N} \\
+			u^{(1)}_{21} & u^{(1)}_{22} & \cdots & u^{(1)}_{2N} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			u^{(1)}_{N1} & u^{(1)}_{N2} & \cdots & u^{(1)}_{NN}
+		\end{array} \right)
+	\end{align}
+	の場合も2回帰納法を用いれば証明できる。
+	まず
+	\begin{gather}
+		\hat{U}^{(1,2)} = \frac{1}{r} \left( \begin{array}{ccccc}
+			u^{(1)}_{11} & u^{*(1)}_{21} & 0 & \cdots &0 \\
+			u^{(1)}_{21} & -u^{*(1)}_{11} & 0 & \cdots & 0 \\
+			0 & 0 & r & \cdots & 0 \\
+			\vdots & \vdots & \vdots & \ddots & \vdots \\
+			0 & 0 & 0 & \cdots & r
+		\end{array} \right) \\
+		r = \sqrt{|u^{(1)}_{11}|^2 + |u^{(1)}_{21}|^2}
+	\end{gather}
+	とすると、
+	$\hat{U}^{(1,2)} \hat{U}^{(N)}$の$(2,1)$成分は0になるから、
+	\begin{align}
+		\hat{U}^{(1,2)\dagger} \hat{U}^{(N)}
+		= \left( \begin{array}{cccc}
+			u^{(2)}_{11} & u^{(2)}_{12} & \cdots & u^{(2)}_{1N} \\
+			0 & u^{(2)}_{22} & \cdots & u^{(2)}_{2N} \\
+			u^{(2)}_{31} & u^{(2)}_{32} & \cdots & u^{(2)}_{3N} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			u^{(2)}_{N1} & u^{(2)}_{N2} & \cdots & u^{(2)}_{NN}
+		\end{array} \right)
+	\end{align}
+	と書ける。
+	したがって、
+	\begin{gather}
+		\hat{U}^{(1,n)}
+		= \frac{1}{r}
+		\left( \begin{array}{ccccccccc}
+			u^{(n)}_{11} & 0 & 0 & \cdots & 0 & u^{*(n)}_{n1} & 0 & \cdots &
+			0 \\
+			0 & r & 0 & \cdots & 0 & 0 & 0 & \cdots & 0 \\
+			0 & 0 & r & \cdots & 0 & 0 & 0 & \cdots & 0 \\
+			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots
+			& \ddots & \vdots \\
+			0 & 0 & 0 & \cdots & r & 0 & 0 & \cdots & 0 \\
+			u^{(n)}_{n1} & 0 & 0 & \cdots & 0 & -u^{*(n)}_{11} & 0 & \cdots &
+			0 \\
+			0 & 0 & 0 & \cdots & 0 & 0 & r & \cdots & 0 \\
+			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots
+			& \ddots & \vdots \\
+			0 & 0 & 0 & \cdots & 0 & 0 & 0 & \cdots & r
+		\end{array} \right) \\
+		\text{ただし、$r = \sqrt{|u^{(n)}_{11}|^2 + |u^{(n)}_{n1}|^2}$}
+	\end{gather}
+	とすると、帰納法から
+	\begin{align}
+		\hat{U}^{(1,N)\dagger} \cdots \hat{U}^{(1,2)\dagger} \hat{U}^{(N)}
+		&= \left( \begin{array}{cccc}
+			u_{11}^{(N)} & u_{12}^{(N)} & \cdots & u_{1N}^{(N)} \\
+			0 & u_{22}^{(N)} & \cdots & u_{2N}^{(N)} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			0 & u_{N2}^{(N)} & \cdots & u_{NN}^{(N)}
+		\end{array} \right)
+	\end{align}
+	が得られる。
+	ここでも列ベクトルが正規直交基底をなしていることを用いると結局
+	\begin{align}
+		\hat{U}^{(1,N)\dagger} \cdots \hat{U}^{(1,2)\dagger} \hat{U}^{(N)}
+		&= e^{i\delta} \left( \begin{array}{cccc}
+			1 & 0 & \cdots & 0 \\
+			0 & u_{22}^{(N)} e^{-i\delta} & \cdots &
+			u_{2N}^{(N)} e^{-i\delta} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			0 & u_{N2}^{(N)} e^{-i\delta} & \cdots & u_{NN}^{(N)} e^{-i\delta}
+		\end{array} \right)
+	\end{align}
+	と書けることが分かる。
+	ここでまた$\hat{U}^{(N-1)}$に対する帰納法を用いれば示せる。
+\end{problem}
+
+\subsection{一般の物理量の定義}
+既に$N$準位系の基準測定に付随した物理量$\lambda_a$ついては定義したが、
+$N$準位系には一般的な物理量も定義されるはずである。
+ここでも2準位系のときのことを思い返すと、
+2準位系では$\sigma_z$測定とそれに対応するエルミート行列、
+空間回転とそれに対応するユニタリ行列$\hat{U}$から、
+$\vec{n}$方向のスピンとそれに対応するエルミート行列$\hat{\sigma}(\vec{n})$
+（正確には$a \sigma(\vec{n}) + b$となるもの）が
+定義できた。
+$N$準位系でも同じように、
+基準測定とそれに対応するエルミート行列$\{\lambda_a\}_{a=1}^N$、
+なんらかの物理操作とそれに対応するユニタリ行列$\hat{U}^{(N)}$から、
+なんらかの物理量$\Lambda$と
+それに対応するエルミート演算子$\hat{\Lambda}$を定義できる。
+
+まず$\hat{\Lambda}$をスペクトル分解
+\begin{align}
+	\hat{\Lambda}
+	= \sum_{k=1}^N \Lambda(k) \Ketbra{u_k}{u_k}
+	\label{ラムダのスペクトル分解}
+\end{align}
+を考える。
+固有ベクトル$\Ket{u_k}$の集合である$\{\Ket{u_k}\}$と$\{\Ket{k}\}$は
+互いに正規直交基底を成しているから、
+あるユニタリ行列$\hat{U}^{(N)}$が存在して、
+$\Ket{k} = \hat{U}^{(N)} \Ket{u_k}$とできる。
+\begin{problem}
+	\begin{align}
+		\hat{U}^{(N)}
+		= \left( \begin{array}{cccc}
+			\Braket{u_1 | 1} & \Braket{u_1 | 2} & \cdots & \Braket{u_1 | N} \\
+			\Braket{u_2 | 1} & \Braket{u_2 | 2} & \cdots & \Braket{u_2 | N} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			\Braket{u_N | 1} & \Braket{u_N | 2} & \cdots & \Braket{u_N | N}
+		\end{array} \right)
+	\end{align}
+	で与えられるユニタリ行列は
+	$\Ket{k} = \hat{U}^{(N)} \Ket{u_k}$を満たすことを示せ。
+
+	\tcblower
+
+	\begin{align}
+		\Ket{u_k}
+		= \left( \begin{array}{c}
+			u_k (1) \\
+			u_k (2) \\
+			\vdots \\
+			u_k (N)
+		\end{array} \right)
+	\end{align}
+	と書くと、
+	\begin{align}
+		\Braket{k | u_{k'}} = u_{k'} (k)
+	\end{align}
+	となる。
+	したがって
+	\begin{align}
+		\hat{U}^{(N)} \Ket{u_k}
+		&= \left( \begin{array}{cccc}
+			\Braket{u_1 | 1} & \Braket{u_1 | 2} & \cdots & \Braket{u_1 | N} \\
+			\Braket{u_2 | 1} & \Braket{u_2 | 2} & \cdots & \Braket{u_2 | N} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			\Braket{u_N | 1} & \Braket{u_N | 2} & \cdots & \Braket{u_N | N}
+		\end{array} \right) \left( \begin{array}{c}
+			\Braket{1 | u_k} \\
+			\Braket{2 | u_k} \\
+			\vdots \\
+			\Braket{N | u_k}
+		\end{array} \right) \\
+		&= \sum_{n=1}^{N} \left( \begin{array}{c}
+			\Braket{u_1 | n} \Braket{n | u_k} \\
+			\Braket{u_2 | n} \Braket{n | u_k} \\
+			\vdots \\
+			\Braket{u_{k-1} | n} \Braket{n | u_k} \\
+			\Braket{u_k | n} \Braket{n | u_k} \\
+			\Braket{u_{k+1} | n} \Braket{n | u_k} \\
+			\vdots \\
+			\Braket{u_N | n} \Braket{n | u_k}
+		\end{array} \right) \\
+		&= \left( \begin{array}{c}
+			0 \\
+			0 \\
+			\vdots \\
+			0 \\
+			1 \\
+			0 \\
+			\vdots \\
+			0
+		\end{array} \right) \\
+		&= \Ket{k}
+	\end{align}
+\end{problem}
+このときこれまで考えてきた前提を踏まえれば、
+以下のようにすることで物理量$\Lambda$の測定を定義することができる。
+\begin{enumerate}
+	\item $\hat{U}^{(N)}$に対応する物理操作を系に施す
+	\item 基準測定を行う
+	\item $k$番目の結果が観測されたら、
+	物理量$\Lambda$の値として$\hat{\Lambda}$の固有値$\Lambda(k)$が観測されたと
+	する
+\end{enumerate}
+
+このとき物理量$\Lambda$の期待値は
+\begin{align}
+	\Braket{\Lambda} = \sum_{k=1}^N \Lambda(k) p(k)
+\end{align}
+と計算できる。
+
+\subsection{同時対角化できるエルミート行列}
+物理量にはいろいろあるが、
+2つの物理量$A$、$B$に対応するエルミート行列$\hat{A}$、$\hat{B}$が
+$[\hat{A}, \hat{B}] = 0$すなわち可換な場合、
+$\hat{A}$と$\hat{B}$の単位固有ベクトル$\Ket{n}$は共通に取れる。
+\begin{proof}
+	$\hat{A}$と$\hat{B}$に縮退がない場合について示す。
+	$\hat{A} \Ket{n} = a_n \Ket{n}$となる
+	単位固有ベクトル$\Ket{n}$を取ってくると、
+	\begin{align}
+		\hat{A} \hat{B} \Ket{n} = \hat{B} \hat{A} \Ket{n}
+		= a_n \hat{B} \Ket{n}
+	\end{align}
+	となる。
+	ここから$\hat{B} \Ket{n}$は$\hat{A}$の固有値$a_n$の固有ベクトルであるが、
+	$\hat{A}$には縮退がないから、
+	$\hat{B} \Ket{n} = b_n \Ket{n}$と書ける。
+\end{proof}
+つまり、共通のユニタリ行列$\hat{U}^{(N)}$が存在して、
+$\hat{U}^{(N)} \hat{A} \hat{U}^{(N)\dagger}$と
+$\hat{U}^{(N)} \hat{B} \hat{U}^{(N)\dagger}$の両方が対角行列となる。
+これは物理的には、
+$\hat{U}^{(N)}$に対応した物理操作を行ったあとに基準測定を行うことで、
+物理量$A$、$B$を同時に測れることを意味している。
+
+なお$N$準位系では、
+一般に1つのエルミート行列$\hat{A}$に対して、
+零行列でも単位行列でもない$N-2$個の独立なエルミート行列が存在して、
+$\hat{A}$を含めた$N-1$個の行列が互いに可換となる。
+つまり、最大$N-1$個の独立な物理量を物理操作と基準測定で同時に測ることができる。
+これは元の基準測定が$N-1$個存在したことに対応する。
+\begin{tcolorbox}[
+enhanced,
+colback = white,
+boxrule = 0.5pt,
+arc=2mm,
+breakable
+]
+	\underline{補足}
+
+	しっかりとした証明を追ってはいないが、
+	同時対角化可能な行列は同じ固有ベクトルの組$\{\Ket{u_k}\}$を用いて
+	\begin{gather}
+		\hat{A} = \sum_{k=1}^N a_k \Ketbra{u_k}{u_k} \\
+		\hat{B} = \sum_{k=1}^N b_k \Ketbra{u_k}{u_k}
+	\end{gather}
+	のようにスペクトル分解できる必要がある。
+	ここで単位ベクトルの組$\{\Ket{u_k}\}$を決めてしまえば、
+	残りの自由度は$N$個（係数$a_k$）であり、
+	$a_k = 1$であるものは単位行列（完全性関係）になるから、
+	残りは$N-1$個になっている。
+\end{tcolorbox}
+
+\subsection{量子状態を定める物理量} \label{ss:量子状態を定める物理量}
+ここまでを踏まえて、
+$N$準位系に密度演算子$\hat{\rho}$を導入するための議論を始める。
+まず量子状態を特定するのに十分な数の物理量として、
+基準測定で定めた$N-1$個のエルミート行列$\hat{\Lambda}_a$を含んだ
+\begin{align}
+	\begin{gathered}
+		\hat{\Lambda}_n^\dagger =\hat{\Lambda}_n \\
+		\Tr [\hat{\Lambda}_n] = 0 \\
+		\Tr [\hat{\Lambda}_n \hat{\Lambda}_{n'}] = N \delta_{nn'}
+	\end{gathered} \label{ラムダの条件}
+\end{align}
+を満たす$N^2 - 1$個のエルミート行列$\{\hat{\Lambda}_n\}$を考える。
+\begin{problem}
+	式\eqref{ラムダの条件}を満たす$N^2 - 1$個の$N$次元エルミート行列の組
+	$\{\hat{\Lambda}_n\}$が存在することを示せ。
+
+	\tcblower
+
+	$N$次元エルミート行列を有限次元実内積空間として考える。
+	（ここで実を考えるのは、
+	エルミート行列の線型結合がエルミートであるためには、
+	係数が実でなければならないからである。）
+	
+	まず$N$次元エルミート行列の実線型空間としての次元を考える。
+	$N$次元複素行列には$N^2$個の要素があるから、
+	実数の選び方の自由度は$2N^2$である。
+	そこでエルミートであるという条件から、
+	対角成分は虚部が0となり$N$の、
+	非対角成分は$(i, j)$成分が定まると自動的に$(j, i)$成分も定まってしまうため、
+	$2 \cdot N(N-1)/2$の自由度が落ちる。
+	したがって、$N$次元エルミート行列の次元は$N^2$となる。
+
+	次に2つのエルミート行列$\hat{\Lambda}$、$\hat{\Lambda}'$の積のトレースを
+	考えると、
+	以下のように内積の性質を満たしていることを示す。
+	以後$\langle \hat{\Lambda}, \hat{\Lambda}' \rangle
+	= \Tr [ \hat{\Lambda}, \hat{\Lambda}']$とする。
+	\begin{itemize}
+		\item 第1変数に関する線型性
+		\begin{align}
+			\langle a X + Y, Z \rangle
+			= \Tr \left[ \left( aX + Y \right) Z \right]
+			= a\Tr \left[ XZ \right] + \Tr \left[ YZ \right]
+			= a\langle X, Z \rangle + \langle Y, Z \rangle
+		\end{align}
+		\item 第2変数に関する線型性
+		\begin{align}
+			\langle X, aY + Z \rangle
+			= \Tr \left[ X (aY + Z) \right]
+			= a\Tr \left[ XY \right] + \Tr \left[ XZ \right]
+			= a \langle X, Y \rangle + \langle X, Z \rangle
+		\end{align}
+		\item 対称性
+		\begin{align}
+			\langle X, Y \rangle
+			= \Tr \left[ XY \right]
+			= \Tr \left[ YX \right]
+			= \langle Y, X \rangle
+		\end{align}
+		\item 非退化性
+		\begin{align}
+			\langle X, X \rangle = 0 \Rightarrow X = 0
+		\end{align}
+		$\because$ $X$の固有値を$\{ x_i \}$とすると、
+		$X$はエルミートだから$x_i$はすべて実数となる。
+		だから$\langle X, X \rangle = \Tr [X^2] = \sum_i x_i^2 = 0$、
+		つまり、全ての$i$について$x_i = 0$となる。
+		\item 正定値性
+		\begin{align}
+			\langle X, X \rangle \geq 0
+		\end{align}
+		これは非退化性の証明から分かる。
+	\end{itemize}
+
+	グラム・シュミットの正規直交化法より、
+	$N^2$次元内積空間には$N^2$個の基底$\{ e_n \}$を
+	$\langle e_n, e_{n'} \rangle = \delta_{nn'}$となるように取れる。
+	ここで$\Tr \left[ I^2 \right] = N$であることから、
+	$N$次単位行列の$1/\sqrt{N}$倍は正規直交基底の1つにできるから、
+	$e_0 = I/\sqrt{N}$としておく。
+	このようにすれば、
+	残りの$N^2 - 1$個を適当に選び、
+	$\hat{\lambda}_n = \sqrt{N} e_n$とすることで、
+	\begin{gather}
+		\Tr[ \hat{\lambda}_n ]
+		= \sqrt{N} \langle e_n e_0 \rangle
+		= 0 \\
+		\Tr \left[ \hat{\lambda}_n \hat{\lambda}_{n'} \right]
+		= N \langle e_n, e_{n'} \rangle
+		= N \delta_{nn'}
+	\end{gather}
+	とできる。
+\end{problem}
+ここで$\hat{\lambda}_n$の初めの$N-1$個が
+基準測定の$\hat{\lambda}_a$に対応している。
+
+基準測定を$\sigma_z$に選んだ2準位スピン系の場合では、
+$\hat{\lambda}_1 = \hat{\sigma}_z$、
+$\hat{\lambda}_2 = \hat{\sigma}_x$、
+$\hat{\lambda}_3 = \hat{\sigma}_y$に対応する。
+
+\subsection{$N$準位系のブロッホ表現}
+2準位系では期待値や確率などを引き出すのに便利だったブロッホ表現
+\begin{align}
+	\hat{\rho}
+	= \frac{1}{2} \left( \hat{I}
+	+ \sum_{s = x, y, z} \Braket{\sigma_s} \hat{\sigma}_s \right)
+\end{align}
+が存在したが、
+$N$準位系でもその拡張が存在する。
+\ref{ss:量子状態を定める物理量}節で定義した
+$N^2 - 1$個の物理量$\{ \Lambda_n \}$の期待値を、
+1つの量子状態に対して計測して、
+$N$次元エルミート行列$\hat{\rho}$を
+\begin{align}
+	\rho = \frac{1}{N} \left( \hat{I}
+	+ \sum_{n=1}^{N^2 - 1} \Braket{\lambda_n} \hat{\lambda}_n \right)
+\end{align}
+で定義する。
+これは2準位系でもそうだったように
+\begin{gather}
+	\Tr \left[ \hat{\rho} \right]
+	= \frac{1}{N} \left( \Tr \left[ \hat{I} \right] + \sum_{n=1}^{N^2 - 1}
+	\Braket{\lambda_n} \Tr \left[ \hat{\lambda}_n \right] \right)
+	= 1 \\
+	\Tr \left[ \hat{\rho} \hat{\lambda}_n \right]
+	= \frac{1}{N} \left( \Tr \left[ \hat{\lambda}_n \right]
+	+ \sum_{n'=1}^{N^2 - 1} \Tr \left[ \hat{\lambda}_{n'}
+	\hat{\lambda}_n \right] \right)
+	= \sum_{n'=1}^{N^2 - 1} \Braket{\lambda}_{n'} \delta_{nn'}
+	= \Braket{\lambda}_n
+\end{gather}
+となることが分かる。
+
+ここから見ていくように、
+量子力学ではこの$\hat{\rho}$から任意の物理量の確率分布が決まることが分かる。
+つまり量子状態は$\hat{\rho}$で定められている。
+この$\hat{\rho}$を実験で決定した$\Braket{\lambda_n}$から求めることを、
+一般に\textbf{量子状態トモグラフィ}と呼ぶ。
+
+\subsection{基準測定におけるボルン則}
+2準位系の場合と同様に、
+$N$準位系でも$\hat{\rho}$を用いれば任意の物理量の確率分布が定まる。
+ここではまず基準測定$\{ \lambda_a \}$についてそれを示す。
+
+式\eqref{確率}と前節で見た関係から、
+\begin{align}
+	p(k) &= \frac{1}{N} \left(
+		1 + \sum_{a=1}^{N-1} \lambda_a (k) \Braket{\lambda_a}
+	\right) \\
+	&= \frac{1}{N} \left(
+		\Tr \left[ \hat{\rho} \right]
+		+ \sum_{a=1}^{N-1} \lambda_a (k)
+		\Tr \left[ \hat{\rho} \hat{\lambda}_a \right]
+	\right) \\
+	&= \Tr \left[ \hat{\rho} \frac{1}{N} \left(
+		\hat{I} + \sum_{a=1}^{N-1} \lambda_a (k) \hat{\lambda}_a
+	\right) \right] \label{確率を密度行列で}
+\end{align}
+が得られる。
+ここで$\Ket{k}$に関する完全性関係
+\begin{align}
+	\hat{I} = \sum_{k=1}^{N} \Ketbra{k}{k}
+\end{align}
+と、
+$\hat{\lambda}_a$の$\Ket{k}$に関するスペクトル分解
+\begin{align}
+	\hat{\lambda}_a = \sum_{k=1}^N \lambda_a (k) \Ketbra{k}{k}
+\end{align}
+を$\Ketbra{k}{k}$について解くことを考える。
+これは式\eqref{連立方程式}の連立方程式において、
+左辺の$\Braket{\lambda_a}$を$\hat{\lambda}_a$、
+1を$\hat{I}$に、
+右辺の$p(k)$を$\Ketbra{k}{k}$に置き換えたものになっているから、
+同じように解けて
+\begin{align}
+	\Ketbra{k}{k} = \frac{1}{N} \left( \hat{I}
+	+ \sum_{a=1}^{N-1} \lambda_a (k) \hat{\lambda}_a \right)
+\end{align}
+となる。
+これを式\eqref{確率を密度行列で}に代入すると、
+2準位系の時と同様に
+\begin{align}
+	p(k)
+	= \Tr \left[ \hat{\rho} \Ketbra{k}{k} \right]
+	= \Braket{k | \hat{\rho} | k}
+\end{align}
+が得られる。
+また$\hat{\lambda}_a$の固有ベクトルから作られる射影演算子を
+$\hat{P}_k = \Ketbra{k}{k}$と書くと、
+\begin{align}
+	p(k) = \Tr \left[ \hat{\rho} \hat{P}_k \right]
+\end{align}
+というボルン則が証明される。
+
+\end{document}

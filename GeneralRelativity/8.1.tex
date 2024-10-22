@@ -1,0 +1,336 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\newtheorem*{theorem}{定理}
+\newtheorem*{definition}{定義}
+\newtheorem*{lemma}{補題}
+\newtheorem*{exercise}{問題}
+\newtheorem*{answer}{解答}
+\renewcommand{\proofname}{証明}
+\allowdisplaybreaks[4]
+
+\title{レジュメ}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{7}
+
+\section{Mass, charge, and angular momentum}
+\subsection{Charges in curved spacetime}
+向き付可能な計量のあるn次元多様体で体積要素を
+$\epsilon_{a_1 \cdots a_n}$と書くことにする。
+すると
+\begin{align}
+	\epsilon^{a_1 \cdots a_p c_{p+1} \cdots c_n}
+	\epsilon_{b_1 \cdots b_p c_{p+1} \cdots c_n}
+	= \pm p! (n-p)! \delta^{a_1}_{[b_1} \cdots \delta^{a_p}_{b_p]}
+	\tag{8.1} \label{8.1}
+\end{align}
+が示せる。
+\begin{proof}
+	\begin{align}
+		\epsilon_{a_1 \cdots a_n} = \sqrt{|g|} \varepsilon_{a_1 \cdots a_n}
+	\end{align}
+	を用いれば、
+	\begin{align}
+		\epsilon^{\mu_1 \cdots \mu_n} \epsilon_{\nu_1 \cdots \nu_n}
+		&= \varepsilon^{\mu_1 \cdots \mu_n} \varepsilon_{\nu_1 \cdots \nu_n} \\
+		&= \det \left( \begin{array}{ccc}
+			\delta^{\mu_1}_{\nu_1} & \cdots & \delta^{\mu_1}_{\nu_n} \\
+			\vdots & \ddots & \vdots \\
+			\delta^{\mu_n}_{\nu_1} & \cdots & \delta^{\mu_n}_{\nu_n}
+		\end{array} \right)
+	\end{align}
+	を使って展開したりすれば良いんだろうな～。
+\end{proof}
+ここで$+$はRieman符号数、$-$はLorentz符号数に対応する。
+\begin{definition}
+	$p$形式$X$のホッジ双対$\star X$を$(n - p)$形式
+	\begin{align}
+		(\star X)_{a_1 \cdots a_{n-p}} = \frac{1}{p!}
+		\epsilon_{a_1 \cdots a_{n - p} b_1 \cdots b_p} X^{b_1 \cdots b_p}
+		\tag{8.2} \label{8.2}
+	\end{align}
+	で定義する。
+\end{definition}
+\begin{lemma}
+	$p$形式$X$について
+	\begin{gather}
+		\star (\star X) = \pm (-1)^{p(n-p)} X \tag{8.3} \label{8.3} \\
+		(\star \ddif \star X)_{a_1 \cdots a_{p-1}}
+		= \pm (-1)^{p(n-p)} \nabla^b X_{a_1 \cdots a_{p-1} b}
+		\tag{8.4} \label{8.4}
+	\end{gather}
+	が成り立つ。
+	ここで符号は体積要素と同じ使い方である。
+\end{lemma}
+\begin{proof}
+	\begin{align}
+		&\quad \left[ \star \left( \star X \right) \right]_{\mu_1 \cdots \mu_p} \\
+		&= \frac{1}{(n-p)!}
+		\epsilon_{\mu_1 \cdots \mu_p \alpha_1 \cdots \alpha_{n-p}}
+		\left( \star X \right)^{\alpha_1 \cdots \alpha_{n-p}} \\
+		&= \frac{1}{(n-p)!} g^{\alpha_1 \nu_1} \cdots
+		g^{\alpha_{n-p} \nu_{n-p}}
+		\epsilon_{\mu_1 \cdots \mu_p \alpha_1 \cdots \alpha_{n-p}}
+		\left( \star X \right)_{\nu_1 \cdots \nu_{n-p}} \\
+		&= \frac{1}{(n-p)!} g^{\alpha_1 \nu_1} \cdots
+		g^{\alpha_{n-p} \nu_{n-p}}
+		\epsilon_{\mu_1 \cdots \mu_p \alpha_1 \cdots \alpha_{n-p}} \cdot
+		\frac{1}{p!} \epsilon_{\nu_1 \cdots \nu_{n-p} \beta_1 \beta_p}
+		X^{\beta_1 \cdots \beta_p} \\
+		&= \frac{1}{p! (n-p)!} g^{\alpha_1 \nu_1} \cdots
+		g^{\alpha_{n-p} \nu_{n-p}} g^{\beta_1 \gamma_1} \cdots
+		g^{\beta_p \gamma_p}
+		\epsilon_{\mu_1 \cdots \mu_p \alpha_1 \cdots \alpha_{n-p}}
+		\epsilon_{\nu_1 \cdots \nu_{n-p} \beta_1 \cdots \beta_p}
+		X_{\gamma_1 \cdots \gamma_p} \\
+		&= \frac{1}{p! (n-p)!}
+		\epsilon^{\alpha_1 \cdots \alpha_{n-p} \underbrace{\gamma_1 \cdots \gamma_p}_{p個を(n-p)個前に送る}}
+		\epsilon_{\mu_1 \cdots \mu_p \alpha_1 \cdots \alpha_{n-p}}
+		X_{\gamma_1 \cdots \gamma_p} \\
+		&= \pm (-1)^{p (n-p)}
+		\delta^{\gamma_1}_{[\mu_1} \cdots \delta^{\gamma_p}_{\mu_p]}
+		X_{\gamma_1 \cdots \gamma_p} \\
+		&= \pm (-1)^{p (n-p)} X_{[\mu_1 \cdots \mu_p]} \\
+		&= \pm (-1)^{p (n-p)} X_{\mu_1 \cdots \mu_p}
+	\end{align}
+	\begin{align}
+		&\quad \left[ \star \ddif \star X \right]_{\mu_1 \cdots \mu_{p-1}} \\
+		&= \frac{1}{(n-p+1)!} 
+		{\epsilon_{\mu_1 \cdots \mu_{p-1}}}^{\nu_1 \cdots \nu_{n-p+1}}
+		\left( \ddif \star X \right)_{\nu_1 \cdots \nu_{n-p+1}} \\
+		&= \frac{1}{(n-p+1)!}
+		{\epsilon_{\mu_1 \cdots \mu_{p-1}}}^{\nu \nu_1 \cdots \nu_{n-p}} \cdot
+		(n-p+1) \partial_\nu \left( \star X \right)_{\nu_1 \cdots \nu_{n-p}} \\
+		&= \frac{1}{(n-p)!}
+		{\epsilon_{\mu_1 \cdots \mu_{p-1}}}^{\nu \nu_1 \cdots \nu_{n-p}}
+		\partial_\nu \left( \frac{1}{p!}
+		\epsilon_{\nu_1 \cdots \nu_{n-p} \beta_1 \cdots \beta_{p}}
+		X^{\beta_1 \cdots \beta_p} \right) \\
+		&= \frac{(-1)^{p(n-p)}}{p! (n-p)!} g^{\alpha \nu}
+		g_{\beta_1 \gamma_1} \cdots g_{\beta_p \gamma_p}
+		{\epsilon^{\gamma_1 \cdots \gamma_{p}}}_{\nu_1 \cdots \nu_{n-p}}
+		{\epsilon_{\mu_1 \cdots \mu_{p-1} \alpha}}^{\nu_1 \cdots \nu_{n-p}}
+		\frac{1}{\sqrt{|g|}}
+		\partial_\nu \left( \sqrt{|g|} X^{\beta_1 \cdots \beta_p} \right) \\
+		&= \pm (-1)^{p(n-p)} g^{\alpha \nu}
+		g_{\beta_1 \gamma_1} \cdots g_{\beta_p \gamma_p}
+		\delta^{\gamma_1}_{[\mu_1} \cdots \delta^{\gamma_{p-1}}_{\mu_{p-1}}
+		\delta^{\gamma_p}_{\alpha]} \frac{1}{\sqrt{|g|}}
+		\partial_\nu \left( \sqrt{|g|} X^{\beta_1 \cdots \beta_p} \right) \\
+		&= \pm (-1)^{p(n-p)}
+		g_{\beta_1 \gamma_1} \cdots g_{\beta_{p-1} \gamma_{p-1}}
+		\delta^{\gamma_1}_{[\mu_1} \cdots \delta^{\gamma_{p-1}}_{\mu_{p-1}}
+		\frac{1}{\sqrt{|g|}} \partial_{\beta_p]}
+		\left( \sqrt{|g|} X^{\beta_1 \cdots \beta_p} \right) \\
+		&= \pm (-1)^{p(n-p)}
+		g_{\beta_1 \gamma_1} \cdots g_{\beta_{p-1} \gamma_{p-1}}
+		\delta^{\gamma_1}_{[\mu_1} \cdots \delta^{\gamma_{p-1}}_{\mu_{p-1}}
+		\nabla_{\beta_p]} X^{\beta_1 \cdots \beta_{p-1} \beta_p} \\
+		&= \pm (-1)^{p(n-p)} \nabla^{\alpha}
+		X_{[\mu_1 \cdots \mu_{p-1} \alpha]} \\
+		&= \pm (-1)^{p (n-p)} \nabla^\alpha X_{\mu_1 \cdots \mu_{p-1} \alpha}
+	\end{align}
+	ここで
+	\begin{align}
+		X &= a_{\mu_1 \cdots \mu_p}
+		\ddif x^{\mu_1} \wedge \cdots \wedge \ddif x^{\mu_p} \\
+		&= p! a_{[\mu_1 \cdots \mu_p]}
+		\ddif x^{\mu_1} \otimes \cdots \otimes \ddif x^{\mu_p}
+	\end{align}
+	となることを用いた。
+\end{proof}
+
+これを用いた例として、3次元ユークリッド空間において通常のベクトル解析の作用素は
+\begin{align}
+	\nabla f = \ddif f \qquad
+	\Div X = \star \ddif \star X \qquad
+	\Rot X = \star \ddif X
+	\tag{8.5} \label{8.5}
+\end{align}
+と書ける。
+\begin{screen}
+	\underline{補足}
+
+	3次元ユークリッド空間では、
+	デカルト座標を選べば$\epsilon_{ijk} = \varepsilon_{ijk}$で
+	\begin{gather}
+		\ddif f = (\partial_i f) \ddif x^i \\
+		\begin{aligned}
+			\star \ddif \star X &= + (-1)^{1 \cdot 2} \nabla^b X_b \\
+			&= \partial^i X_i
+		\end{aligned} \\
+		\begin{aligned}
+			\star \ddif X &=
+			\star \left[ (\partial_i X_j) \ddif x^i \wedge \ddif x^j\right] \\
+			&= \star \left[ (2! \partial_i X_j)
+			\ddif x^i \otimes \ddif x^j \right] \\
+			&= \left( \frac{1}{2!} \varepsilon_{ijk} \cdot
+			2! \partial^j X^k \right) \ddif x^i \\
+			&= \left( \varepsilon_{ijk} \partial^j X^k \right) \ddif x^i
+		\end{aligned}
+	\end{gather}
+\end{screen}
+ここで$f$は関数、$X$はベクトル場$X^a$から得られる1形式$X_a$を表している。
+最後の式は外微分が$\Rot$の一般化と思えることを示している。
+
+他の例として、Maxwell方程式
+\begin{align}
+	\nabla^a F_{ab} = -4\pi j_b \qquad \nabla_{[a} F_{bc]} = 0
+\end{align}
+は
+\begin{align}
+	\ddif \star F = -4 \pi \star j \qquad
+	\ddif F = 0
+	\tag{8.7} \label{8.7}
+\end{align}
+と書ける。
+\begin{screen}
+	\underline{補足}
+	\begin{align}
+		(\star \ddif \star F)_a = - (-1)^{2 \cdot 2} \nabla^b F_{ab}
+		= -\nabla^b F_{ab} = \nabla^b F_{ba}
+	\end{align}
+	であるから
+	\begin{align}
+		-(-1)^{3 \cdot 1} (\ddif \star F)_{abc}
+		&= (\star \star \ddif \star F)_{abc} \\
+		&= \frac{1}{1!} \epsilon_{abcd} (\star \ddif \star F)^d \\
+		&= \epsilon_{abcd} \nabla_e F^{ed}
+	\end{align}
+	となり、
+	\begin{align}
+		(\ddif \star F)_{abc} = \epsilon_{abcd} \nabla_e F^{ed}
+	\end{align}
+	が分かる。
+	また
+	\begin{align}
+		(\star j)_{abc} = \frac{1}{1!} \epsilon_{abcd} j^d
+		= \epsilon_{abcd} j^d
+	\end{align}
+\end{screen}
+
+この第1式は$\ddif \star j = 0$つまり$\nabla_a j^a = 0$で、
+$j^a$が保存量であることを示している。
+第2式はPoincar\'{e}の補題に対応している。
+
+次にspacelikeな超曲面$\Sigma$を考える。
+すれば$\Sigma$における電荷の総量を
+\begin{align}
+	Q = - \int_{\Sigma} * j \tag{8.8} \label{8.8}
+\end{align}
+と定義できる。
+（$\Sigma$を$J^-(\Sigma)$の境界とみなし、
+Stokesの定理で用いる向きを選ぶことによって$\Sigma$の向きをfixしておく。）
+\begin{screen}
+	\underline{補足}
+
+	元々の正のフレームが$(v_1, \cdots, v_n)$だったときに、
+	$x_1 = {\rm const}$境界の外向きのベクトルが$v$であるとき、
+	$(v, v_2, \cdots, v_n)$が正のフレームであるとき
+	境界で$(v_2, \cdots, v_n)$を正のフレームとする。
+\end{screen}
+
+Maxwell方程式を用いれば
+\begin{align}
+	Q = \frac{1}{4\pi} \int_{\Sigma} \ddif \star F \tag{8.9} \label{8.9}
+\end{align}
+で、Stokesの定理を用いれば
+\begin{align}
+	Q = \frac{1}{4\pi} \int_{\partial \Sigma} \star F \tag{8.10} \label{8.10}
+\end{align}
+となる。
+$\Sigma$上の電荷総量が$\partial \Sigma$上の$\star F$の積分で書ける。
+これは曲がった空間におけるGaussの法則$Q \sim \int \vec{E} \cdot \ddif \vec{S}$
+の一般化になっている。
+
+例えば体積要素が
+$r^2 \sin \theta \ddif t \wedge \ddif r \wedge \ddif \theta \wedge \ddif \phi$
+となるように向きを選んだ極座標Minkowski時空で$\Sigma$を$t=0$に選ぶ。
+$\Sigma$を$t \le 0$の境界と思ってStokesの定理による向きを考えれば、
+$\Sigma$での向きは$\ddif r \wedge \ddif \theta \wedge \ddif \phi$となる。
+ここで新たに$\Sigma_R$を$\Sigma$の$r \le R$領域、その境界を$S_R^2$とすれば、
+向きは$\ddif \theta \wedge \ddif \phi$となる。
+Coulombポテンシャルを考えれば、
+\begin{align}
+	A = -\frac{q}{r} \ddif t \qquad \Rightarrow
+	F = -\frac{q}{r^2} \ddif t \wedge \ddif r
+	= -\frac{q}{r^2}
+	\left( \ddif t \otimes \ddif r - \ddif r \otimes \ddif t \right)
+\end{align}
+となって、ホッジ双対は
+\begin{align}
+	(\star F)_{\mu \nu} &= \epsilon_{\mu \nu \rho \sigma} F^{\rho \sigma} \\
+	&= r^2 \sin \theta \cdot \varepsilon_{\mu \nu \rho \sigma}
+	g^{\rho \alpha} g^{\sigma \beta} F_{\alpha \beta} \\
+	&= \varepsilon_{\mu \nu t r} r^2 \sin \theta
+	g^{tt} g^{rr} (F_{tr} - F_{rt}) \\
+	&= 2 \varepsilon_{\mu \nu t r} r^2 \sin \theta \cdot \frac{q}{r^2} \\
+	&= 2 \epsilon_{\mu \nu t r} q \sin \theta \\
+	\star F &= 2 q \sin \theta
+	(\ddif \theta \otimes \ddif \phi - \ddif \phi \otimes \ddif \theta) \\
+	&= q \sin \theta \ \ddif \theta \wedge \ddif \phi
+\end{align}
+であるから、
+$\Sigma_R$内の総電荷は
+\begin{align}
+	Q[\Sigma_R]
+	= \frac{1}{4\pi} \int_{S_R^2} \ddif \theta \ddif \phi \ q \sin \theta
+	= q
+\end{align}
+となり、欲しい結果が求まった。
+
+Minkowski時空上の漸近的平坦な超曲面で、
+$R \to \infty$の極限を取ることで$\Sigma$上の総電荷を無限遠での積分で書くことができる。
+これに倣ってあらゆる漸近的平坦な終端（？）での総電荷を定義できる。
+\begin{definition}
+	$(\Sigma, h_{ab}, K_{ab})$を漸近的平坦な終端とすれば、そこでの総電荷、総磁荷は
+	\begin{align}
+		Q = \frac{1}{4\pi} \lim_{r \to \infty} \int_{S_r^2} \star F \qquad
+		P = \frac{1}{4\pi} \lim_{r \to \infty} \int_{S_r^2} F
+	\end{align}
+	である。
+	ここで$S_2^2$は漸近的平坦な終端の定義で用いられている座標$x^i$において、
+	$x^i x^i = r^2$を満たす球面である。
+\end{definition}
+\begin{exercise}
+	この定義がKerr-Newman解での$Q, P$と一致することを示せ。
+\end{exercise}
+\begin{answer}
+	Pass
+\end{answer}
+
+従って、時空内にchargeがない（例えば$j^a = 0$）場合でもchargeは有限になりうる。
+Kerr-Newman解またはReissner-Nordstrom解において$t$一定面を考えると、
+その面でのchargeは0になる。
+しかしこれを無限遠での表面積分に置き換えると、
+境界には2つの漸近的平坦な終端があるために、2つの項を得る。
+したがってこれら2つの終端でのchargeは大きさが等しく逆符号になっていなければならない。
+
+\end{document}

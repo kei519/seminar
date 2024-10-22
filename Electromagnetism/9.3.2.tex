@@ -1,0 +1,384 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\title{\S 9.3 \ 点電荷による電磁波の放射}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{subsection}{1}
+\subsection{加速された点電荷による電磁波}
+
+点電荷の運動による電磁場の表式を改めて表示しておくと
+\begin{align}
+	\vec{E}(\vec{x}, t) &= \frac{e}{4\pi\varepsilon_0} \left[
+		\frac{(\vec{n}(t'_0) - \vec{\beta}(t'_0))(1 - \vec{\beta}^2(t'_0))}
+		{\alpha^3(t'_0)R^2(t'_0)}
+		+ \frac{\vec{n}(t'_0) \times
+		\{ (\vec{n}(t'_0) - \vec{\beta}(t'_0)) \times \dot{\vec{\beta}}(t'_0) \}}
+		{c\alpha^3(t'_0) R(t'_0)}
+	\right]
+	\tag{3.29} \label{3.29} \\
+	\vec{B}(\vec{x}, t)
+	&= \frac{1}{c} \vec{n}(t'_0) \times \vec{E}(\vec{x}, t)
+	\tag{3.30} \label{3.30} \\
+	t'_0 &= t - \frac{|\vec{x} - \vec{r}(t'_0)|}{c}
+\end{align}
+であり、これらはそれぞれ2項からなっている。
+1項目は$\vec{\beta}$すなわち点電荷の速度に依存し$R^2$に反比例する項、
+2項目は$\dot{\vec{\beta}}$すなわち点電荷の加速度に依存し$R$に反比例する項である。
+したがって波動域で効いてくるのはこの第2項だけになる。
+このように点電荷が加速されることで電磁波が放射される現象を\textbf{制動放射}という。
+
+以後では$\vec{E}, \vec{B}$は波動域のみを指して用いる。
+つまり
+\begin{align}
+	\vec{E}(\vec{x}, t) &= \frac{e}{4\pi\varepsilon_0}
+	\frac{\vec{n}(t'_0) \times
+	\{ (\vec{n}(t'_0) - \vec{\beta}(t'_0)) \times \dot{\vec{\beta}}(t'_0) \}}
+	{c\alpha^3(t'_0) R(t'_0)}
+	\tag{3.44} \label{3.44} \\
+	\vec{B}(\vec{x}, t)
+	&= \frac{1}{c} \vec{n}(t'_0) \times \vec{E}(\vec{x}, t)
+	\label{3.45} \tag{3.45}
+\end{align}
+波動域では$\vec{B}$が$\vec{n}$と$\vec{E}$に垂直なだけではなく、
+$\vec{E}$も$\vec{n}$に垂直になっている。
+（なぜなら$\vec{n} \cdot (\vec{n} \times \vec{A})
+= \vec{A} \cdot (\vec{n} \times \vec{n}) = 0$だからである。)
+したがって波動域の点電荷による電磁波は自由電磁波の性質を持っている。
+
+ここで前節同様に、この制動放射によってどれだけのエネルギーが
+無限遠方に流れていくかを見たい。
+そのためにまず、\eqref{3.44}を用いてPoyntingベクトルを計算して
+時刻$t$で位置$\vec{x}$において観測される電磁波の持つエネルギー密度を求めることができる。
+それは
+\begin{align}
+	\vec{S}(\vec{x}, t) &= \vec{E}(\vec{x}, t) \times \vec{H}(\vec{x}, t) \\
+	&= \frac{1}{\mu_0 c} \vec{E}(\vec{x}, t)^2 \vec{n}(t_0')
+	\quad \left( \because \ \vec{n}(t_0') \cdot \vec{E}(\vec{x}, t) = 0 \right) \\
+	&= \frac{1}{\mu_0 c} \left( \frac{e}{4\pi \varepsilon_0} \right)^2
+	\frac{\vec{n}(t_0')}{c^2 \alpha^6(t_0') R^2(t_0')} \left(
+		\vec{n}(t_0') \times \left\{
+			\Bigl( \vec{n}(t_0') - \vec{\beta}(t_0') \Bigr)
+			\times \dot{\vec{\beta}}(t_0')
+		\right\}
+	\right)^2
+	\tag{3.46} \label{3.46}
+\end{align}
+と書ける。
+電磁場を複素数で書けば、
+\begin{align}
+	\overline{\vec{S}(\vec{x}, t)} = \frac{1}{2\mu_0 c}
+	\left| \vec{E}(\vec{x}, t) \right|^2 \vec{n}(t_0')
+	\tag{3.47} \label{3.47}
+\end{align}
+によって時間平均を求めることができる。（ホンマか？）
+
+これは最初に求めたかった、点電荷の制動放射によって
+放射されるエネルギーの表式になっているだろうか。
+いまPoyntingベクトルの表式を眺めると、
+これは先にも述べたように時刻$t$、位置$\vec{x}$でのエネルギーの流れになっている。
+しかし実際に見たいものは、
+時刻$t$で位置$\vec{r}(t)$にいる点電荷がエネルギーをどれだけ放射するかであるので、
+このままでは求めたいものになっていない。
+というのも、例えば時刻$T_1$から$T_2$の間に点電荷が電磁波を放射することによるエネルギーを
+位置$\vec{x}$で観測する場合には、時刻$T_1 + |\vec{x} - \vec{t}(T_1)|/c$から
+$T_2 + |\vec{x} - \vec{r}(T_2)|/c$の間に観測することになるが、
+これらの間隔は点電荷が加速しているために同じにならない（Doppler効果）からである。
+
+この変換を行わなければならないが、
+例に上げた状況で位置$\vec{x}$で受け取るエネルギー$E$を調べると、
+\begin{align}
+	E = \int_{T_1 + \frac{|\vec{x} - \vec{r}(T_1)|}{c}}
+	^{T_2 + \frac{|\vec{x} - \vec{r}(T_2)|}{c}} \ddif t
+	\vec{S}(\vec{x}, t) \cdot \vec{n}(t_0')
+\end{align}
+であるが、これを
+\begin{align}
+	t = t_0' + \frac{|\vec{x} - \vec{r}(t_0')|}{c}
+\end{align}
+によって変数変換することで
+\begin{align}
+	E = \int_{T_1}^{T_2} \ddif t_0'
+	\dif{t}{t_0'} \vec{S}(\vec{x}, t) \cdot \vec{n}(t_0')
+\end{align}
+となるから、点電荷が単位時間・単位面積あたりに放射するエネルギーは
+\begin{align}
+	\dif{E}{t_0'} &= \bigl( \vec{S}(\vec{x}, t) \cdot \vec{n}(t_0') )\bigr)
+	\dif{t}{t_0'} \\
+	&= \bigl( \vec{S}(\vec{x}, t) \cdot \vec{n}(t_0') )\bigr) \alpha(t_0')
+	\tag{3.48} \label{3.48}
+\end{align}
+となる。
+（これは単位時間あたりのエネルギーとは、時間積分することでエネルギーになる関数ということだからである。）
+これを球面上で積分すれば点電荷が単位時間に放射する全エネルギー
+\begin{align}
+	\dif{W}{t_0'} = \int \vec{S}(\vec{x}, t) \cdot \vec{n}(t_0') \alpha(t_0')
+	R^2(t_0') \ddif \Omega
+	\tag{5.49} \label{5.49}
+\end{align}
+を得る。
+これは式\eqref{3.46}を用いることで全て$t_0'$で書き下すことができる。
+この$t_0'$を$t$と書き換えて$\alpha$を書き下せば
+\begin{align}
+	\dif{W}{t} = \frac{1}{\mu_0 c^3} \left( \frac{e}{4\pi \varepsilon_0} \right)^2
+	\int \ddif \Omega \frac{\left[ \vec{n}(t) \times \left\{
+		\left(\vec{n}(t) - \vec{\beta}(t)\right) \times \dot{\vec{\beta}}(t) 
+	\right\} \right]^2}
+	{(1 - \vec{n}(t) \cdot \vec{\beta}(t))^5}
+	\tag{3.50} \label{3.50}
+\end{align}
+となる。
+
+ここで得た式\eqref{3.50}は正確なものであるが、
+一般の場合にこれ以上の計算を進めるのは難しい。
+したがって以降はいくつかの特別な場合を調べることにする。
+そのとき$\theta$は特に注意しない限り
+$\vec{n}(t)$と$\dot{\vec{\beta}}(t)$のなす角とする。
+
+まず$\beta \ll 1$、つまり点電荷の速さ$v$が光速度$c$に比べて極めて小さい場合を考える。
+このとき
+式\eqref{3.50}は
+\begin{align}
+	\dif{W}{t} &= \frac{e^2}{16 \pi^2 \varepsilon_0 c} \int \ddif \Omega
+	\left( \vec{n}(t) \times
+	\left( \vec{n}(t) \times \dot{\vec{\beta}}(t) \right)
+	\right)^2 \\
+	&= \frac{e^2}{16 \pi^2 \varepsilon_0 c} \int \ddif \Omega
+	\ \sin^2 \theta \left( \dot{\vec{\beta}}(t) \right)^2
+	\quad \left( \because \vec{n} \times \dot{\vec{\beta}}
+	\mbox{は} \vec{n} \mbox{に垂直で大きさが}
+	\sin \theta | \dot{\vec{\beta}} | \mbox{であるベクトル} \right) \\
+	&= \frac{e^2}{6 \pi \varepsilon_0 c^3} \left[ \dot{\vec{v}}(t) \right]^2
+	\tag{3.51} \label{3.51}
+\end{align}
+と書ける。
+また式\eqref{3.47}から時間平均は$\vec{v}$を複素数で書くことで
+\begin{align}
+	P = \dif{\overline{W}}{t}
+	= \frac{e^2}{12 \pi \varepsilon_0 c^3} \left| \dot{\vec{v}}(t) \right|^2
+	\tag{3.52} \label{3.52}
+\end{align}
+とできる。
+例えば点電荷が$z$軸方向にのみ振動数$\omega_0$の単振動をしている場合を考えれば、
+\begin{align}
+	x = {\rm const.} \quad y = {\rm const.} \quad z = ae^{i\omega_0 t}
+\end{align}
+であるから、
+\begin{align}
+	P = \frac{e^2}{12 \pi \varepsilon_0 c^3} a^2 {\omega_0}^4
+	\tag{3.53} \label{3.53}
+\end{align}
+が単位時間あたりの平均放射エネルギーとなる。
+
+次に$\vec{\beta}$と$\dot{\vec{\beta}}$が平行である場合を考える。
+このとき
+\begin{align}
+	\left( \vec{n} - \vec{\beta} \right) \times \dot{\vec{\beta}}
+	= \vec{n} \times \dot{\vec{\beta}}
+\end{align}
+となるから式\eqref{3.50}は
+\begin{align}
+	\dif{W}{t} = \frac{e^2 \dot{\vec{v}}^2}{16 \pi^2 \varepsilon_0 c^3}
+	\int \ddif \Omega
+	\cfrac{\sin^2 \theta}{\left( 1 - \cfrac{v(t)}{c} \cos \theta \right)^5}
+	\tag{3.54} \label{3.54}
+\end{align}
+となる。
+これは$\beta = v/c \to 1$に近づくと分母が$1 - \cos \theta$に近づくことから、
+角分布は電荷の進行方向に傾いていく（GeoGebra参照）。
+\eqref{3.54}の角積分は$\xi = 1 - \beta \cos \theta$とすることで
+\begin{align}
+	\dif{W}{t} &= \frac{e^2 \dot{\vec{v}}^2}{16 \pi^2 \varepsilon_0 c^3}
+	\cdot 2\pi \int_{-1}^{1} \ddif \cos \theta \
+	\cfrac{\sin^2 \theta}{\left( 1 - \cfrac{v(t)}{c} \cos \theta \right)^5} \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{8 \pi \varepsilon_0 c^3} \frac{1}{\beta}
+	\int_{1-\beta}^{1+\beta} \ddif \xi \ \frac{1}{\xi^5} \left[
+		1 - \left( \frac{1 - \xi}{\beta} \right)^2
+	\right] \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{8 \pi \varepsilon_0 c^3} \frac{1}{\beta}
+	\int_{1-\beta}^{1+\beta} \ddif \xi \ \left[
+		\left(1 - \frac{1}{\beta^2} \right) \frac{1}{\xi^5}
+		+ \frac{2}{\beta^2}\frac{1}{\xi^4} - \frac{1}{\beta^2}\frac{1}{\xi^3}
+	\right] \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{8 \pi \varepsilon_0 c^3} \frac{1}{\beta}
+	\left[
+		\frac{\beta^2 - 1}{4\beta^2}
+		\left\{ \frac{1}{(1-\beta)^4} - \frac{1}{(1+\beta)^4} \right\}
+		+ \frac{2}{3\beta^2}
+		\left\{ \frac{1}{(1-\beta)^3} - \frac{1}{(1+\beta)^3}\right\}
+		- \frac{1}{2\beta^2}
+		\left\{ \frac{1}{(1-\beta)^2} - \frac{1}{(1+\beta)^2} \right\}
+	\right] \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{8 \pi \varepsilon_0 c^3} \frac{1}{\beta}
+	\left[
+		\frac{4}{3\beta^2} \frac{3\beta + \beta^3}{(1 - \beta^2)^3}
+		- \frac{1}{2\beta^2} \frac{4\beta + 4\beta^3}{(1 - \beta^2)^3}
+		- \frac{1}{\beta^2} \frac{2\beta}{(1 - \beta^2)^2}
+	\right] \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{8 \pi \varepsilon_0 c^3} \frac{1}{\beta}
+	\left[
+		\frac{1}{3\beta} \frac{6 - 2\beta^2}{(1 - \beta^2)^3}
+		- \frac{1}{\beta} \frac{2}{(1 - \beta^2)^2}
+	\right] \\
+	&= \frac{e^2 \dot{\vec{v}}^2}{6 \pi \varepsilon_0 c^3}
+	\frac{1}{(1 - \beta^2)^3}
+	\tag{3.55} \label{3.55}
+\end{align}
+と求まる。
+
+次に点電荷が円運動している場合を考える。
+ここで今考えている時刻での速度方向を$z$軸、加速度方向を$x$軸方向に一致するように取り、
+加速度の大きさを$\alpha/c$とする。
+すなわち$\vec{\beta} = (0, 0, \beta)$、
+$\dot{\vec{\beta}} = (\alpha/c, 0, 0)$となる。
+加えて観測点の方向を
+$\vec{n} = (\sin \theta \cos \phi, \sin \theta \sin \phi, \cos \theta)$
+とする。
+そうすれば式\eqref{3.50}の分子は$\vec{s} = \vec{n} - \vec{\beta}$と置くことで
+\begin{align}
+	\left[ 
+		\vec{n} \times \left( \vec{s} \times \dot{\vec{\beta}} \right)
+	\right]^2
+	&= \left[ \left( \vec{n} \cdot \dot{\vec{\beta}} \right) \vec{s}
+	- \left( \vec{n} \cdot \vec{s} \right) \dot{\vec{\beta}} \right]^2 \\
+	&= \left( \vec{n} \cdot \dot{\vec{\beta}} \right)^2 \vec{s}^2
+	- 2 \left( \vec{n} \cdot \dot{\vec{\beta}} \right)
+	\left( \vec{n} \cdot \vec{s} \right)
+	\left( \vec{s} \cdot \dot{\vec{\beta}} \right)
+	+ \left( \vec{n} \cdot \vec{s} \right)^2 \dot{\vec{\beta}}^2
+\end{align}
+と計算できるが、
+\begin{gather}
+	\vec{n} \cdot \vec{\beta} = \beta \cos \theta \\
+	\vec{s}^2 = \left( \vec{n} - \vec{\beta} \right)^2
+	= \vec{n}^2 - 2\vec{n} \cdot \vec{\beta} + \vec{\beta}^2
+	= 1 - 2\beta \cos \theta + \beta^2 \\
+	\vec{n} \cdot \vec{s} = \vec{n} \cdot \left( \vec{n} - \vec{\beta} \right)
+	= 1 - \beta \cos \theta \\
+	\vec{s} \cdot \dot{\vec{\beta}}
+	= \left( \vec{n} - \vec{\beta} \right) \cdot \dot{\vec{\beta}}
+	= \vec{n} \cdot \dot{\vec{\beta}}
+	= \frac{\alpha}{c} \sin \theta \cos \phi
+\end{gather}
+の関係を用いると
+\begin{align}
+	\left[ \vec{n} \times \left\{
+		\left(\vec{n} - \vec{\beta}\right) \times \dot{\vec{\beta}} 
+	\right\} \right]^2
+	&= \frac{\alpha^2}{c^2} \sin^2 \theta \cos^2 \phi
+	\left( 1 - 2\beta \cos \theta + \beta^2 \right)
+	- 2 \frac{\alpha^2}{c^2} \sin^2 \theta \cos^2 \phi
+	\left( 1 - \beta \cos \theta \right)
+	+ \frac{\alpha^2}{c^2} \left( 1 - \beta \cos \theta \right)^2 \\
+	&= \frac{\alpha^2}{c^2} \left[
+		\left( 1 - \beta \cos \theta \right)^2
+		- \left( 1 - \beta^2 \right) \sin^2 \theta \cos^2 \phi
+	\right]
+\end{align}
+が得られる。
+したがって放射波の各分布は
+\begin{align}
+	\dif{P}{\Omega} = \frac{e^2}{16 \pi^2 \varepsilon_0 c} \frac{\alpha^2}{c^2}
+	\frac{1}{\left( 1 - \beta \cos \theta \right)^3} \left[
+		1 - \frac{\left( 1 - \beta^2 \right) \sin^2 \theta \cos^2 \phi}
+		{(1 - \beta \cos \theta)^2}
+	\right]
+	\tag{3.57} \label{3.57}
+\end{align}
+となる。
+これも$z$軸方向に鋭いピークを持つ
+（GeoGebra参照（これは$\phi=0$、つまり$z {\rm -} x$平面内の場合））。
+教科書によると、このことから電子加速器を用いれば、
+紫外線からX線にわたる強力な光源が作れるらしいが、
+グラフを見れば分かるように、
+$\theta$について$\pi/2$周期で0と極大値を繰り返すわけではないので、
+どのように振動数を調整するのかはわからない。
+と思ったが、これは進行方向に放射された電磁波が自由電磁波として進行しているときに
+振動数分解をすれば様々な振動数の電磁波になり、
+紫外線からX線にわたる電磁波が「同時に」放射されるということなのかもしれない。
+\footnote{Wikipediaにも「極めて光度が強い白色光」と書かれている。}
+これを\textbf{放射光}（synchrotron radiation）という。
+また\eqref{3.57}を$\vec{\beta}$と$\dot{\vec{\beta}}$が平行な場合と
+同様に角積分を実行すると
+\begin{align}
+	P &= \frac{e^2 \alpha^2}{16 \pi^2 \varepsilon_0 c^3}
+	\int_{-1}^{1} \ddif \cos \theta
+	\int_{0}^{2\pi} \ddif \phi \
+	\frac{1}{\left( 1 - \beta \cos \theta \right)^3} \left[
+		1
+		- \frac{\left( 1 - \beta^2 \right) \sin^2 \theta}
+		{\left( 1 - \beta \cos \theta \right)^2}
+		\frac{1 + \cos 2\phi}{2}
+	\right] \\
+	&= \frac{e^2 \alpha^2}{16 \pi \varepsilon_0 c^3}
+	\frac{1}{\beta} \int_{1-\beta}^{1+\beta} \ddif \xi \ \left[
+		\frac{2}{\xi^3}
+		- \frac{1 - \beta^2}{\xi^5} \left\{
+			1 - \left( \frac{1 - \xi}{\beta} \right)^2
+		\right\}
+	\right] \\
+	&= \frac{e^2 \alpha^2}{16 \pi \varepsilon_0 c^3}
+	\frac{1}{\beta} \int_{1-\beta}^{1+\beta} \ddif \xi \ \left[
+		\frac{1 + \beta^2}{\beta^2} \frac{1}{\xi^3}
+		- \frac{2 \left( 1 - \beta^2 \right)}{\beta^2} \frac{1}{\xi^4}
+		+ \frac{\left( 1 - \beta^2 \right)^2}{\beta^2} \frac{1}{\xi^5}
+	\right] \\
+	&= \frac{e^2 \alpha^2}{16 \pi \varepsilon_0 c^3} \frac{1}{\beta} \left[
+		\frac{1 + \beta^2}{2\beta^2} \left\{
+			\frac{1}{\left( 1 - \beta \right)^2}
+			- \frac{1}{\left( 1 + \beta \right)^2}
+		\right\}
+		- \frac{2 \left( 1 - \beta^2 \right)}{3\beta^2} \left\{
+			\frac{1}{\left( 1 - \beta \right)^3}
+			- \frac{1}{\left( 1 + \beta \right)^3}
+		\right\} \right. \\
+		& \qquad \qquad \qquad \qquad \left.
+		+ \frac{\left( 1 - \beta^2 \right)^2}{4 \beta^2} \left\{
+			\frac{1}{\left( 1 - \beta \right)^4}
+			- \frac{1}{\left( 1 + \beta \right)^4}
+		\right\}
+	\right] \\
+	&= \frac{e^2 \alpha^2}{16 \pi \varepsilon_0 c^3} \frac{1}{\beta} \left[
+		\frac{1 + \beta^2}{\beta}
+		\frac{2}{\left( 1 - \beta^2 \right)^2}
+		- \frac{4}{3 \beta}
+		\frac{\beta^2 + 3}{\left( 1 - \beta^2 \right)^2}
+		+ \frac{2}{\beta}
+		\frac{\beta^2 + 1}{\left( 1 - \beta^2 \right)^2}
+	\right] \\
+	&= \frac{e^2 \alpha^2}{6 \pi \varepsilon_0 c^3}
+	\frac{1}{\left( 1 - \beta^2 \right)^2}
+\end{align}
+を得る。
+
+
+\end{document}

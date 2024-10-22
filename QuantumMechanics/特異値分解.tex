@@ -1,0 +1,245 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\DeclareMathOperator{\rank}{rank}
+
+\title{特異値分解}
+\author{}
+
+\begin{document}
+\maketitle
+
+\begin{thm}{特異値分解}{特異値分解}
+	一般の$(m, n)$型行列$A$は
+	特異値と呼ばれる正の実数の組$\{ \lambda_i \}_{i=1}^r$
+	（ただし$0 \leq r = \rank A\leq \min (m, n)$、
+	$r=0$のとき実数の組は$\emptyset$）と
+	$m$次ユニタリ行列$V$、$n$次ユニタリ行列$W$を用いて
+	\begin{align}
+		A = V \left( \begin{array}{cccc}
+			a_1 & \cdots & 0 & \\
+			\vdots & \ddots & \vdots & \Huge{O} \\
+			0 & \cdots & a_r & \\
+			& \Huge{O} & & \Huge{O}
+		\end{array} \right) W
+	\end{align}
+	と書ける。
+\end{thm}
+
+この定理の証明のためにいくつかの補題を示す。
+\begin{lem}{}{A=B}
+	２つの$(m, n)$型行列$A$、$B$について、
+	任意の$\Ket{\psi} \in \mathbb{C}^n$で
+	$A \Ket{\psi} = B \Ket{\psi}$が成り立てば$A = B$。
+	また任意の$\Ket{\phi} \in \mathbb{C}^m$で
+	$\Bra{\phi} A = \Bra{\phi} B$が成り立てば$A = B$。
+\end{lem}
+\begin{proof}
+	$\Ket{\psi}$として標準基底のうちの１つ$\Ket{e_i}$を取れば、
+	$A \Ket{e_i} = B \Ket{e_i} \in mathbb{C}^m$となる。
+	ここで$\mathbb{C}^m$の標準基底から１つ$\Ket{e'_j}$を持ってきて内積を取ると、
+	$\Braket{e'_j | A | e_i} = \Braket{e'j | B | e_i}$が得られる。
+	ここから任意の$i, j$について$a_{ji} = b_{ji}$であるから、$A = B$である。
+	
+	後半も同じである。
+\end{proof}
+
+\begin{lem}{}{ベクトル分解}
+	$(m, n)$型行列$A$は$\mathbb{C}^n$の正規直交基底$\{ \Ket{u_i} \}_{i=1}^n$、
+	$\mathbb{C}^m$の正規直交基底$\{ \Ket{v_i} \}_{i=1}^m$を用いて、
+	\begin{align}
+		A = \sum_{i=1}^n \left( A \Ket{u_i} \right) \Bra{u_i}
+		= \sum_{i=1}^m \Ket{v_i} \left( \Bra{v_i} A \right)
+	\end{align}
+	と書ける。
+\end{lem}
+\begin{proof}
+	前半をまず示す。
+	補題\ref{lem:A=B}より任意の$\Ket{\psi} \in \mathbb{C}^n$について
+	\begin{align}
+		A \Ket{\psi}
+		= \sum_{i=1}^n \left( A \Ket{u_i} \right) \Braket{u_i | \psi}
+		\label{eq:後ろのベクトル分解}
+	\end{align}
+	を示せば良い。
+	$\Ket{\psi}$を正規直交基底$\{ \Ket{u_i} \}_{i=1}^n$で展開すると、
+	\begin{align}
+		\Ket{\psi} = \sum_{i=1}^n \Braket{u_i | \psi} \Ket{u_i}
+	\end{align}
+	と書ける。
+	これを式\eqref{eq:後ろのベクトル分解}の両辺に代入すると、
+	\begin{align}
+		(\text{左辺})
+		&= \sum_{i=1}^n \Braket{u_i | \psi} A \Ket{u_i} \\
+		(\text{右辺})
+		&= \sum_{i=1}^n \left( A \Ket{u_i} \right)
+		\Bra{u_i} \sum_{j=1}^n \left( \Braket{u_j | \psi} \Ket{u_j} \right) \\
+		&= \sum_{i=1}^n A \Ket{u_i} \Braket{u_i | \psi}
+	\end{align}
+	となり両辺は一致する。
+
+	後半に関しても、$\Ket{\phi}$を
+	$\mathbb{C}^m$の正規直交基底$\{ v_i \}_{i=1}^m$で展開すれば良い。
+\end{proof}
+
+\begin{lem}{}{固有値の一致}
+	エルミート行列$A^\dagger A$、$A A^\dagger$は非負の固有値を持ち、
+	またその非零の固有値は一致する。
+\end{lem}
+\begin{proof}
+	まず$A^\dagger A$、$A A^\dagger$は
+	\begin{gather}
+		\left( A^\dagger A \right)^\dagger
+		= A^\dagger A \\
+		\left( A A^\dagger \right)^\dagger
+		= A A^\dagger
+	\end{gather}
+	であるから、それぞれエルミート行列である。
+	また任意のベクトル$\Ket{\psi} \in \mathbb{C}^n$、
+	$\Ket{\phi} \in \mathbb{C}^m$に対して
+	\begin{align}
+		\Braket{\psi | A^\dagger A | \psi}
+		&= \left\| A \Ket{\psi} \right\|^2 \\
+		&\geq 0 \\
+		\Braket{\phi | A A^\dagger | \phi}
+		&= \left\| A^\dagger \Ket{\phi} \right\|^2 \\
+		&\geq 0
+	\end{align}
+	であるから、それぞれの固有値は非負である。
+
+	次に$A^\dagger A$が固有値$\lambda_i > 0$を持ち、
+	それに対応する固有ベクトルが$\Ket{u_i}$である場合を考える。
+	このとき
+	\begin{align}
+		A A^\dagger \left( A \Ket{u_i} \right)
+		&= A \left( A^\dagger A \Ket{u_i} \right) \\
+		&= \lambda_i A \Ket{u_i} \\
+		\left\| A \Ket{u_i} \right\|^2
+		&= \Braket{u_i | A^\dagger A | u_i} \\
+		&= \lambda_i \Braket{u_i | u_i} \\
+		&= \lambda_i \left\| \Ket{u_i} \right\|^2 \\
+		&> 0
+	\end{align}
+	となるから、
+	$A A^\dagger$は固有値$\lambda_i$を持ち、
+	それに対応した固有ベクトルは$A \Ket{u_i}$である。
+
+	また$A A^\dagger$が固有値$\lambda'_i > 0$を持ち、
+	それに対応する固有ベクトルが$\Ket{v_i}$である場合、
+	\begin{align}
+		A^\dagger A \left( A^\dagger \Ket{v_i} \right)
+		&= A^\dagger \left( A A^\dagger \Ket{v_i} \right) \\
+		&= \lambda'_i A^\dagger \Ket{v_i} \\
+		\left\| A^\dagger \Ket{v_i} \right\|^2
+		&= \Braket{v_i | A A^\dagger | v_i} \\
+		&= \lambda'_i \Braket{v_i | v_i} \\
+		&= \lambda'_i \left\| \Ket{v_i} \right\|^2 \\
+		&> 0
+	\end{align}
+	であるから、
+	$A^\dagger A$は固有値$\lambda'_i$を持ち、
+	それに対応した固有ベクトルは$A^\dagger \Ket{v_i}$となる。
+\end{proof}
+
+\begin{lem}{}{0になるとき}
+	$A^\dagger A \Ket{\psi} = 0$、$A A^\dagger \Ket{\phi} = 0$となるとき、
+	つまり$\Ket{\psi}$、$\Ket{\phi}$がそれぞれ
+	$A^\dagger A$、$A^\dagger A$の固有値0の固有ベクトルのとき、
+	$A \Ket{\psi} = 0$、$A^\dagger \Ket{\phi} = 0$である。
+\end{lem}
+\begin{proof}
+	\begin{align}
+		\left\| A \Ket{\psi} \right\|^2
+		&= \Braket{\psi | A^\dagger A | \psi} \\
+		&= 0 \\
+		\left\| A^\dagger \Ket{\phi} \right\|^2
+		&= \Braket{\phi | A A^\dagger | \phi} \\
+		&= 0
+	\end{align}
+	以上から従う。
+\end{proof}
+
+\begin{thm}{一般の行列のスペクトル分解}{行列のスペクトル分解}
+	任意の$(m, n)$型行列$A$は、
+	$\mathbb{C}^n$の正規直交基底$\{ \Ket{u_i} \}_{i=1}^n$、
+	$\mathbb{C}^m$の正規直交基底$\{ \Ket{v_i} \}_{i=1}^m$と
+	正の実数の組$\{ a_i \}_{i=1}^r$
+	（ただし$0 \leq r = \rank A \leq \min (m, n)$で、$n = 0$のとき実数の組は$\emptyset$）
+	を用いて
+	\begin{gather}
+		A = \sum_{i=1}^r a_i \Ketbra{v_i}{u_i} \\
+		\text{（ただし$r = 0$のとき右辺は0、つまり$A$は零行列）}
+	\end{gather}
+	と書ける。
+\end{thm}
+\begin{proof}
+	一般性を失わずに$n \leq m$とできる。
+	もし$n > m$であれば、$A^\dagger$を$A$と取り直せば良い。
+	
+	まず$A^\dagger A$の固有値の組$\{ \lambda_i \}_{i=1}^n$と、
+	それぞれの固有値に対応した単位ベクトルの組$\{ \Ket{u_i} \}_{i=1}^n$を考える。
+	ここで固有値は
+	$\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_n \geq 0$
+	を満たすように並び替えておく。
+	また$\lambda_i > 0$を満たす最大の$i$を$r$とする。
+	つまり$\lambda_1 \geq \cdots \geq \lambda_r > \lambda_{r+1} = \cdots
+	= \lambda_n = 0$。
+	すると補題\ref{lem:固有値の一致}の証明から、
+	$1 \leq i \leq r$に対して
+	$A \Ket{u_i}$は大きさ$\sqrt{\lambda_i}$の$A A^\dagger$の固有ベクトルである。
+	そこで$1 \leq i \leq r$に対して、
+	$\Ket{v_i} \coloneqq A \Ket{u_i} / \sqrt{\lambda_i}$とすれば、
+	$\Ket{u_i}$、$\Ket{u_j}$の正規直交性より、
+	$1 \leq i, j \leq r$に対して
+	\begin{align}
+		\Braket{v_j | v_i}
+		&= \frac{1}{\sqrt{\lambda_i \lambda_j}}
+		\Braket{u_j | A^\dagger A | u_i} \\
+		&= \frac{1}{\sqrt{\lambda_i \lambda_j}} \lambda_i \Braket{u_j | u_i} \\
+		&= \delta_{ij}
+	\end{align}
+	であることが分かる。
+	つまり$\{ \Ket{v_i} \}_{i=1}^r$を拡大すれば
+	$\mathbb{C}^m$の正規直交基底$\{ \Ket{v_i} \}_{i=1}^m$を作れる。
+
+	また$r+1 \leq i \leq n$に対しては、
+	$A^\dagger A \Ket{u_i} = 0$であるから補題\ref{lem:0になるとき}から
+	$A \Ket{u_i} = 0$であることが分かる。
+	したがって補題\ref{lem:ベクトル分解}を用いて、
+	\begin{align}
+		A &= \sum_{i=1}^n \left( A \Ket{u_i} \right) \Bra{u_i} \\
+		&= \sum_{i=1}^r \sqrt{\lambda_i} \Ketbra{v_i}{u_i}
+	\end{align}
+
+	この$r$が$\rank A$になることはあとで示す。
+\end{proof}
+
+最後に定理\ref{thm:特異値分解}を示す。
+定理\ref{thm:行列のスペクトル分解}より、
+$\mathbb{C}^n$の正規直交基底$\{\Ket{u_i}\}_{i=1}^n$と
+$\mathbb{C}^m$の正規直交基底$\{\Ket{v_i}\}_{i=1}^m$を用いて
+$A$を表すことができた。
+ここで正規直交基底は標準基底にユニタリ行列を作用させることで
+作れることを思い出すと、
+ある$n$次ユニタリ行列$W$とある$m$次ユニタリ行列$V$を用いることで、
+$W^\dagger \Ket{e_i} = \Ket{u_i}$、
+$V \Ket{e'_i} = \Ket{v_i}$とすることができる。
+したがって
+\begin{align}
+	A &= \sum_{i=1}^r \sqrt{\lambda_i} V \Ketbra{e'_i}{e_i} W \\
+	&= V \left( \begin{array}{cccc}
+		\sqrt{\lambda}_1 & \cdots & 0 & \\
+		\vdots & \ddots & \vdots & \Huge{O} \\
+		0 & \cdots & \sqrt{\lambda}_r & \\
+		& \Huge{O} & & \Huge{O}
+	\end{array} \right) W
+\end{align}
+とできる。
+
+またユニタリ行列は正則行列であるから、
+基本変形によって作ることが出来る。
+そのことと基本変形によって行列のランクは変わらないことを思い出すと、
+$\rank A = r$であることが分かる。
+\qed
+
+\end{document}

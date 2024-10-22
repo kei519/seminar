@@ -1,0 +1,245 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{\S 39. \ 非慣性基準系における運動}
+
+\begin{document}
+\maketitle
+
+ここまでは、力学系の運動を考察するのに、ずっと慣性基準系で物事を考えてきた。
+しかしこの節では、非慣性系における1粒子系のラグランジアン、運動方程式がどのように書けるかを見ていくことにする。
+以後慣性系の量の添字は0とする。
+
+1番はじめに最小作用の原理を考えたとき、考えている系が慣性系か、そうでないかは考慮しなかった。
+つまり、非慣性系においても、最小作用の原理、またそこから導かれるオイラー・ラグランジュ方程式は、成立することが前提としてある。
+そこで、まず慣性系を基準として、そこから慣性系と非慣性系の間で成り立つ変換式を用いて、非慣性系におけるラグランジアンを求め、そこから運動方程式を出すことを考える。
+\begin{screen}
+	\underline{補足}
+
+	多分、最小作用の原理は最初の時点で、ある系$S$において書かれたラグランジアン$L$であるとき、そこから$q_i^{\prime} = f_i(q)$で変換された系$S^{\prime}$におけるラグランジアン$L^{\prime}$が、時間に関する完全導関数を除いて、
+	$L(q^{\prime}) = L(f^{-1}(q^{\prime}))$と一致することを要求していそう。
+\end{screen}
+
+慣性系において、1粒子系のラグランジアン$L_0$は
+\begin{align}
+	L_0 = \frac{m}{2} \vec{v}_0^2 - U_0(r_0)
+\end{align}
+と書けることをまず思い出しておく。
+ここから非慣性系への変更を、2つに分けて行う。
+まず、慣性系$K_0$に対して（等速でない）並進運動をしている系$K^{\prime}$を考え、
+そのあとにその系に対して回転している（つまり、慣性系$K_0$に対しては並進と回転を組み合わせた運動をしている）系$K$について考える。
+
+まず慣性系$K_0$のラグランジアンを$L_0$として、速度$\vec{V}(t)$で運動している非慣性系$K^{\prime}$のラグランジアン$L^{\prime}$を求める。
+以後、系$K^{\prime}$の量にはプライムを付すことにする。
+すると、速度の合成則から
+\begin{align}
+	\vec{v}_0 = \vec{v}^{\prime} + \vec{V}(t)
+\end{align}
+が成り立つ。
+またここから、
+\begin{align}
+	\vec{r}_0 = \vec{r}^{\prime} + \int^t \vec{V}(t^{\prime}) \ddif t^{\prime}
+\end{align}
+が得られる。
+したがって、この系におけるラグランジアン$L^{\prime}$は
+\begin{align}
+	L^{\prime} &= \frac{m}{2} \left( \vec{v}^{\prime} + \vec{V}(t) \right)^2
+	+ U_0(\vec{r}_0) \\
+	&= \frac{m}{2} {\vec{v}^{\prime}}^2 + m \vec{V}(t) \cdot \vec{v}^{\prime}
+	- U^{\prime} \left( \vec{r}^{\prime} \right) + \frac{m}{2} \vec{V}^2(t)
+\end{align}
+となる。
+ここで、
+\begin{align}
+	U^{\prime} \left( \vec{r}^{\prime} \right) = U_0 \left(
+		\vec{r}^{\prime} + \int^t \vec{V}(t^{\prime}) \ddif t^{\prime}
+	\right)
+\end{align}
+と定義した。
+最後の項は時間に関する完全導関数であるから、落とすことができる。
+また
+\begin{align}
+	m \vec{V}(t) \cdot \vec{v}^{\prime} =
+	\dif{}{t} \left( m \vec{V}(t) \vec{r}^{\prime} \right)
+	- m \vec{W}(t) \cdot \vec{r}^{\prime}
+\end{align}
+を用いて、$L^{\prime}$を
+\begin{align}
+	L^{\prime} = \frac{m}{2} {\vec{v}^{\prime}}^2
+	- m \vec{W}(t) \cdot \vec{r}^{\prime}
+	- U^{\prime} \left( \vec{r}^{\prime} \right)
+\end{align}
+と置き直す。
+ここで$\vec{W} = \ddif \vec{V} / \ddif t$である。
+すると、この系の運動方程式は、
+\begin{align}
+	\pdif{L^{\prime}}{\vec{r}^{\prime}} &=
+	-\pdif{U^{\prime}}{\vec{r}^{\prime}} - m\vec{W}(t)\\
+	\pdif{L^{\prime}}{\vec{v}^{\prime}} &= m\vec{v}^{\prime}
+\end{align}
+であるから、オイラー・ラグランジュ方程式を用いて、
+\begin{align}
+	m\dif{\vec{v}^{\prime}}{t} = -\pdif{U^{\prime}}{\vec{r}^{\prime}} - m\vec{W}(t)
+\end{align}
+であることがわかる。
+これはつまり、並進運動の加速度が、それとは反対向きに一様な力の場のように影響するということである。
+
+では次に系$K^{\prime}$に対して、角速度$\vec{\Omega}(t)$で回転している系$K$のラグランジアン$L$を求める（これが求めたいラグランジアン）。
+以後、系$K$の量にはなにも付けずに文字のみで表すことにする。
+これまで散々見てき、角速度$\vec{\Omega}(t)$で回転している系との速度の関係を用いると、
+\begin{align}
+	\vec{v}^{\prime} = \vec{v} + \vec{\Omega}(t) \times \vec{r}
+\end{align}
+が成り立つ。
+またのちの便利のために、時刻$t$において、系$K$が系$K^{\prime}$に対して、回転行列$R(t)$で表される分だけ回転しているとする。
+つまり、
+\begin{align}
+	\vec{r} = R(t) \vec{r}^{\prime}
+\end{align}
+が満たされたいるとする。
+このとき、系$K$のラグランジアン$L$は
+\begin{align}
+	L &= \frac{m}{2} \left( \vec{v} + \vec{\Omega}(t) \times \vec{r} \right)^2
+	- m \vec{W}(t) \cdot \vec{r}^{\prime}
+	- U^{\prime} \left( \vec{r}^{\prime} \right) \\
+	&= \frac{m}{2} \vec{v}^2 + m \vec{v} \cdot (\vec{\Omega}(t) \times \vec{r})
+	+ \frac{m}{2} (\vec{\Omega}(t) \times \vec{r})^2
+	- m R^{-1}(t) \vec{W}(t) \cdot R^{-1}(t) \vec{r}^{\prime} - U(\vec{r}) \\
+	&= \frac{m}{2} \vec{v}^2 + m \vec{v} \cdot (\vec{\Omega}(t) \times \vec{r})
+	+ \frac{m}{2} (\vec{\Omega}(t) \times \vec{r})^2 - m \vec{W}(t) \cdot \vec{r}
+	- U(\vec{r})
+\end{align}
+と書ける。
+ここで
+\begin{align}
+	U(\vec{r}) = U^{\prime}(R^{-1}(t) \vec{r})
+\end{align}
+と定義し、第3式において、$\vec{W}$を系$K$の座標系で見た並進加速度に取り替えた。
+これが求めたかった、一般の非慣性系におけるラグランジアン$L$である。
+
+ここから運動方程式求めるのに、楽をするために微分形式が用いられているので、それに倣う。
+\begin{align}
+	\ddif L = m \vec{v} \cdot \ddif \vec{v}
+	+ m(\vec{\Omega} \times \vec{r}) \cdot \ddif \vec{v}
+	+ m \vec{v} \left( \dif{\vec{\Omega}}{t} \times \vec{r} \right) \ddif t
+	+ m \vec{v} \cdot (\vec{\Omega} \times \ddif \vec{r})
+	+ m (\vec{\Omega} \times \vec{r}) \cdot (\vec{\Omega} \times \ddif \vec{r})
+	\quad & \\
+	+ m (\vec{\Omega} \times \vec{r}) \cdot \dif{\vec{\Omega}}{t} \ddif t
+	- m \dif{\vec{W}}{t} \cdot \vec{r} \ddif t
+	- m \vec{W} \cdot \ddif \vec{r}
+	- \pdif{U}{\vec{r}} \cdot \ddif \vec{r}& \\
+	= \left[ m\vec{v} + m(\vec{\Omega} \times \vec{r} )\right] \ddif \vec{v}
+	+ \left[ m(\vec{v} \times \vec{\Omega})
+	+ m(\vec{\Omega} \times \vec{r}) \times \vec{\Omega}
+	- m\vec{W} - \pdif{U}{\vec{r}} \right] \cdot \ddif \vec{r}
+	+ (\ddif t \mbox{の項})
+	\hspace{8mm}& %いい改行の仕方知りません
+\end{align}
+したがって、
+\begin{align}
+	\pdif{L}{\vec{v}} &= m \vec{v} + m(\vec{\Omega} \times \vec{r}) \\
+	\pdif{L}{\vec{r}} &= m(\vec{v} \times \vec{\Omega})
+	+ m[(\vec{\Omega} \times \vec{r}) \times \vec{\Omega}]
+	- m\vec{W} - \pdif{U}{\vec{r}}
+\end{align}
+を得る。
+以上より、求める運動方程式は
+\begin{align}
+	m \dif{\vec{v}}{t} = -\pdif{U}{\vec{r}} - m\vec{W}
+	+ m \left( \vec{r} \times \dot{\vec{\Omega}} \right)
+	+ 2m(\vec{v} \times \vec{\Omega})
+	+ m[\vec{\Omega} \times (\vec{r} \times \vec{\Omega})]
+\end{align}
+となる。
+ここで3つの力が新しく出てきた。
+$m\vec{r} \times \dot{\vec{\Omega}}$は回転の不均一さにより発生する力で、
+$K^{\prime}$系への以降で現れた加速度の項と似たようなものであると考えられる。
+しかし回転する系では、その回転が一様な場合でも、新たな力が表出する。
+$2m(\vec{v} \times \vec{\Omega})$はコリオリ力と呼ばれ、今まで見てきた力のどれとも違って、質点の速度にも依存する。
+$m[\vec{\Omega} \times (\vec{r} \times \vec{\Omega})]$は遠心力と呼ばれ、$\vec{r}$と$\vec{\Omega}$で定まる平面内で、$\vec{\Omega}$に垂直な方向である。
+また、その大きさは、回転軸（$\vec{\Omega}$の向き）からの距離が$\rho$であるとき、$m \rho \Omega^2$となる。
+
+ここからは、並進運動がなく、一様な回転のみがある特別な場合について考察する。
+つまり$\vec{\Omega} = {\rm const}$、$\vec{W} = \vec{0}$の場合である。
+このときラグランジアンは
+\begin{align}
+	L = \frac{m}{2} \vec{v}^2 + m \vec{v} \cdot (\vec{\Omega} \times \vec{r})
+	+ \frac{m}{2} (\vec{\Omega} \times \vec{r})^2 - U(\vec{r})
+\end{align}
+と書け、運動方程式は、
+\begin{align}
+	m \dif{\vec{v}}{t} = -\pdif{U}{\vec{r}}	+ 2m(\vec{v} \times \vec{\Omega})
+	+ m[\vec{\Omega} \times (\vec{r} \times \vec{\Omega})]
+\end{align}
+となる。
+このときの（保存料としての）エネルギーを考える。
+この系の（一般化）運動量$\vec{p}$は
+\begin{align}
+	\vec{p} = m\vec{v} + m(\vec{\Omega} \times \vec{r})
+\end{align}
+であるから、エネルギーは
+\begin{align}
+	E &= \vec{p} \cdot \vec{v} - L \\
+	&= m \vec{v}^2 + m(\vec{\Omega} \times \vec{r}) \cdot \vec{v} - L \\
+	&= \frac{m}{2} \vec{v}^2 - \frac{m}{2} (\vec{\Omega} \times \vec{r})^2
+	+ U(\vec{r})
+\end{align}
+と書ける。
+このように書けば、速度の1次項は消える。
+つまり、通常の運動エネルギーと、位置にのみ依存するポテンシャル（のようなもの）からなる。
+ここで慣性系と異なる、付加されたポテンシャル項は、遠心エネルギーと呼ばれる。
+
+この非慣性系における運動量、エネルギーの表式に、慣性系における値を入れてみる。
+慣性系と非慣性系は、ラグランジアン導出時と同様に、
+\begin{align}
+	\vec{v}_0 &= \vec{v} + (\vec{\Omega} \times \vec{r}) \\
+	\vec{r} &= R(t) \vec{r}_0
+\end{align}
+という関係で結ばれているから、
+運動量は、
+\begin{align}
+	\vec{p} = m\vec{v}_0
+\end{align}
+となり、通常の表式と一致する。
+また角運動量は
+\begin{align}
+	\vec{M} &= \vec{r} \times \vec{p} = R^{-1} (\vec{r}_0 \times \vec{p}_0) \\
+	\vec{M}_0 &= \vec{r}_0 \times \vec{p}_0
+\end{align}
+となる。
+角速度$\vec{\Omega}$が一定であるときは、ある軸周りの回転しか行われず、$R$はその軸方向、すなわち角運動量の方向へはなんの変更も行わないから、どちらの系でも角運動量は一致する。
+またエネルギーは、
+\begin{align}
+	E &= \frac{m}{2} \left[ \vec{v}_0
+	- (\Omega \times \vec{r}) \right]^2
+	- \frac{m}{2} (\vec{\Omega} \times \vec{r})^2 + U_0(\vec{r}_0) \\
+	&= \frac{m}{2} \vec{v}_0^2 + U_0(\vec{r}_0)
+	- m\vec{v}_0 \cdot (\vec{\Omega} \times \vec{r}) \\
+	&= E_0 - (\vec{M} \times \vec{\Omega})
+\end{align}
+となり、慣性系とは一致しない。
+
+ここまでは全て1粒子の場合であったが、多粒子の場合でも、それぞれの座標成分は1粒子の座標成分と同じく独立であり、また相互作用があった場合も、それらは普通粒子間距離にしか依らず、非慣性系への変更では影響を受けないため、同様の議論が成り立つ。
+
+\end{document}

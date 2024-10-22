@@ -1,0 +1,240 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+\usepackage{enumerate}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 5.1\ Conformal Compactification （共変コンパクト化）}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{4}
+\section{Asymptotic flatness （漸近的平坦）}
+我々は初期値による「漸近的平坦性」という概念は既に定義した(cf. 3.6)。
+この章では、時空が「漸近的に平坦である」ということはどういうことか定義する。
+そうすることで、「ブラックホール」という言葉を定義できるようになる。
+
+\subsection{Conformal compactification （共変コンパクト化）}
+時空$(M, g)$を取ってくれば、$M$上で滑らかな正の関数$\Omega$を用いて、新たな計量$\bar{g} = \Omega^2 g$を定義することができる。
+このとき、$\bar{g}$は$g$から共変写像によって得たと言うことができる。
+この2つの計量$g$、$\bar{g}$ではtimelike、spacelike、nullの定義は一致し、そのためこれらは同じ光円錐を作る、つまり同じ因果構造を持つ。
+Conformal compactificationのアイデアは、計量$g$を用いると無限遠の点となるところを、非物理的な計量$\bar{g}$を用いることで、「有限の点」となるように$\Omega$を選ぶことである。
+そのためには、無限遠で$\Omega \to 0$となることを要請する必要がある。
+もっと正確に言うと、$\Omega$を時空$(M, \bar{g})$がこれまでの章で議論してきた意味で、拡張可能(extendible)となる、つまり時空$(M, \bar{g})$は更に大きな時空$(\bar{M}, \bar{g})$の一部となるように、選ぶようにすることである。
+そうすれば、$M$は$\bar{M}$の真部分集合となり、また$\bar{M}$の中で$M$の境界$\partial M$上では$\Omega = 0$となる。
+この境界$\partial M$が$(M, g)$上での無限遠に相当する。
+いくつかの例を見ることが、これがどのような働きをするかを見る最も簡単な方法だろう
+
+\begin{description}
+	\item[Minkowski時空]
+\end{description}
+
+$(M, g)$をMinkowski時空とする。
+球座標表示において計量は
+\begin{equation}
+	g = -\ddif t^2 + \ddif r^2 + r^2 \ddif \omega^2 \tag{5.1}
+\end{equation}
+（$S^2$における計量を共変パラメータ$\Omega$と混同しないように$\ddif \omega^2$と書く。）
+retarded timeとadvanced time（遅延・先進時間？）を
+\begin{align}
+	u = t - r \qquad v=t+r \tag{5.2}
+\end{align}
+で定義する。
+これ以降では、それぞれの座標が動く範囲を把握することが重要となる。
+$r \ge 0$であるから、$-\infty < u \le v < \infty$を得る。
+また計量は
+\begin{align}
+	g = -\ddif u \ddif v + \frac{1}{4} (u-v)^2 \ddif \omega^2 \tag{5.3}
+\end{align}
+である。
+今新たな座標$(p, q)$を
+\begin{align}
+	u = \tan p \qquad v = \tan q \tag{5.4}
+\end{align}
+によって定義すると、$(p, q)$の動く範囲は、$-\pi/2 < p \le q < \pi/2$、つまり有限になる。
+また、これらから
+\begin{align}
+	g = (2 \cos p \cos q)^{-2} \left[ -4\ddif p \ddif q + \sin^2 (q-p) \ddif \omega^2 \right] \tag{5.5}
+\end{align}
+が得られる。
+無限遠は、もとの座標系にでは$|t| \to \infty$もしくは$r \to \infty$に対応するが、新しい座標系では$|p| \to \pi/2$もしくは$|q| \to \pi/2$に対応する。
+
+この時空をconformally compactify（同角コンパクト化）するには、正関数を
+\begin{align}
+	\Omega = 2 \cos p \cos q \tag{5.6}
+\end{align}
+と定義し、
+\begin{align}
+	\bar{g} = \Omega^2 g = -4 \ddif p \ddif + \sin^2 (q-p) \ddif \omega^2 \tag{5.7}
+\end{align}
+とすればよい。
+最後に
+\begin{align}
+	T = q + p \in (-\pi, \pi) \qquad \chi = q - p \in [0, \pi) \tag{5.8}
+\end{align}
+とすれば、
+\begin{align}
+	\bar{g} = - \ddif T^2 + \ddif \chi^2 + \sin^2 \chi \ddif \omega^2 \tag{5.9}
+\end{align}
+を得る。
+ここで$\ddif \chi^2 + \sin^2 \chi \ddif \omega^2$は、$S^3$上の単位球計量（単位超球面$S^3$）における計量である。
+もし$T \in (-\infty, \infty)$かつ$\chi \in [0, \pi]$であれば、$\bar{g}$は平らな時間軸と、$S^3$上の単位球計量との積によって与えられる、Einsteinの静的宇宙(Einstein static universe)$\mathbb{R} \times S^3$における計量となる。
+ESUは軸が時間方向に対応した、無限に伸びる円柱として視覚化されることもある。
+今考えている場合では、$p, q$の範囲に制限があって、$M$は図5.1に示すようにESUの有限部分空間になっている。
+
+時空$(\bar{M}, \bar{g})$をESUとする。
+するとこれは$(M, \bar{g})$の拡張になっている。
+$M$の境界$\partial M$はMinkowski時空における無限遠に対応している。
+その境界は、(i)\ $i^{\pm}$でラベルされた点、つまり$T=\pm \pi, \chi=0$\ (ii)\ $i^0$でラベルされた点、つまり$T=0, \chi=\pi$\ (iii)\ $\chi \in (0, \pi)$と$(\theta, \phi)$によってパラメータ付けされた$T=\pm(\pi - \chi)$で表される、つまり円柱トポロジー$\mathbb{R} \times S^2$（なぜなら$(0, \pi)$は$\mathbb{R}$と微分同相）を持った、2つのnull超曲面$\mathcal{I}^{\pm}$（発音はscri）からなっている。
+\begin{screen}
+	\underline{補足}
+
+	Minkowski時空における無限遠は$|t| \to \infty$もしくは$r \to \infty$に対応しており、これは$|p| \to \pi/2$もしくは$|q| \to \pi/2$に対応している。
+	これらは
+	\begin{align}
+		|T + \chi| = 2|q| \to \pi \qquad |T - \chi| = 2|p| \to \pi
+	\end{align}
+	に対応しているが、ここで$p \le q$に注意すると、
+	\begin{align}
+		-pi < T - \chi \le T + \chi < \pi
+	\end{align}
+	であるから、
+	考えられるパターンは
+	\begin{enumerate}[(i)]
+		\item $T + \chi \to \pi, T - \chi \to \pi$つまり$T \to \pi, \chi \to 0$
+		\item $T + \chi \to \pi, -\pi < T - \chi < \pi$つまり$T \to \pi - \chi$
+		\item $T + \chi \to \pi, T - \chi \to -\pi$つまり$T \to 0, \chi \to \pi$
+		\item $-\pi < T + \chi < \pi, T - \chi \to -\pi$つまり$T \to -\pi + \chi$
+		\item $T + \chi \to -\pi, T - \chi \to -\pi$つまり$T \to -\pi, \chi \to 0$
+	\end{enumerate}
+	となる。
+\end{screen}
+
+図5.1を$(T, \chi)$平面に射影するのは、図5.2にあるようなMinkowski時空のPenroseダイアグラムを得るのに都合が良い。
+
+形式的には、Penroseダイアグラムというのは、平坦なローレンツ計量（今の場合$-\ddif T^2 + \ddif \chi^2$)が与えられた$\mathbb{R}^2$の有界部分集合である。
+Penroseダイアグラム内部の各点は$S^2$を表している。
+また境界上の点は、対称軸（$r=0$）もしくは、計量が$g$であるもとの時空における無限遠点を表している。
+
+$g$による測地線がPenroseダイアグラム上でどのように見えるかを考えよう。
+最も考えるのが楽なものは、放射状の測地線つまり$\theta$、$\phi$が定数となるようなものである。
+$g$と$\bar{g}$の因果構造が同じであることを思い出そう。
+すると、$g$による放射状のnull曲線は平坦な計量$-\ddif T^2 + \ddif \chi^2$におけるnull曲線、つまり45°の直線となる。
+これらの曲線はすべて$\mathcal{I}^-$から始まり、原点（$r=0$）を通り、$\mathcal{I}^+$で終わる。
+このため、$\mathcal{I}^-$はpast null infinity、$\mathcal{I}^+$はfuture null infinityと呼ばれている。
+同様に放射状のtimelikeな測地線は$i^-$から始まり$i^+$で終わるため、$i^-$はpast timelike infinity、$i^+$はfuture timelike infinityと呼ばれる。
+最後に、放射状のspacelikeな測地線は、$i^0$で始まり終わるため、$i^0$はspatial infinityと呼ばれている。
+
+また放射状でない（non-radialな）曲線の射影をPenroseダイアグラムに描くこともできる。
+このような射影によって、物事は2次元の平坦な計量に関して「よりtimelike」に見える。
+（なぜなら(5.9)式の最後の項を右辺に移行することで、intervalに負の効果をもたらすためである。）
+そのため、non-radialなtimelike測地線は射影してもtimelikeなままであり、non-radialなnull曲線は射影によってtimelikeに見えることになる。
+
+測地線の振る舞いは、場と類似性を持っている。
+大雑把に言えば、masslessな放射は$\mathcal{I}^-$から来て$\mathcal{I}^+$に向かっていく。
+例えば、Minkowski時空でmasslessなスカラー場$\psi$を考える、つまり波動方程式$\nabla^a \nabla_a \psi = 0$の解を考える。
+簡単のため、解$\psi$は球対称な形$\psi = \psi(t, r)$であると仮定する。
+\begin{description}
+	\item[例題] Minkowski時空における波動方程式の球対称な一般解は、任意の関数$f, g$を用いて
+	\begin{align}
+		\psi(t, r) = \frac{1}{r} (f(u) + g(v))
+		= \frac{1}{r} (f(t-r) + g(t+r)) \tag{5.10}
+	\end{align} 
+	と書けることを示せ。
+	これは、$g(x) = -f(x)$で
+	\begin{align}
+		\psi(t, r) = \frac{1}{r} (f(u) - f(v))
+		= \frac{1}{r} (F(p) - F(q)) \tag{5.11}
+	\end{align}
+	（ただし$F(x) = f(\tan x)$）と書ける場合以外では、$r=0$で特異的となる（つまりそこでは解でない）。
+	ここでもし$F_0(q)$を$\mathcal{I}^-$（$p = -\pi/2$）上での$r\psi$の極限値であるとすれば、$F(-\pi/2) - F(q) = F_0(q)$であるから、$F(q) = F(-\pi/2) - F_0(q)$を得る。
+	したがって、解を
+	\begin{align}
+		\psi = \frac{1}{r} (F_0(q) - F_0(p)) \tag{5.12}
+	\end{align}
+	とも書ける。
+	\item[解] 球対称であるから、波動方程式$\nabla^a \nabla_a \psi = 0$をMinkowski計量で具体的に書き下すと、
+	\begin{align}
+		\left[ -\pdif{^2}{t^2} + \frac{1}{r^2} \pdif{}{r} \left( r^2 \pdif{}{r}\right) \right] \psi = 0 \label{eq:wave}
+	\end{align} 
+	となるが、ここで$\Psi = R/r$と置くと、
+	\begin{align}
+		\frac{1}{r^2} \pdif{}{r} \left( r^2 \pdif{}{r} \right) \Psi
+		&= \frac{1}{r^2} \pdif{}{r} \left( r \pdif{R}{r} - \Psi \right) \\
+		&= \frac{1}{r} \pdif{^2 R}{r^2} + \frac{1}{r^2} \pdif{R}{r} - \frac{1}{r^2} \pdif{\Psi}{r} \\
+		&= \frac{1}{r} \pdif{^2 R}{r^2}
+	\end{align}
+	となるから、波動方程式\eqref{eq:wave}は
+	\begin{align}
+		\frac{1}{r} \left( -\pdif{^2}{t^2} + \pdif{^2}{r^2} \right) R &= 0 \\
+		\left( -\pdif{^2}{t^2} + \pdif{^2}{r^2} \right) R &= 0
+	\end{align}
+	と書き直せる。
+	これは1次元の波動方程式であるから、任意関数$f, g$を用いて
+	\begin{align}
+		R = f(u) + g(v) = f(t - r) + g(t + r)
+	\end{align}
+	と書ける（これを示すには、$u, v$の変換を施した後に積分すれば良い）。
+\end{description}
+
+\begin{description}
+	\item[2次元Minkowski時空]
+\end{description}
+これらのアイデアの別の例として、計量が
+\begin{align}
+	g = -\ddif t^2 + \ddif r^2 \tag{5.13}
+\end{align}
+で与えられた2次元Minkowski時空を考える。
+前と同様の座標変換を行うと、この場合は$-\infty < r < \infty$のため、$-\infty < u, v < \infty, -\pi/2 < p, q < \pi/2$となることと、$T, \chi \in (-\pi, \pi)$となることだけが違ってくる。
+Penroseダイアグラムは図5.3のとおりである。
+今考えている場合、左と右に部分spatial infinityと部分future/past null infinityがあることになる。
+
+\begin{description}
+	\item[Kruskal時空]
+\end{description}
+この場合は、我々はすでに時空$(M, g)$が2つの漸近的に平坦な領域を持っていることを知っている。
+それら2つの領域の無限遠が、4次元Minkowski時空において同じ構造を持っていることを期待するのは自然なことだろう。
+Kruskal時空におけるPenroseダイアグラムを描くためには、我々はともに有限な、もっというと$(-\pi/2, \pi/2)$の範囲を動く、新たな座標$P=P(U)$と$Q=Q(V)$を（$P, Q$が定数であるような線が、放射状のnull測地線になるように）定義したほうが良いだろう。
+すると、（Minkowski時空においてEinsteinの静的宇宙を用いたのと同様に）大きな多様体$\bar{M}$上で滑らかに拡張できる非物理的な計量$\bar{g}$を求めるために、共変パラメータ$\Omega$を決める必要がある。
+すれば、$M$は$\bar{M}$の部分空間となり、その境界は$P$もしくは$Q$が$\pm \pi/2$である領域に対応した、4部分からなることとなる。
+これらの4部分が$\mathcal{I}^{\pm}$で表される、領域I内のfuture/past null infinityと、$\mathcal{I}^{\pm^{\prime}}$で表される、領域IV内のfuture/past null infinityのどれに対応するかを考える。
+
+しかしこの分類を正確に行うことは面倒である。
+幸いにもそれをする必要はない。
+無限遠での構造を理解した今、KuruskalダイアグラムからPenroseダイアグラムの形を推測することができる。
+なぜなら、放射状null曲線を45°の曲線として表現するからです。
+唯一の重要な違いは、無限遠がPenroseダイアグラムの境界と対応することだ。
+$\Omega$を選ぶ自由度を用いて、曲率特異点である$r=0$がPenroseダイアグラムにおいて水平な直線になるようにすることが慣例になっている。
+結果は図5.4で示したとおりである。
+
+Minkowski時空でのconformal compactificationとは対照的に、非物理的な計量は$i^{\pm}$と$i^{\pm^{\prime}}$において特異的となることが分かる。
+これは、$r$が定数である曲線が$i^{\pm}$と交わるが、その中には曲率特異点である$r=0$も含まれていることから理解されるだろう。
+あまり明らかではないが、非物理的な計量が$i^0$において滑らかになるように$\Omega$を選ぶこともできないことが分かる。
+
+\begin{description}
+	\item[球対称崩壊]
+\end{description}
+
+球対称な重力崩壊のPenroseダイアグラムは、Kruskalダイアグラムから簡単に推測することができる。
+これは図5.5で示した。
+
+\end{document}

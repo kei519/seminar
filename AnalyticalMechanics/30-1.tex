@@ -1,0 +1,80 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\begin{document}
+
+\begin{align}
+	\dif{}{t} \left( a_{ij}(Q) \dot{\xi_j} \right) = f_i(Q, t)
+\end{align}
+で、$Q$に依存する量はほぼ変化しないから定数とみなして、
+\begin{align}
+	 &a_{ij} \ddot{\xi_i} = f_i (Q, t) =
+	 f_i^{(1)} (Q) \cos \omega t + f_i^{(2)} (Q) \sin \omega t \\
+	 &\ddot{\xi_i} = a_{ij}^{-1}
+	 \left( f_j^{(1)} \cos \omega t + f_j^{(2)} \sin \omega t \right)
+\end{align}
+を得るから、
+\begin{align}
+	 \xi_i = -\frac{a_{ij}}{\omega^2}
+	 \left( f_j^{(1)} \cos \omega t + f_j^{(2)} \sin \omega t \right)
+	 \label{eq:xi}
+\end{align}
+となる。
+
+また、
+\begin{align}
+	 \overline{f_i f_j} = \frac{1}{2}
+	 \left( f_i^{(1)} f_j^{(1)} + f_i^{(2)} f_j^{(2)} \right)
+	 \label{eq:f}
+\end{align}
+であるが、式\refeq{eq:xi}より
+\begin{align}
+	 \dot{\xi_i} = \frac{a_{ij}^{-1}}{\omega}
+	 \left( f_j^{(1)} \sin \omega t - f_j^{(2)} \cos \omega t \right)
+\end{align}
+であることより、
+\begin{align}
+	\overline{\dot{\xi_i}\dot{\xi_j}} &= \frac{a_{ik}^{-1} a_{jl}^{-1}}{\omega^2} 
+	\overline{\left( f_k^{(1)} f_l^{(1)} \sin^2 \omega t
+	- f_k^{(1)} f_l^{(2)} \sin \omega t \cos \omega t
+	- f_k^{(2)} f_l^{(1)} \cos \omega t \sin \omega t
+	+ f_k^{(2)} f_l^{(2)} \cos^2 \omega t \right)} \\
+	&= \frac{a_{ij}^{-1} a_{jl}^{-1}}{2\omega^2}
+	\left( f_k^{(1)} f_l^{(1)} + f_k^{(2)} f_l^{(2)} \right)
+\end{align}
+となるから、式\refeq{eq:f}より
+\begin{align}
+	\overline{f_i f_j} = \omega^2 a_{ik} a_{jl}
+	\overline{\dot{\xi_k} \dot{\xi_l}}
+\end{align}
+と書ける。
+したがって、
+\begin{align}
+	U_{\mbox{有効}} &= U + \frac{a_{ij}^{-1}}{2\omega^2} \overline{f_i f_j} \\
+	&= U + \frac{1}{2} a_{ij}^{-1} a_{ik} a_{jl}
+	\overline{\dot{\xi_k} \dot{\xi_l}} \\
+	&= U + \frac{a_{kl}}{2} \overline{\dot{\xi_k} \dot{\xi_l}}
+\end{align}
+となることが分かる。
+
+\end{document}

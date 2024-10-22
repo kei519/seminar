@@ -1,0 +1,83 @@
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\usepackage{braket}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+% ページを跨ぐ枠
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins, theorems}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\newcommand{\Ketbra}[2]{\Ket{#1} \! \! \Bra{#2}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\renewcommand{\proofname}{証明}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+% 定理環境
+\newcounter{thetcbcounter}
+\newtcbtheorem{thm}{定理}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{thm}
+\newtcbtheorem[use counter from = thm]{dfn}{定義}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{def}
+\newtcbtheorem[use counter from = thm]{lem}{補題}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{lem}
+\newtcbtheorem[use counter from = thm]{prop}{命題}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{prop}
+\newtcbtheorem[use counter from = thm]{cor}{系}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{cor}
+\newtcbtheorem[use counter from = thm]{ass}{仮定}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{ass}
+\newtcbtheorem[use counter from = thm]{conj}{予想}{
+coltitle = white,
+colback = white,
+colframe = black!50,
+fonttitle = \bfseries,
+breakable = true,
+}{conj}

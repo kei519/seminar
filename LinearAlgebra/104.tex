@@ -1,0 +1,39 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{./preamble}
+
+\title{レジュメ}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{3}
+\section{線型空間}
+\setcounter{subsection}{2}
+\subsection{基底及び次元}
+\begin{thm}[code={\setcounter{\tcbcounter}{9}}]{}{3.10}
+	$V$の有限部分集合$S$が$n$個の元から成る極大線型独立系を持つならば、
+	$n$個より多くの$S$のベクトルは線型従属である。
+	とくに、$S$の任意の極大線型独立系は$n$個のベクトルより成る。
+	（また$S$の$n$個の線型独立なベクトルより成る集合は、
+	極大線型独立系となる。）
+\end{thm}
+\begin{thm}[code={\setcounter{\tcbcounter}{8}}]{}{3.9}
+	$K$上の線型空間$V$が$n$個のベクトルから成る基底を持つならば、
+	$n$個よりも多くのベクトルは線型従属である。
+	とくに、$V$の任意の基底は$n$個のベクトルより成る。
+\end{thm}
+\begin{cor}[code={\setcounter{\tcbcounter}{10}}]{}{3.11}
+	$K$上の次元の等しい2つの線型空間は互いに同型である。
+\end{cor}
+
+基底の取り替えの話。
+
+\subsection{線型部分空間}
+\begin{dfn*}{線型部分空間}{線型部分空間}
+	$K$上の線型空間$V$の部分集合$W$が、
+	同じ演算に関して$K$上の線型空間となるとき、
+	$W$を$V$の部分線型空間あるいは単に部分空間と言う。
+\end{dfn*}
+
+\end{document}

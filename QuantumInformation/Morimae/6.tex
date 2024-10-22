@@ -1,0 +1,85 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\theoremstyle{definition}
+\newtheorem{dfn}{定義}
+
+\title{第6章 計算量理論の基礎}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{6}
+
+計算量理論とは、ある問題を解くのに、
+ある計算機がどのくらいのリソース（時間やメモリなど）を必要とするかを
+研究する学問である。
+この章では古典計算量理論と量子計算量理論の基礎について簡単に説明する。
+
+\subsection{判定問題}
+計算機科学においては判定問題（decision problem）、
+つまりYESかNOで答えられる問題を考えるのが普通である。
+多くの問題は判定問題に焼き直すことができ、また判定問題は扱いやすいため、
+計算機科学においては「問題」の1つの良いモデル化としてスタンダードになっている。
+
+問題を判定問題に限定すれば、
+計算機としては問題の入力をビット列 $x \in \{0, 1\}^*$ とし、
+答えがYESならば1をNOならば0を出力するものを考えれば良い。
+このとき、出力が1ならば出力 $x$ を受理（accept）すると言い、
+0ならば出力 $x$ を拒否（reject）すると言う。
+
+このようにすれば、問題はビット列の部分集合 $L$ として表すことができる。
+つまり入力のビット列 $x \in \{0, 1\}^*$ としたとき、
+$x$ が受理されるならば $x \in L$、拒否されるならば $x \notin L$ となるような
+部分集合 $L \subseteq \{0, 1\}^*$ として問題を表すのである。
+この $L$ は言語とも呼ばれる。
+
+場合によっては $\{0, 1\}^*$ のすべての要素を入力とせず、
+$A_{\rm yes} \cap A_{\rm no} = \emptyset$ となる2つの部分集合
+$A_{\rm yes}$、$A_{\rm no} \subseteq \{0, 1\}^*$ を考え、
+入力としては $A_{\rm yes} \cup A_{\rm no}$ のみしか与えられないと
+「約束された」判定問題を考えることもある。
+このような問題はプロミス問題（promise problem）とも呼ばれる。
+
+\subsection{P、BPP、NP}
+判定問題を、その用いるリソースにより分類することにより、
+様々な計算量クラスを得ることができる。
+この節では古典計算量理論における代表的なクラスであるP、BPP、NPを定義する。
+
+\begin{dfn}
+	ある言語 $L$ が $P$ に入るとは、多項式時間決定的チューリングマシンが存在して、
+	\begin{enumerate} \label{def:P}
+		\item $x \in L$ のとき受理
+		\item $x \notin L$ のとき拒否
+	\end{enumerate}
+	を満たすことである。
+\end{dfn}
+
+\end{document}

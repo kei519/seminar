@@ -1,0 +1,1489 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{\string~/preamble}
+
+\usepackage{cancel}
+\usepackage{multicol}
+\DeclareMathOperator{\Tr}{Tr}
+\renewcommand{\labelenumii}{(\arabic{enumii})}
+
+\title{第８章 \ 量子対話型証明系}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{8}
+
+対話型証明系とは、
+計算能力に制限のある検証者（verifier、アーサーとも）が、
+計算能力に制限のない証明者（prover、マーリンとも）と
+メッセージをやり取りすることにより、
+検証者の能力を超えた問題を解くシステムのことである。
+量子対話型証明系とは、メッセージが量子計算であったり、
+検証者や証明者が量子計算を行えるような、
+量子が関わっている対話型証明系のことである。
+ただし証明者は常に正しいヒントをくれるとは限らないため、
+ここで考えなければいけないのは、
+いかに検証者が嘘に騙されないように
+証明者の高い計算能力を利用するかということである。
+
+\subsection{MA}
+ここまでで、NPには同値な定義が２つあることを見てきたが、
+ここで新たに同値な別の定義を与える。
+
+NPは、確率的計算において、
+分岐に差し掛かる度に一定の確率で一方を選ぶような場合を
+考えることで、
+$x \in L$のとき受理確率$> 0$のものとして定義できた。
+ここで計算能力に制限のないマーリンがいて、
+あらかじめ各分岐においてどちらを選べば良いかを
+ビット列で表したメモとして渡しておいてくれていれば、
+$x \in L$のときには必ず受理される。
+逆に$x \notin L$のときには、
+いかなるメモを渡されても受理することはない。
+したがってNPは次のようにも定義できる。
+\begin{dfn}{}{}
+	\vspace{-1zh}
+	\begin{align}
+		&L \in \mathrm{NP} \\
+		&\xLeftrightarrow{\mathrm{def}} \left\{
+			\begin{array}{l}
+				\text{ある多項式時間チューリングマシンと多項式$w$が存在して、} \\
+				x \in L \Rightarrow \text{あるビット列$y \in \{0, 1\}^w$が存在
+				して、$(x, y)$を入力として計算を行うと受理する} \\
+				x \notin L \Rightarrow \text{どんな$y \in \{0, 1\}^w$に
+				対しても、$(x, y)$を入力として行う計算は受理しない。}
+			\end{array}
+		\right.
+	\end{align}
+\end{dfn}
+ここでの$y$がマーリンがくれるヒントに対応する。
+（witness、certificationと呼ばれる。）
+これを確率的チューリングマシンに拡張したクラスがMAと
+呼ばれる。
+\begin{dfn}{}{}
+	\vspace{-1zh}
+	\begin{align}
+		&L \in \mathrm{NP} \\
+		&\xLeftrightarrow{\mathrm{def}} \left\{
+			\begin{array}{l}
+				\text{ある多項式時間確率的チューリングマシンと多項式$w$が
+				存在して、} \\
+				x \in L \Rightarrow \text{あるビット列$y \in \{0, 1\}^w$が
+				存在して、$(x, y)$を入力として行う計算の受理確率 $\ge 2/3$} \\
+				x \notin L \Rightarrow \text{どんな$y \in \{0, 1\}^w$に
+				対しても、受理確率$\le 1/3$}
+			\end{array}
+		\right.
+	\end{align}
+\end{dfn}
+
+\subsection{IP}
+MAは証明者とのやり取りが１回だけだったが、
+それを$k$回に拡張したものとして$IP[k]$を定義する。
+慣習として最後のメッセージは証明者$\to$検証者とする。
+\begin{dfn}{}{}
+	\vspace{-1zh}
+	\begin{align}
+		&L \in \mathrm{IP} [k]_{c, s} \\
+		&\xLeftrightarrow{\mathrm{def}} \left\{
+			\begin{array}{l}
+				\text{ある多項式時間確率的古典検証者が存在して、} \\
+				x \in L \Rightarrow \text{ある証明者の行動が存在して、
+				検証の受理確率$\ge c$} \\
+				x \notin L \Leftarrow \text{どんな証明者の行動に対しても、
+				検証者の受理確率$\le s$}
+			\end{array}
+		\right.
+	\end{align}
+\end{dfn}
+
+また、多項式回のやり取りで判定できるクラスを特にIPと書く。
+$\mathrm{IP}=\mathrm{PSPACE}$であることが知られている。
+
+\subsection{QMA}
+BQPのときと同様にMAを量子に拡張したい。
+MAの場合にはwitnessとアーサーの２つをそれぞれ量子に拡張する余地がある。
+\begin{enumerate}
+	\item witnessは量子、アーサーも量子 $\to$ QMA
+	\item witnessは古典、アーサーは量子 $\to$ QCMA
+	\item witnessは量子、アーサーは古典 $\to$ \(\left( 
+		\begin{array}{l}
+			\text{アーサーが完全に古典 $\to$ $w$を利用できない $\to$ BPP} \\
+			\text{アーサーが$Z$測定可能 $\to$ $w$は古典確率分布 $\to$ MA} \\
+			\text{アーサーが$Z$、$X$測定可能 $\to$ QMA \ （\S 8.10で見る）}
+		\end{array}
+	\right.\)
+\end{enumerate}
+以下ではQMAについて詳しく見る。
+\begin{dfn}{}{}
+	\vspace{-1zh}
+	\begin{align}
+		&L \in \mathrm{QMA}_w (c, s) \\
+		&\xLeftrightarrow{\mathrm{def}} \left\{
+			\begin{array}{l}
+				\text{ある多項式時間一様生成可能量子回路族$\{V_x\}_x$と
+			多項式$w$、$m$が存在して、} \\
+				x \in L \Rightarrow \text{ある$w$量子ビット状態$\Ket{\psi}$が
+				存在して、受理確率} \\
+				\phantom{x \in L \Rightarrow} \begin{aligned}
+					&\mathrm{Tr} \left[ \Ketbra{0}{0}
+					\mathrm{Tr}_{w+m-1} \left[ V_x
+					\left( \Ket{\psi} \otimes \Ket{0^m} \right)
+					\left( \Bra{\psi} \otimes \Bra{0^m} \right)
+					V_x^\dagger \right] \right] \\
+					&= \left( \Bra{\psi} \otimes \Bra{0^m} \right) V_x^\dagger
+					\left( \Ketbra{0}{0} \otimes I^{\otimes w+m-1} \right)
+					V_x \left( \Ket{\psi} \otimes \Ket{0^m} \right) \geq c
+				\end{aligned} \\
+				x \notin L \Rightarrow \text{どんな$w$量子ビット状態
+				$\Ket{\psi}$に対しても、受理確率$\leq s$}
+			\end{array}
+		\right.
+	\end{align}
+\end{dfn}
+
+$x \in L$のときwitnessは純粋状態$\Ket{\psi}$としてよい。
+なぜならwitness \ $\rho = \sum_i a_i \Ketbra{\psi_i}{\psi_i}$のとき
+\begin{align}
+	\mathrm{受理確率} &= \mathrm{Tr} \left[ \Ketbra{0}{0} \mathrm{Tr}_{w+m-1}
+	\left[ 
+		V_x \left( \rho \otimes \Ketbra{0^m}{0^m} V_x^\dagger \right)
+	 \right] \right] \\
+	&= \mathrm{Tr} \left[ \Ketbra{0}{0} \mathrm{Tr}_{w+m-1}
+	\left[ 
+		V_x \left( \sum_i a_i \Ketbra{\psi_i}{\psi_i} \otimes
+		\Ketbra{0^m}{0^m} V_x^\dagger \right)
+	 \right] \right] \\
+	 &= \sum_i a_i \underbrace{\left[ \left( \Bra{\psi_i} \otimes \Bra{0^m}
+	\right) V_x^\dagger \left( \Ketbra{0}{0} \otimes I^{\otimes w+m-1} \right)
+	V_x \left( \Ket{\psi_i} \otimes \Ket{0^m} \right) \right]}_{p_i} \\
+	& \geq c
+\end{align}
+したがって全ての$i$について、$p_i < c$とすると、受理確率 $< \sum_i a_i c = c$
+となり矛盾するからである。
+
+またBPP、BQP同様に、QMAにおける$(c, s)$は$c - s \geq 1/\mathrm{poly}$を
+満たす任意の$c, s$であれば、多項式回の繰り返しで成功確率を1に近づけられる。
+しかしQMAの場合、その証明は非自明である。
+なぜなら、$x \in L$ならばマーリンが$\Ket{\psi}^{\otimes \mathrm{poly}}$を
+送ってくれる場合を考えればBPP同様の方法で示せるが、
+$x \notin L$の場合、マーリンはwitnessとして任意の状態を送ってくる可能性があり、
+エンタングルしているかもしれないからである。
+この場合であっても、QMAの定義から、任意の状態$\rho$に対して受理確率$\leq s$である。
+したがって、エンタングルした状態でも、
+$i$番目の受理確率は$i - 1$番目の結果にかかわらず$s$以下となり、
+結局受理確率は$(s, 1-s)$の独立なベルヌーイ試行で上から抑えられる。
+以下BPPのときと同様の議論をすればよい。
+
+\subsection{Marriott-Watrousの方法}
+QMAにおいてpoly回繰り返すためには、
+マーリンは$\Ket{\psi}^{\otimes \mathrm{poly}}$の状態を送らなければ内容に思われる。
+しかし実は$\Ket{\psi}$を送るだけで十分であることが示されている。
+つまり$c - s \geq 1/\mathrm{poly}$ならば、任意の多項式$r$に対して
+\begin{align}
+	\mathrm{QMA}_w (c, s) \subseteq \mathrm{QMA}_w (1 - 2^{-r}, 2^{-r})
+\end{align}
+が成り立つ。
+このようにする方法はMarriott-Watrousの方法と呼ばれる。
+
+Marriott-Watrousの方法を用いると、
+witnessがlogサイズのQMAはBQPに入ることが示される。
+$L \in \mathrm{QMA}_w (c,s)$とする。
+Marriott-Watrousの結果から、
+任意の多項式$r$に対して$c = 1 - 2^{-r}$、$s = 2^{-r}$と取ってよい。
+アーサーの回路を$V_x$とするとき、
+$w$量子ビットwitnessを$I^{\otimes w}/2^w$と置き換えて$V_x$を作用させると、
+受理確率は
+\begin{enumerate}
+	\item $x \in L$のとき \begin{align}
+		&\mathrm{Tr} \left[ \Ketbra{0}{0} \mathrm{Tr}_{w+m-1} \left[
+			V_x \left( \frac{I^{\otimes w}}{2^w} \otimes \Ketbra{0^m}{0^m}
+			\right) V_x^\dagger
+		\right] \right] \\
+		&= \mathrm{Tr} \left[ \left( \Ketbra{0}{0} \otimes I^{\otimes w+m-1}
+		\right) V_x \left( \frac{I^{\otimes w}}{2^w} \otimes \Ketbra{0^m}{0^m}
+		\right) V_x^\dagger \right] \\
+		&= \frac{1}{2^w} \left[ \left( \Ketbra{0}{0} \otimes I^{\otimes w+m-1}
+		\right) V_x \left( \Ketbra{\psi}{\psi} \otimes \Ketbra{0^m}{0^m}
+		\right) \right] \\
+		& \qquad + \frac{1}{2^w} \underbrace{
+		\mathrm{Tr} \left[ \left( \Ketbra{0}{0}
+		\otimes I^{\otimes w+m-1} \right) V_x
+		\left\{ \underbrace{\left( I^{\otimes w} - \Ketbra{\psi}{\psi} \right)}
+		_{\text{射影演算子}} \otimes \Ketbra{0^m}{0^m} \right\} V_x^\dagger
+		\right]
+		}_{\geq 0} \\
+		&\geq \underbrace{\mathrm{Tr} \left[ \left( \Ketbra{0}{0} \otimes
+		I^{\otimes w+m-1} \right) V_x \left( \frac{I^{\otimes w}}{2^w} \otimes
+		\Ketbra{0^m}{0^m} \right) V_x^\dagger \right]}_{\text{受理確率}} \\
+		&\geq \frac{1 - 2^{-r}}{2^w}
+	\end{align}
+	\item $x \notin L$のとき、任意のwitnessについて受理確率$\leq 2^{-r}$だから、
+	今の場合もそうである。
+\end{enumerate}
+したがって$x \in L$、$x \notin L$のときの受理確率のboundの差は
+\begin{align}
+	\frac{1 - 2^{-r}}{2^w} - 2^{-r}
+	\geq \frac{1 - 2^{-r + w} - 2^{-r+w}}{2^w}
+	= \frac{1 - 2^{-r + w + 1}}{2^w}
+	= \frac{1}{2^w} - 2^{-r + 1}
+	= O(1/\mathrm{poly}) \quad
+	\left( \because \text{$w = \mathrm{log}$かつ$r$は多項式} \right)
+	\qed
+\end{align}
+
+同様に$\mathrm{QMA} \subseteq \mathrm{SBQP}$も示せる。
+$L \in \mathrm{QMA}_w (c, s)$と仮定する。
+Marriott-Watrousの結果より、
+任意の多項式$r$に対して$L \in \mathrm{QMA}_w (1-2^{-r}, 2^{-r})$が成り立つ。
+witnessの代わりに$I^{\otimes w}/2^{w}$とし、$r \geq w + 1$とすれば、
+受理確率$p_{\mathrm{acc}}$は
+\begin{multicols}{2}
+	\begin{enumerate}
+		\item $x \in L$のとき
+		\begin{align}
+			p_{\mathrm{acc}} \geq \frac{1 - 2^{-r}}{2^w}
+			= \left( 1 - 2^{-r} \right) 2^{-w}
+		\end{align}
+		\item $x \notin L$のとき
+		\begin{align}
+			p_{\mathrm{acc}} \leq 2^{-r} \leq 2^{-w-1} = \frac{1}{2} 2^{-w}
+		\end{align}
+	\end{enumerate}
+	したがって、
+	\begin{align}
+		\left( 1 - 2^{-r} \right) - \frac{1}{2}
+		= \frac{2 - 2^{-r+1} - 1}{2}
+		= \frac{1 - 2^{-r+1}}{2}
+		\geq O(1/\mathrm{poly})
+	\end{align}
+	\qed
+	\columnbreak
+	\begin{itembox}[l]{SBQP}
+		\vspace{-1zh}
+		\begin{align}
+			x \in L &\Rightarrow p_\mathrm{acc} \geq a 2^{-r} \\
+			x \notin L &\Rightarrow p_\mathrm{acc} \leq b 2^{-r} \\
+			\left( \text{ただし、} \right. \
+			&\left. a - b \geq 1/\mathrm{poly} \right)
+		\end{align}
+	\end{itembox}
+\end{multicols}
+
+\subsection{group non-membership問題}
+MAはQMAのwitnessが計算規定の特別な場合だから、
+明らかに$\mathrm{MA} \subseteq \mathrm{QMA}$。
+ここまで出てきた計算量クラスを包含関係で並べると、
+\begin{align}
+	\mathrm{P} \subseteq \mathrm{NP} \subseteq \mathrm{MA} \subseteq
+	\underbrace{\mathrm{QMA} \subseteq \mathrm{SBQP}}_{
+		\mathrm{現在の最良}
+	} \subseteq \mathrm{PP} \subseteq \mathrm{PSPACE}
+\end{align}
+$\mathrm{MA} \neq \mathrm{QMA}$であるかという問題を考えると、
+そうであるときには$\mathrm{P} \neq \mathrm{PSPACE}$が言えてしまうため、
+これもそう簡単には解けないだろうと思われている。
+
+しかしそれに関連した話題として、group non-membership（GNM）問題がある。
+\begin{dfn}{GNM}{}
+		ある有限群$G$の要素$g_1, \dots, g_k, h$が与えられたときに、
+		$h$が$g_1, \dots, g_k$の生成する群$H = \left< g_1, \dots, g_k \right>$
+		に入っていなければYES、入っていればNOを返す問題。
+\end{dfn}
+		
+ある種の群に対する演算（後で説明する）が１ステップで行えるような
+groupオラクルを考えると、GNMがQMAに入ることをWatrousは示した。
+またこのオラクルの下では、GNMはcoNPとAM（検証者がランダムナビットを証明者に送り、
+証明者がメッセージを返すシステムで解ける問題のクラス）に入り、
+BPPとMAには入らないことが知られている。
+\begin{proof}
+	群$H$に対し、ある要素$h_1, \dots, h_m$が存在して、
+	$s \equiv (s_1, \dots, s_m) \in \left\{ 0, 1 \right\}^m$を
+	一様にランダムに降ったときの$h_1^{s_1}, \dots, h_m^{s_m}$の分布は、
+	$H$の中から要素を一様ランダムに選ぶ分布を近似できる。
+	アーサーはマーリンから与えられた状態$\Ket{\psi}$に対し、次のようなテストをする。
+	
+	まずアンシラ$\Ket{0^m}$を$\Ket{\psi}$にくっつけ、
+	アンシラに$H^{\otimes m}$を作用させて
+	\begin{align}
+		\frac{1}{\sqrt{2^m}} \sum_{s \in \left\{ 0, 1 \right\}^m}　\Ket{s}
+		\otimes \left( \prod_{j=1}^{m} U(h_j)^{s_j} \Ket{\psi} \right) \\
+		\left( \text{ただし、$x, y \in G$に対し}
+		\underbrace{U(x) \Ket{y} = \Ket{xy}}_{オラクルに計算させる} \right)
+	\end{align}
+	を作る。
+	最後にアンシラの各量子ビットを$X$基底で測定し、全て$\Ket{+}$が現れたら、
+	パスしたとみなす。（そうでなければ$\Ket{\psi}$をもらうところからやり直す。）
+
+	パスしたあとの状態は
+	\begin{align}
+		&\cfrac{\displaystyle
+		\left[ \cfrac{1}{2^m} \left( \Ket{0} + \Ket{1} \right)
+		\left( \Bra{0} + \Bra{1} \right)^{\otimes m} \otimes I \right]
+		\sum_{s \in \{0, 1\}^m} \left[ \cfrac{1}{\sqrt{2^m}} \Ket{s} \otimes
+		\left( \prod_{j=1}^{m} U\left( h_j \right)^{s_j} \Ket{\psi} \right) 
+		\right]}
+		{\displaystyle \left|
+		\cfrac{1}{\sqrt{2^m}} \left( \Bra{0} + \Bra{1} \right)
+		\sum_{s \in \{0, 1\}^m} \cfrac{1}{\sqrt{2^m}} \Ket{s} \right|} \\
+		&= \frac{1}{2^m \sqrt{2^m}} \left( \sum_{b, b'} \Ketbra{b}{b'} \otimes
+		I \right) \sum_{s \in \{0, 1\}^m} \left( \Ket{s} \otimes
+		\prod_{j=1}^{m} U\left( h_j \right)^{s_j} \Ket{\psi} \right) \qquad
+		\left( \because \left( \Ket{0} + \Ket{1} \right)^{\otimes m}
+		= \sum_{b \in \{0, 1\}^m} \Ket{b} \right) \\
+		&= \frac{1}{2^m \sqrt{2^m}} \sum_{b'} \Ket{b'} \otimes
+		\sum_{s} \underbrace{\prod_{j=1}^{m} U\left( h_j \right)^{s_j}}_
+		{U\left( \underbrace{h_1^{s_1} \cdots h_m^{s_m}}_
+		{\text{サンプリングは$g \in H$に近似}} \right)}
+		\Ket{\psi} \\
+		&\simeq \frac{1}{2^m} \Ket{+}^{\otimes m} \otimes
+		\sum_{g \in H} U(g) \Ket{\psi} \\
+		&= \frac{1}{2^m} \Ket{+}^{\otimes m} \otimes
+		\sum_x \alpha_x \left( \sum_{g \in H} \Ket{gx} \right) \qquad
+		\left( \Ket{\psi} = \sum_x \alpha_x \Ket{x} \text{とした} \right)
+	\end{align}
+	である。
+	またパスする確率$p$は
+	\begin{align}
+		p &= \frac{1}{\sqrt{2^m}} \sum_s \left( \Bra{s} \otimes
+		\prod_{j=1}^{m} U(h_j)^{s_j} \Bra{\psi} \right)
+		\left( \frac{1}{2^m} \sum_{b, b'} \Ketbra{b}{b'} \otimes I \right)
+		\frac{1}{\sqrt{2^m}} \sum_{s'} \left( \Ket{s'} \otimes
+		\prod_{j=1}^{m} U(h_j)^{s_j} \Ket{\psi} \right) \\
+		&= \frac{1}{2^m \cdot 2^m} \sum_{s, s', b, b'}
+		\delta_{sb} \delta_{s'b'} \prod_{i, j = 1}^{m}
+		\Braket{\psi | U^\dagger (h_i)^{s_i} U(h_j)^{s_j} | \psi}
+	\end{align}
+	ここでwitnessが
+	\begin{align}
+		\Ket{\psi} = \Ket{H} = \frac{1}{\sqrt{|H|}} \sum_{g \in H} \Ket{G}
+	\end{align}
+	ならば
+	\begin{align}
+		p &= \frac{1}{2^m \cdot 2^m} \sum_{b, b'} \prod_{i=1}^m \prod_{j=1}^m
+		\frac{1}{\sqrt{|H|} \sqrt{|H|}} \sum_{g, g'}
+		\Braket{g | U^\dagger (h_i)^{b_i} U(h_j)^{b_j} | g'} \\
+		&= \frac{1}{2^m} \frac{1}{2^m} \frac{1}{|H|} \sum_{g, g'} \sum_{h, h'}
+		\Braket{g | U^\dagger (h) U(h') | g'} \quad \left( \because
+		\sum_b \prod_i U(h_i)^{b_i} = \sum_{h \in H} U(h) \right) \\
+		&= \frac{1}{2^m} \frac{1}{2^m} \frac{1}{|H|} \sum_{g, g'} \sum_{h, h'}
+		\Braket{h | h'} \\
+		&= 1 \quad \left( \because H \sim h_1^{s_1} \cdots h_m^{s_m}
+		\text{であり、各$i$について} s_i \in \{0, 1\} \text{であるから、}
+		|H| = 2^m \ ??? \right)
+	\end{align}
+	であり、パスする状態は存在する。
+
+	パスした状態にアンシラ$\Ket{+}$を付けて、
+	アンシラをコントロールとする$\mathrm{controlled-} U(h)$を作用させると、
+	\begin{align}
+		\frac{1}{2^m} \frac{1}{\sqrt{2}} \sum_x \alpha_x \left( \sum_{g \in H}
+		\Ket{gx} \Ket{0} + \sum_{g \in H} \Ket{hgx} \Ket{1} \right)
+	\end{align}
+	という状態（測定した$\Ket{+}^{\otimes m}$を除いた）になる。
+	ここでアンシラを$X$基底測定して、$\Ket{-}$が現れたら受理とする。
+	$h \in H$のとき状態は
+	\begin{align}
+		\frac{1}{2^m} \frac{1}{\sqrt{2}} \sum_x \alpha_x \left( \sum_{g \in H}
+		\Ket{gx} \Ket{0} + \sum_{g \in H} \Ket{gx} \Ket{1} \right)
+		= \frac{1}{2^m} \sum_x \alpha_x \sum_{g \in H} \Ket{gx} \Ket{+}
+	\end{align}
+	であるから、$\Ket{-}$が出る確率は0となる。
+	$h \notin H$のときは、witnessとして$\Ket{H}$を取ると状態は
+	\begin{align}
+		\frac{1}{\sqrt{2}} \left( \ket{H}\ket{0} + U(h) \Ket{H}\Ket{1} \right)
+	\end{align}
+	となり、$\Ket{-}$が出る確率は
+	\begin{align}
+		&\frac{1}{2} \left( \Bra{H} \otimes \Bra{0} 
+		+ \Bra{H} U^\dagger (h) \otimes \Bra{1} \right) \left( I \otimes
+		\Ketbra{-}{-} \right) \left( \Ket{H} \otimes \Ket{0}
+		+ U(h) \Ket{H} \otimes \Ket{1} \right) \\
+		&= \frac{1}{4} \left( \Bra{H} - \Bra{H} U^\dagger (h) \right)
+		\left( \Ket{H} - U(h) \Ket{H} \right) \\
+		&= \frac{1}{2} \left[ 1
+		- \mathrm{Re} \left( \underbrace{\Braket{H | U(h) | H}}_
+		{\Braket{g | U(h) | g'} =
+		\Braket{\underbrace{g}_{\in H} | \underbrace{hg'}_{\notin H}} = 0}
+		\right) \right] \\
+		&= \frac{1}{2}
+	\end{align}
+	を得る。
+	以上から
+	\begin{align}
+		\frac{1}{2} - 0 \geq 1/\mathrm{poly}
+	\end{align}
+	でQMAに入る。
+\end{proof}
+
+\subsection{subset state witness}
+QMAの定義においては、マーリンが送る$w$量子ビット状態について特に制限はなかった。
+しかし実はsubset stateと呼ばれる、計算基底を$+1$の係数で重ね合わせた状態
+\begin{align}
+	\Ket{S} = \frac{1}{\sqrt{|S|}} \sum_{z \in S} \Ket{z} \quad
+	\left( S \subseteq \{0, 1\}^w \right)
+\end{align}
+のみをwitnessとして考えれば良いことが証明されている。
+これは任意の状態がsubset stateで近似
+（$\exists S, \left| \Braket{\psi|S} \right| = \Omega(w^{-1/2})$）
+できるという性質を使っている。
+GNMの議論で出てきたwitness$\Ket{H}$もsubset stateとなっている。
+
+\subsection{クリフォードゲートのみの検証者}
+QMAの定義では、
+アーサーは任意の多項式時間一様生成可能量子計算が可能である必要があった。
+しかしマジック状態を多項式個用意できれば、
+４章で示したようにクリフォードゲートのみでユニバーサル量子計算が可能であるから、
+マーリンが通常のwitnessに加えて、
+多項式このマジック状態をアーサーに送れば、
+アーサークリフォードゲートのみの量子計算で良いことになる。
+マーリンが正しいマジック状態を送ってくれるとは限らないが、
+クリフォードゲートのみでマジック状態の正しさを確かめる方法が提案されている。
+
+\subsection{１量子ビットずつシーケンシャルに測定できる検証者}
+またアーサーは１量子ビットをシーケンシャルに測定、
+つまり飛んでくる量子ビットを１つずつ測定できるだけでも十分であることも証明されている。
+この証明には７章で見た状態の検証を用いれば良い。
+
+\subsection{対話型証明系における乱数の役割}
+対話型証明系において、
+計算能力の高いマーリンにアーサーが出し抜かれないのは、
+計算能力が高くても予測できない乱数を用いてwitnessの正しさを証明しているからである。
+つまり、対話型証明系においては乱数が重要な役割を果たしている。
+
+\subsection{local Hamiltonian問題}
+\begin{dfn}{NP困難}{}
+	任意のNP問題を多項式時間で$L$に変形できる。
+\end{dfn}
+
+\begin{dfn}{NP完全}{}
+	$L$がNP完全であるとは、$L \in \mathrm{NP}$かつ$L$がNP困難であることである。
+\end{dfn}
+
+3SATはNP完全であることが知られている。
+\begin{dfn}{SAT（充足可能性問題）}{}
+	リテラル$x_1, x_2, \dots, x_n, \lnot x_1, \lnot x_2, \dots \lnot x_n$に
+	対して、論理式
+	\begin{align}
+		\underset{\mathrm{ここが３つの論理和のものが3SAT}}
+		{(\underbrace{x_1 \lor x_2 \lor x_3}) \land (\underbrace{
+			\lnot x_1 \lor x_4 \lor x_5 \lor \lnot x_6 \lor \lnot x_7
+		})} \land \cdots
+	\end{align}
+	を真にする$(x_1, \dots, x_n)$の組が存在するかという問題。
+\end{dfn}
+
+そしてSATの「量子アナロジー」としてlocal Hamiltonian（LH）問題が知られており、
+これはQMA完全である。
+\begin{dfn}{LH（local Hamiltonian問題）}{}
+	ある$k$体相互作用ハミルトニアンが与えられたときに、
+	その基底エネルギーが$b$以下ならYES、
+	$a$以上ならNOを返す問題。
+	ただし$a - b \geq 1/\mathrm{poly}$。
+\end{dfn}
+
+\begin{proof}
+	\underline{LHはQMA困難}
+
+	ある$L \in QMA$を考える。
+	$L \in QMA$だから、ある量子回路$U = U_T \cdots U_2 U_1$、
+	$w$量子ビットのwitness$\Ket{\psi}$が存在する。
+	このとき、アーサーの計算の各時刻の状態に時刻を記録する状態$\Ket{t}$を付けて
+	同じ重みで重ね合わせた
+	\begin{align}
+		\Ket{\Psi} = \frac{1}{\sqrt{T+1}} \sum_{t=0}^T \left[ 
+			U_t U_{t-1} \cdots U_1 \left( \Ket{\psi} \otimes \Ket{0^m} \right)
+			\otimes \Ket{t}
+		 \right]
+	\end{align}
+	という状態（Kitaev-Feynmann状態、history状態）を考える。
+	この状態は射影演算子
+	\begin{align}
+		A \coloneqq I^{\otimes w} \otimes
+		\left( I^{\otimes m} - \Ketbra{0^m}{0^m} \right) \otimes
+		\underbrace{\Ketbra{t=0}{t=0}}_
+		\text{$\Ket{t=0}$の状態しか取り出さない}
+	\end{align}
+	に対し$A \Ket{\Psi} = 0$を満たし、初期状態の正しさを確かめられる。
+	また射影演算子
+	\begin{align}
+		B \coloneqq \Ketbra{0}{0} \otimes I^{\otimes w+m-1} \otimes
+		\Ketbra{t=T}{t=T}
+	\end{align}
+	に対し、
+	$\Braket{\Psi|B|\Psi}$はアーサーの受理確率（に比例したもの）となる。
+	そして射影演算子
+	\begin{align}
+		C_t \coloneqq \frac{1}{2} \left( I^{\otimes w+m} \otimes \Ketbra{t}{t}
+		+ I^{\otimes w+m} \otimes \Ketbra{t+1}{t+1}
+		- U_{t+1} \otimes \Ketbra{t+1}{t}
+		- U^\dagger_{t+1} \Ketbra{t}{t+1} \right)
+	\end{align}
+	に対し、
+	\begin{align}
+		2C_t \Ket{\psi} &=
+		U_t \cdots U_1 \left( \Ket{\psi} \otimes \Ket{0^m} \right) \otimes
+		\Ket{t}
+		+ U_{t+1} \cdots U_1 \left( \Ket{\psi} \otimes \Ket{0^m} \right)
+		\otimes \Ket{t+1} \\
+		&\qquad
+		- U_{t+1} U_t \cdots U_1 \left( \Ket{\psi} \otimes \Ket{0^m} \right)
+		\otimes \Ket{t+1}
+		- U_{t+1}^\dagger U_{t+1} U_t \cdots U_1
+		\left( \Ket{\psi} \otimes \Ket{0^m} \right) \Ket{t} \\
+		&= 0
+	\end{align}
+	となり、
+	時刻$t$から時刻$t+1$の計算ステップが正しいものであるかをチェックしている。
+
+	したがって、$A, B, C_t$に適当な重み付けをして作ったハミルトニアンを考えると、
+	$x \in L$のときには状態$\Ket{\Psi}$のエネルギーは小さくなるが、
+	$x \notin L$のときには、
+	$\Ket{\Psi}$に近い状態を持ってくれば、
+	$A$と$C_t$に対してはエネルギーが低くなるが、
+	$B$のエネルギーが高くなり、
+	逆に$B$のエネルギーを小さくする状態を持ってくると、
+	$\Ket{\Psi}$からかけ離れた状態になってしまい、
+	$A, C_t$に対するエネルギーが高くなってしまうため、
+	全体としてのエネルギーは高くなっています。
+	したがってQMAの問題はLHに分解できる。
+
+	また接道理論を用いると、
+	今までに見てきたことを$X$と$Z$のみからなる２体相互作用ハミルトニアンでも
+	行うことができる。
+	したがって2-LHであればQMA困難である。
+
+	\noindent
+	\underline{$\mathrm{LH} \in \mathrm{QMA}$}
+
+	2-LHがQMAに入ることを示せば十分
+	（n-LHが2-LHに分解できることも示されていなければならない）。
+
+	$n$量子ビットハミルトニアン$H$（$n = 2$？）をパウリ基底で書いたときに
+	\begin{align}
+		H = \sum_{i=1}^{h} c_i \sigma_i
+	\end{align}
+	となるとする。
+	$\sigma_i$は２つのサイトが$X, Z$であるようなパウリ演算子、
+	$c_i$は$H, X, Z$のエルミート性より実である。
+	このとき検証者は送られてきた$n$量子ビット状態$\rho$に対し、
+	次のような操作を行う。
+	\begin{enumerate}
+		\item 確率$|c_i| / R$で$i$を発生させる。
+		（ただし$R = \sum |c_i|$。）
+		ゲートの数は多項式だから、$h = \mathrm{poly}(n)$であり、
+		$R$は多項式時間で古典計算機で計算できる。
+		\item $\sigma_i$を測定する。
+		つまり$\rho$の各量子ビットを$\sigma_i$で指定されるパウリ演算子で測定し、
+		その結果を$m_1, m_2 \in \{+1, -1\}$とするとき、
+		$m_1 m_2 \neq \mathrm{sign}(c_i)$ならば受理とする。
+		（これは$\mathrm{sign}(c_i) \sigma_i$（固有値$\pm 1$）の$-1$の
+		固有状態ならば受理するということであり、
+		$n$体ハミルトニアンをパウリ演算子に分解したとき、
+		それらのパウリ演算子による測定値が負に（小さく）なるなら受理するということ。）
+	\end{enumerate}
+	すると受理確率$p_\mathrm{acc}$は
+	\begin{align}
+		p_\mathrm{acc} = \sum_i \frac{|c_i|}{R} \mathrm{Tr} \left[
+			\rho \frac{I^{\otimes n} - \mathrm{sign}(c_i) \sigma_i}{2}
+		\right]
+		= \frac{1}{2} - \frac{\mathrm{Tr}(\rho H)}{2R}
+	\end{align}
+	となる。
+	したがってYESのときは$\rho$として基底状態を取れば、
+	$\mathrm{Tr}(\rho H) \leq b$なので
+	\begin{align}
+		p_\mathrm{acc} \geq \frac{1}{2} - \frac{b}{2R} = \alpha
+	\end{align}
+	であり、一方でNOのときは、
+	どのような状態に対しても$\mathrm{Tr}(\rho H) \geq a$だから
+	\begin{align}
+		p_\mathrm{acc} \leq \frac{1}{2} - \frac{a}{2R} = \beta
+	\end{align}
+	である。
+	したがって
+	\begin{align}
+		\alpha - \beta
+		= \left( \frac{1}{2} - \frac{b}{2R} \right)
+		- \left( \frac{1}{2} - \frac{a}{2R} \right)
+		= \underbrace{\frac{a - b}{2R}
+		\geq \frac{1/\mathrm{poly}}{\mathrm{poly}}}_
+		{\text{$R$の評価はどこ？　仮定しなければならないのでは？}}
+		= \frac{1}{\mathrm{poly}}
+	\end{align}
+	であり、問題を$QMA$に入る。
+\end{proof}
+8.3節で$X, Z$測定のみできればQMAに入ることを述べたが、
+これがその証明である。
+
+\subsection{QCMA}
+
+\subsection{QMA(2)}
+マーリンが$k$人いるように拡張されたQMAは$\mathrm{QMA}(k)$と呼ばれている。
+
+実は$k \geq 3$となる$k = \mathrm{poly}(n)$に対し、
+$\mathrm{QMA}(k) = \mathrm{QMA}(2)$であることと、
+$c - s \geq 1/\mathrm{poly}(n)$ならば、
+任意の多項式$r$について$(1 - 2^{-r}, 2^{-r})$に増幅できることが知られている。
+
+しかし$\mathrm{QMA} \subset \mathrm{QMA}(2)$であるのは明らかだが、
+QMAと$\mathrm{QMA}(2)$が等しいかは未解決問題である。
+$\mathrm{QMA}(2)$に入るが$\mathrm{QMA}$に入ることが知られていない問題は存在する。
+
+\subsection{QIP}
+マーリンとアーサーの間でメッセージをやり取りするように拡張したQMA、
+つまりIPの量子版はQIPと呼ばれている。
+
+QIPにおいては３つのレジスタ$P$、$M$、$V$を考える。
+$P$は証明者のプライベートレジスタ、
+$M$はメッセージレジスタ、
+$V$は検証者のプライベートレジスタと呼ばれる。
+
+証明者は$P$と$M$のみに任意のユニタリー演算子を、
+検証者は$V$と$M$のみに任意の多項式時間一様生成可能量子回路を
+作用させることができる。
+そして$M$のみを送り合う。
+ただし慣習として最後のメッセージは、
+証明者から検証者へ送られる。
+
+ここでもQMAと似たように、
+$k \geq 4$となる任意の多項式$k$について、
+$\mathrm{QIP}(k) = \mathrm{QIP}(3)$であることが知られている
+（この証明は8.17節で見る）。
+また、$\mathrm{QIP}(3) = \mathrm{PSPACE}$であることも知られている。
+
+\subsection{QIP完全問題の例：close images}
+\begin{dfn}{close images}{close_images}
+	ある定数$0 < b < a \leq 1$と２つの量子回路$Q_{1x}$、$Q_{2x}$が与えられたときに、
+	$F$をフィデリティとしたとき、
+	\begin{itemize}
+		\item YES：ある$\rho$、$\xi$に対し、
+		$F(Q_{1x}(\rho), Q_{2x}(\xi)) \geq a$
+		\item NO：すべての$\rho$、$\xi$に対し、
+		$F(Q_{1x}(\rho), Q_{2x}(\xi)) \leq b$
+	\end{itemize}
+	と返す問題をclose imagesと呼ぶ。
+\end{dfn}
+close imagesはQIP完全であることが知られている。
+\begin{proof}
+	\underline{QIP困難であること}
+
+	$\mathrm{QIP} = \mathrm{QIP}(3)$であるから、
+	$\mathrm{QIP}(3)$で考えればよい。
+	ある$L \in \mathrm{QIP}(3)$を考えると、
+	ある一様生成回路族$\{ A_x \}_x$、$\{ C_x \}_x$が存在して、
+	\begin{enumerate}
+		\item 証明者が状態$\Ket{\psi}_{PM}$を作る。
+		\item 証明者がレジスタ$M$を検証者に送る。
+		\item 検証者がレジスタ$V$を$\Ket{0^{|V|}}_V$で初期化し、
+		レジスタ$M$、$V$に量子回路$A_x$を作用させて
+		\begin{align}
+			I^{\otimes |P|} \otimes A_x
+			\left( \Ket{\psi}_{PM} \otimes \Ket{0^{|V|}}_V \right)
+		\end{align}
+		を作る。
+		\item 検証者がレジスタ$M$を証明者に送る。
+		\item 証明者がレジスタ$P$、$M$にユニタリ演算子$B_{PM}$を作用させて
+		\begin{align}
+			B_{PM} \otimes I^{\otimes |V|}
+			\left( I^{\otimes |P|} \otimes A_x \right)
+			\left( \Ket{\psi}_{PM} \otimes \Ket{0^{|V|}}_V \right)
+		\end{align}
+		を作る。
+		\item 証明者がレジスタ$M$を検証者に送る。
+		\item 検証者がレジスタ$M$、$V$に量子回路$C_x$を作用させて
+		\begin{align}
+			I^{\otimes |P|} \otimes C_x
+			\left( B_{PM} \otimes I^{\otimes |V|} \right)
+			\left( I^{\otimes |P|} \otimes A_x \right)
+			\left( \Ket{\psi}_{PM} \otimes \Ket{0^{|V|}}_V \right)
+		\end{align}
+		を作る。
+		\item 量子ビットを測定する。
+	\end{enumerate}
+	という計算を行う。
+	このとき最後の状態$\Ket{\Psi}$は
+	\begin{align}
+		\Ket{\Psi}
+		= \sqrt{p_{\mathrm{acc}}} \Ket{\phi_0} \otimes \Ket{0}
+		+ \sqrt{1 - p_{\mathrm{acc}}} \Ket{\phi_1} \otimes \Ket{1}
+	\end{align}
+	と書けるから、
+	\begin{align}
+		\left| \left( \Bra{\xi} \otimes \Bra{0} \right)
+		\Ket{\Psi} \right|^2
+		&= p_{\mathrm{acc}} \left| \Braket{\phi_0 | \xi} \right|^2 \\
+		&\leq p_{\mathrm{acc}}
+		\left| \Braket{\phi_0 | \phi_0} \right|^2 \quad 
+		\left( \text{$\Ket{\xi} = \Ket{\phi_0}$のとき等号成立} \right) \\
+		&= p_{\mathrm{acc}}
+	\end{align}
+	が成り立ち、
+	受理する確率は
+	\begin{align}
+		p_{\mathrm{acc}}
+		= \max_{\Ket{\xi}} \left| \left( \Bra{\xi} \otimes \Bra{0} \right)
+		\Ket{\Psi} \right|^2
+		\intertext
+		{これは$x \in L$のとき
+		ある$\Ket{\hat{\psi}}$、$\hat{B}$が存在して
+		$p_{\mathrm{acc}} \geq c$、
+		$x \notin L$のとき全ての$\Ket{{\psi}}$、${B}$に対して、
+		$p_{\mathrm{acc}} \leq s$}
+		\label{eq:p_acc}
+	\end{align}
+	となる。
+
+	ここまでを踏まえて、
+	$|P| + |M| + |V| - 1 \to |V|$ビット量子回路
+	\begin{gather}
+		Q_{1x} \left( \rho \right)
+		= \Tr_{PM} \left[ \left( I^{\otimes |P|} \otimes C^\dagger_x \right)
+		\left( \Ketbra{0}{0} \otimes \rho \right)
+		\left( I^{\otimes |P|} \otimes C_x  \right) \right]
+	\end{gather}
+	と、$|P| + |M| \to |V|$ビット量子回路
+	\begin{gather}
+		Q_{2x} \left( \rho \right)
+		= \Tr_{PM} \left[ \left( I^{\otimes |P|} \otimes A_x \right)
+		\left( \rho \otimes \Ketbra{0^{|V|}}{0^{|V|}} \right)
+		\left( I^{\otimes |P|} \otimes A^\dagger_x  \right) \right]
+	\end{gather}
+	（つまり、$C_x$、$A_x$を作用させてから、
+	$|P| + |M|$ビットを測定する回路
+	（\textcolor{red}{これを回路と呼んでいいのか？}））
+	を考える。
+	このとき
+	\begin{align}
+		F\left( Q_{1x} \left( \Ketbra{\xi}{\xi} \right),
+		Q_{2x} \left( \Ketbra{\psi}{\psi} \right) \right)
+	\end{align}
+	を考えると、
+	$Q_{1x}(\cdot)$、$Q_{2x}(\cdot)$というのはある密度演算子を、
+	純粋化させた状態を用いて表したものになっているから、
+	Uhlmannの定理より、
+	$P$と$M$にのみ作用するユニタリ演算子$B, D, E$を用いて
+	\begin{align}
+		&F\left( Q_{1x} \left( \Ketbra{\xi}{\xi} \right),
+		Q_{2x} \left( \Ketbra{\psi}{\psi} \right) \right) \\
+		&= \max_{D, E} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			D \times E
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)
+		\right| \\
+		 &= \max_{B} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			B
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)
+		 \right|
+	\end{align}
+	と表されることが分かる。
+	\begin{tcolorbox}[
+	enhanced,
+	colback = white,
+	boxrule = 0.5pt,
+	arc=2mm,
+	breakable
+	]
+		\underline{補足}
+	
+		$\rho \in \mathcal{H}_A$の純粋化された状態
+		$\Ketbra{\rho}{\rho} \in \mathcal{H}_A \otimes \mathcal{H}_B$
+		とは
+		\begin{align}
+			\Tr_B \left[ \Ketbra{\rho}{\rho} \right] = \rho
+		\end{align}
+		を満たす状態。
+	\end{tcolorbox}
+	\begin{thm}{Uhlmannの定理}{Uhlmann}
+		\begin{align}
+			F(\rho, \sigma)
+			= \max_{\Ket{\rho}, \Ket{\sigma}}
+			\left| \Braket{\rho | \sigma} \right|
+		\end{align}
+		ただし$\Ket{\rho}$、$\Ket{\sigma}$は
+		それぞれ$\rho$、$\sigma$の純粋化。
+	\end{thm}
+	
+	したがって、
+	この量子回路$Q_{1x}$、$Q_{2x}$について、
+	$a = \sqrt{c}$、$b = \sqrt{s}$としてclose imagesを考えると、
+	\begin{align}
+		&\max_{\Ket{\xi}, \Ket{\psi}}
+		F\left( Q_{1x} \left( \Ketbra{\xi}{\xi} \right),
+		Q_{2x} \left( \Ketbra{\psi}{\psi} \right) \right) \\
+		&= \max_{\Ket{\xi}, B, \Ket{\psi}} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			B
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)
+		\right|
+	\end{align}
+	である。
+	よって、\eqref{eq:p_acc}より、
+	$x \in L$ならば
+	\begin{align}
+		&\max_{\Ket{\xi}, B, \Ket{\psi}} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			B
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)
+		\right| \\
+		&\geq \max_{\Ket{\xi}} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			\hat{B}
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\hat{\psi}} \otimes \Ket{0^{|V|}} \right)
+		\right| \\
+		&= \sqrt{p_{\mathrm{acc}}} \\
+		&\geq \sqrt{c}
+	\end{align}
+	となり、YESを返す。
+	逆に$x \notin L$ならば
+	\begin{align}
+		&\max_{\Ket{\xi}, B, \Ket{\psi}} \left|
+			\left( \Bra{\xi} \otimes \Bra{0} \right)
+			\left( I^{\otimes |P|} C_x \right)
+			B
+			\left( I^{\otimes |P|} A_x \right)
+			\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)
+		\right| \\
+		&= \max_{B, \Ket{\psi}} \sqrt{p_{\mathrm{acc}}} \\
+		&\leq \sqrt{s}
+	\end{align}
+	となり、NOを返す。
+	以上より、close imagesはQIP困難である。
+
+	\noindent \underline{QIPに入る}
+
+	回路として$Q_1$、$Q_2$が与えられた場合を考える。
+	このとき状態$\rho$に対して、
+	レジスタ$R \cup S$を$\rho$の純粋化として、
+	レジスタ$S$の状態が$\rho$になるようにする。
+	そしてレジスタ$T$にアンシラを格納しておき、
+	レジスタ$S \cup T$に作用し、
+	レジスタ$U$に適当な状態、
+	レジスタ$V$に$Q_1(\rho)$を出力するユニタリ演算$A$を考える
+	（\textcolor{red}{このようなユニタリは多項式時間で実現可能か？}）。
+	同様に、
+	レジスタ$W \cup X$を$\rho$の純粋化として、
+	レジスタ$X$の状態が$\rho$になるようにする。
+	そしてレジスタ$Y$にアンシラを格納しておき、
+	レジスタ$X \cup Y$に作用し、
+	レジスタ$Z$に適当な状態、
+	レジスタ$V$に$Q_2(\rho)$を出力するユニタリ演算$C$を考える。
+	このとき$U$、$Z$のサイズは一般に異なるが、
+	$|U| \neq |Z|$のときには、
+	$T$または$Y$にアンシラを追加し、
+	レジスタのサイズが小さい方に出力してやれば、
+	$|U| = |Z|$とすることがいつでもできるから、
+	今後$|U| = |Z|$として考える。
+
+	これらのことを踏まえた上で、
+	次のような$\mathrm{QIP}(3)$回路を考える。
+	\begin{enumerate}
+		\item 証明者がレジスタ$R \cup S$に状態$\Ket{\rho}$を用意する。
+		\item レジスタ$S$を検証者に送る。
+		\item 検証者がレジスタ$T$にアンシラを用意し、
+		レジスタ$S \cup T$にユニタリ演算子$A$を作用させ、
+		レジスタ$U \cup V$に状態を格納する。
+		\item 証明者にレジスタ$U$を送る。
+		\item 証明者がレジスタ$R \cup U$にユニタリ演算子$B$を作用させる、
+		レジスタ$W \cup Z$に状態を格納する。
+		このとき、$|U| = |Z|$としてあるが、
+		一般には$|R| \neq |W|$であるが、
+		証明者が適切にアンシラを付けたり、
+		結果を捨てたりすればよい。
+		\item レジスタ$Z$を検証者に送る。
+		\item 検証者がレジスタ$Z \cup V$に
+		ユニタリ演算子$C^\dagger$を作用させ、
+		レジスタ$X \cup Y$に状態を格納する。
+		\item レジスタ$Y$の各量子ビットを計算基底で測定し、
+		全て0なら受理する。
+	\end{enumerate}
+	この回路の受理確率を$p_{\mathrm{acc}}$とすると、
+	先程と同様に
+	\begin{align}
+		p_{\mathrm{acc}} = \max_{\Ket{\xi}} \left|
+			\left( \Bra{\xi} \otimes \Bra{0^{|Y|}} \right)
+			\left( I^{\otimes |W|} \otimes C^\dagger \right)
+			\left( B \otimes I^{\otimes |V|} \right)
+			\left( I^{\otimes |R|} \otimes A \right)
+			\left( \Ket{\rho} \otimes \Ket{0^{|T|}} \right)
+		\right|^2
+	\end{align}
+	と書けることが分かる。
+	
+	これはclose imagesがYESを返すとき、
+	\begin{align}
+		\max_{\Ket{\rho}, B} p_{\mathrm{acc}}
+		&= \max_{\Ket{\rho}, \Ket{\xi}} F^2 \left(
+			\Tr_{RU} \left[ A \left( \Ketbra{\rho}{\rho} \otimes
+			\Ketbra{0^{|T|}}{0^{|T|}} \right) A^\dagger \right],
+			\Tr_{WZ} \left[ C \left( \Ketbra{\xi}{\xi} \otimes
+			\Ketbra{0^{|Y|}}{0^{|Y|}} \right) C^\dagger \right]
+		\right) \\
+		&= \max_{\rho, \xi} F^2 \left( Q_1(\rho), Q_2(\xi) \right) \\
+		&\geq a^2
+	\end{align}
+	close imagesがNOを返すとき、
+	\begin{align}
+		\max_{\Ket{\rho}, B} p_{\mathrm{acc}}
+		&= \max_{\rho, \xi} F^2 \left( Q_1(\rho), Q_2(\xi) \right) \\
+		&\leq b^2
+	\end{align}
+	となるから、
+	$c = a^2$、$s = b^2$と取ればある証明者の行動が存在して、
+	close imagesがYESを返すとき、
+	QIP回路は$p_{\mathrm{acc}} \geq c$で受理し、
+	close imagesがNOを返すとき、
+	QIP回路は$p_{\mathrm{acc}} \leq s$で受理するから、
+	close imagesは$QIP_{c, s}(3)$に入っている。
+\end{proof}
+
+close imagesにおいて$Q_1$、$Q_2$が一般の量子回路ではなく、
+ユニタリな場合を考える。
+つまり、ある多項式$m_1$、$m_2$が存在して、
+\begin{itemize}
+	\item YES：
+	ある$\Ket{\rho}$、$\Ket{\xi}$が存在して、
+	\begin{align}
+		F\left( Q_1 \left( \Ket{\rho} \otimes \Ket{0^{m_1}} \right)
+		Q_2 \left( \Ket{\xi} \otimes \Ket{0^{m_2}} \right) \right)
+		\geq a
+	\end{align}
+	\item NO：
+	全ての$\Ket{\rho}$、$\Ket{\xi}$について
+	\begin{align}
+		F\left( Q_1 \left( \Ket{\rho} \otimes \Ket{0^{m_1}} \right)
+		Q_2 \left( \Ket{\xi} \otimes \Ket{0^{m_2}} \right) \right)
+		\leq b
+	\end{align}
+\end{itemize}
+を判定する問題を考える。
+するとこれはQMA完全であることが次のように分かる。
+\begin{proof}
+	\underline{QMA困難である}
+
+	あらゆるマーリンの行動に対するQMA回路$V_x$の受理確率の最大値は
+	\begin{align}
+		\max_{\Ket{\psi}, \Ket{\eta}} \left|
+			\left( \Ket{0} \otimes \Ket{\eta} \right)
+			V_x \left( \Ket{\psi} \otimes \Ket{0^{m}} \right)
+		\right|
+		= \max_{\Ket{\psi}, \Ket{\eta}}
+		F^2 \left( 
+			\Ket{0} \otimes \Ket{\eta},
+			V_x \left( \Ket{\psi} \otimes \Ket{0^{m}} \right)
+		 \right)
+	\end{align}
+	となるから、close imagesで判定可能。
+
+	\noindent \underline{QMAに入る}
+
+	close imagesの例が与えられたとき、
+	あらゆる状態に対して、
+	フィデリティの最大値は
+	\begin{align}
+		\max_{\Ket{\rho}, \Ket{\xi}} F\left( 
+			Q_1 \left( \Ket{\rho} \otimes \Ket{0^{m_1}} \right),
+			Q_2 \left( \Ket{\xi} \otimes \Ket{0^{m_2}} \right)
+		\right)
+		= \left| \left( \Ket{\rho} \otimes \Ket{0^{m_1}} \right)
+		Q_1^\dagger Q_2
+		\left( \Ket{\xi} \otimes \Ket{0^{m_2}} \right) \right|
+	\end{align}
+	となるから、
+	ユニタリ$Q_1^\dagger Q_2$のQMAで判定可能。
+\end{proof}
+
+\subsection{QIP完全問題の例２：quantum circuit distinguishability}
+
+\subsection{QMAM}
+$\mathrm{QIP}(3)$は証明者と検証者で３回量子メッセージをやり取りする。
+ここで２回目である、
+検証者から証明者へのメッセージを、
+古典の１ビットに置き換えたクラスはQMAMと呼ばれる。
+実は$\mathrm{QIP}(3) = \mathrm{QMAM}$であることが知られている。
+
+まずgentle measurement lemmaを用いたダイレクトな証明を説明する。
+\begin{lem}{gentle measurement lemma}{gentle_measurement}
+	状態$\rho$とある$\varepsilon$、
+	$0 \leq \Lambda \leq 1$であるPOVM要素に対し、
+	もし$\Tr(\Lambda \rho) \geq 1 - \varepsilon$なら、
+	\begin{align}
+		\frac{1}{2} \left\| \rho
+		- \frac{\sqrt{\Lambda} \rho \sqrt{\Lambda}}
+		{\Tr\left[ \Lambda \rho \right]} \right\|_1
+		\leq \sqrt{\varepsilon}
+	\end{align}
+	が成り立つ。
+\end{lem}
+元の$\mathrm{QIP}(3)$プロトコルが
+レジスタ$P$、$M$、$V$に対して
+$C_{MV} B_{PM} A_{MV}$を作用させるような回路であるとする。
+このとき次のようなQMAMプロトコルを考える。
+\begin{enumerate}
+	\item 証明者がレジスタ$P$、$M$、$V$を持っている。
+	証明者が正直なときには、
+	これらを
+	\begin{align}
+		\Ket{\Psi}_{PMV} =
+		A_{MV} \left( \Ket{\psi}_{PM} \otimes \Ket{0^{|V|}}_V \right)
+	\end{align}
+	という状態にし、
+	邪悪なときには任意の状態$\Ket{\Psi}_{PMV}$とする。
+	\item 検証者にレジスタ$V$を送る。
+	\item 検証者はランダムビット$s \in \{0, 1\}$を生成し、
+	証明者に送る。
+	\item 証明者はレジスタ$P$、$M$にユニタリ$W_{PM}$を作用させ、
+	$M$を検証者に送る。
+	ただし
+	\begin{align}
+		W_{PM} = \begin{cases}
+			I^{\otimes |P| + |M|} \quad
+			\left( \text{$s=0$かつ証明者が正直な場合} \right) \\
+			B_{PM} \quad
+			\left( \text{$s=1$かつ証明者が正直な場合} \right) \\
+			\text{任意} \quad
+			\left( \text{証明者が邪悪な場合} \right)
+		\end{cases}
+	\end{align}
+	である。
+	\item 検証者は
+	\begin{align}
+		\Ket{\Psi'}_{PMV}
+		= W_{PM} \Ket{\Psi}_{PMV}
+	\end{align}
+	という状態を持っており、
+	\begin{enumerate}
+		\item $s = 0$のとき、
+		レジスタ$M$、$V$を
+		\begin{align}
+			\left\{ 
+				\Lambda \coloneqq A_{MV}
+				\left( I^{\otimes m} \otimes \Ketbra{0}{0} \right)
+				A_{MV}^\dagger,
+				I^{\otimes |M| + |V|} - \Lambda
+			 \right\}
+		\end{align}
+		で測定する。
+		もし$\Lambda$を得れば受理する。
+		受理確率を$p_\mathrm{test}$とする。
+		\item $s = 1$のとき、
+		レジスタ$M$と$V$にユニタリ$C_{MV}$を作用させ、
+		出力の１ビットを測定する。
+		0が出たら受理する。
+		受理確率を$p_\mathrm{comp}$とする。
+	\end{enumerate}
+\end{enumerate}
+
+このようなプロトコルの元で、
+ある言語$L \in \mathrm{QIP}_{1-2^{-r}, 2^{-r}}(3)$を考える。
+すると$L$は上記のQMAMプロトコルでも判定可能である。
+
+まず$x \in L$のとき、
+証明者が正直な場合には
+$\Lambda \Ketbra{\Psi'}{\Psi'}_{PMV} = \Ketbra{\Psi}{\Psi}_{PMV}$
+であるから、
+$p_\mathrm{test} = 1$である。
+また
+\begin{align}
+	p_\mathrm{comp}
+	= \max_{\Ket{\xi}} \left|
+		\left( \Bra{\xi} \otimes \Bra{0} \right)
+		C_{MV} B_{PM} A_{MV} \Ket{\Psi}_{PMV}
+	\right|^2
+	\geq 1 - 2^{-r} \quad
+	\left( \because L \in QIP_{1 - 2^{-r}, 2^{-r}}(3) \right)
+\end{align}
+である。
+したがってこのQMAMプロトコルの受理確率$p_\mathrm{acc}$は
+\begin{align}
+	p_\mathrm{acc} 
+	= \frac{p_\mathrm{test}}{2} + \frac{p_\mathrm{comp}}{2}
+	\geq \frac{1}{2} + \frac{1 - 2^{-r}}{2}
+	= 1 - 2^{-r - 1}
+	\eqqcolon \alpha
+\end{align}
+である。
+
+次に$x \notin L$のとき、
+ある$\varepsilon$に対し、
+$p_\mathrm{test} < 1 - \varepsilon$のとき、
+\begin{align}
+	p_\mathrm{acc}
+	= \frac{p_\mathrm{test}}{2} + \frac{p_\mathrm{comp}}{2}
+	< \frac{1 - \varepsilon}{2} + \frac{1}{2}
+	= 1 - \frac{\varepsilon}{2}
+	\eqqcolon \beta_1
+\end{align}
+となる。
+$p_\mathrm{test}
+= \Tr \left[ \Lambda \Ketbra{\Psi'}{\Psi'}_{PMV} \right]
+\geq 1 - \varepsilon$のとき、
+\begin{align}
+	p_{\mathrm{comp}}
+	&= \Tr \left[
+		\left( \Ketbra{0}{0} \otimes I^{\otimes |P|+|M|+|V|-1} \right)
+		C_{MV} \Ketbra{\Psi'}{\Psi'} C_{MV}^\dagger
+	\right]
+\end{align}
+ここで、
+すると$\Lambda$は射影演算子であるから、
+$\sqrt{\Lambda} = \Lambda$でから
+gentle measurement lemma（補題\ref{lem:gentle_measurement}）より
+\begin{align}
+	\frac{1}{2} \left\|
+		\Ketbra{\Psi'}{\Psi'}
+		- \frac{\Lambda \Ketbra{\Psi'}{\Psi'} \Lambda}
+		{\Tr \left[ \Lambda \Ketbra{\Psi'}{\Psi'} \right]}
+	\right\|_1
+	\leq \sqrt{\varepsilon}
+\end{align}
+が分かる。
+ここで
+\begin{align}
+	\Ket{\Psi''} \coloneqq
+	\frac{\Lambda \Ket{\Psi'}}
+	{\sqrt{\Tr \left[ \Lambda \Ketbra{\Psi'}{\Psi'} \right]}}
+\end{align}
+を導入する。$\Lambda$は
+$A_{MV} \left( \Ket{\mathrm{any}} \otimes \Ket{0^{|V|}}\right)$
+への射影だから、
+ある状態$\Ket{\eta}$を用いて
+\begin{align}
+	\Ket{\Psi''}
+	= A_{MV} \left( \Ket{\eta}_{PM} \otimes \Ket{0^{|V|}} \right)
+\end{align}
+と書ける。
+したがって、
+\begin{align}
+	p_\mathrm{comp} &\leq
+	\Tr \left[ \left( \Ketbra{0}{0} \otimes I^{\otimes |P|+|M|+|V|-1} \right)
+	C_{MV} \Ketbra{\Psi''}{\Psi''} C^\dagger_{MV} \right]
+	+ \sqrt{\varepsilon} \ \left( \text{\textcolor{red}{？}} \right) \\
+	&= \Tr \left[ \left( \Ketbra{0}{0} \otimes I^{\otimes |P|+|M|+|V|-1}\right) C_{MV} A_{MV} \left( \Ket{\eta} \otimes \Ket{0^{|V|}}
+	\left( \Bra{\eta} \otimes \Bra{0^{|V|}} \right) A_{MV}^\dagger
+	C_{MV}^\dagger \right) \right]
+	+ \sqrt{\varepsilon} \\
+	&\leq 2^{-r} + \sqrt{\varepsilon} \quad
+	\left( \because x \notin L \right)
+\end{align}
+よってQMAMの受理確率$p_\mathrm{acc}$は
+\begin{align}
+	p_\mathrm{acc} = \frac{p_\mathrm{test}}{2} + \frac{p_\mathrm{comp}}{2}
+	\leq \frac{1}{2} + \frac{2^{-r} + \sqrt{\varepsilon}}{2}
+	\eqqcolon \beta_2
+\end{align}
+
+$\varepsilon = 1/\mathrm{poly}$とすると、
+\begin{align}
+	\beta \coloneqq \max \{ \beta_1, \beta_2 \}
+	= \max \{ 1 - \frac{\varepsilon}{2},
+	\frac{1}{2} + \frac{2^{-r} + \sqrt{\varepsilon}}{2} \}
+	= 1 - \frac{\varepsilon}{2}
+\end{align}
+であるから、
+\begin{align}
+	\alpha - \beta
+	= \left( 1 - 2^{-r-1} \right) - \left( 1 - \frac{\varepsilon}{2} \right)
+	= \frac{\varepsilon}{2} - 2^{-r-1}
+	\geq 1/\mathrm{poly}
+\end{align}
+となって$L \in \mathrm{QMAM}$であることが分かる。
+
+次にシンプルな証明を示す。
+$x \notin L$のとき証明者は、
+$s=0$を得たときにはユニタリ演算子$D_{PM}$を、
+$s=1$を得たときにはユニタリ演算子$E_{PM}$を作用させるとすると、
+\begin{align}
+	p_\mathrm{test}
+	&= \max_{\Ket{\xi}} \left|
+		\left( \Bra{\xi} \otimes \Ket{0^{|V|}} \right)
+		A_{MV}^\dagger D_{PM} \Ket{\Psi}_{PMV}
+	\right|^2 \\
+	&\leq \max_{\Ket{\xi}, D, \Ket{\Psi}} \left|
+		\left( \Bra{\xi} \otimes \Ket{0^{|V|}} \right)
+		A_{MV}^\dagger D_{PM} \Ket{\Psi}_{PMV}
+	\right|^2 \\
+	p_\mathrm{comp}
+	&= \max_{\Ket{\eta}} \left|
+		\left( \Ket{0} \otimes \Bra{\eta} \right)
+		C_{MV} E_{PM} \Ket{\Psi}_{PMV}
+	\right|^2 \\
+	&\leq \max_{\Ket{\eta}, E, \Ket{\Psi}} \left|
+		\left( \Ket{0} \otimes \Bra{\eta} \right)
+		C_{MV} E_{PM} \Ket{\Psi}_{PMV}
+	\right|^2
+\end{align}
+であるから、
+\begin{align}
+	p_\mathrm{acc}
+	&= \frac{p_\mathrm{test}}{2} + \frac{p_\mathrm{comp}}{2} \\
+	&\leq \frac{1}{2} \max_{\Ket{\xi}, \Ket{\eta}, D, E, \Ket{\Psi}}
+	\left[ \left|
+		\left( \Bra{\xi} \otimes \Bra{0^{|V|}} \right)
+		A_{MV}^\dagger D_{PM} \Ket{\Psi}_{PMV}
+	\right|^2 + \left|
+		\left( \Bra{0} \otimes \Bra{\eta} \right)
+		C_{MV} E_{PM} \Ket{\Psi}_{PMV}
+	\right|^2 \right]
+\end{align}
+ここで
+\begin{align}
+	\max_{\Ket{\psi}} \left[ 
+		\left| \Braket{\xi | \psi} \right|^2
+		+ \left| \Braket{\eta | \psi} \right|^2
+	 \right]
+	 \leq 1 + \left| \Braket{\eta | \xi} \right|
+\end{align}
+であることを用いると、
+\begin{align}
+	p_\mathrm{acc}
+	&\leq \frac{1}{2} + \frac{1}{2} \max_{\Ket{\xi}, \Ket{\eta}, D, E}
+	\left|
+		\left( \Bra{0} \otimes \Bra{\eta} \right)
+		C_{MV} E_{PM} D_{PM}^\dagger A_{MV}
+		\left( \Ket{\xi} \otimes \Ket{0^{|V|}} \right)
+	\right| \\
+	&\leq \frac{1}{2} + \frac{\sqrt{2^{-r}}}{2} \quad
+	\left( \because x \notin L \right) \\
+	&\eqqcolon \beta
+\end{align}
+となる。
+したがって
+\begin{align}
+	\alpha - \beta
+	= \left( 1 - 2^{-r-1} \right)
+	- \left( \frac{1}{2} - \frac{\sqrt{2^{-r}}}{2} \right)
+	= \frac{1}{2} + \frac{\sqrt{2^{-r}}}{2} - 2^{-r-1}
+	\geq 1/\mathrm{poly}
+\end{align}
+から、これはQMAMに入る。
+\begin{tcolorbox}[
+enhanced,
+colback = white,
+boxrule = 0.5pt,
+arc=2mm,
+breakable
+]
+	\underline{補足}
+
+	任意の１次独立な$\{ \Ket{\xi}, \Ket{\eta} \}$で張られる空間を、
+	\begin{align}
+		\Ket{\xi^\perp} = \frac{\Ket{\eta} - \Braket{\xi | \eta}\Ket{\xi}}
+		{\sqrt{1 - \left| \Braket{\xi | \eta} \right|^2}}
+	\end{align}
+	を用いて正規直交基底$\{ \Ket{\xi}, \Ket{\xi~\perp} \}$で張り直すと、
+	\begin{align}
+		\Ket{\eta} = \Braket{\xi | \eta} \Ket{\xi}
+		+ \sqrt{1 - \left| \Braket{\xi | \eta} \right|^2} \Ket{\xi^\perp}
+	\end{align}
+	と書き直せる。
+	すると、
+	\begin{align}
+		\Ketbra{\xi}{\xi} + \Ketbra{\eta}{\eta}
+		&= \left( 1 + \left| \Braket{\xi | \eta} \right|^2 \right)
+		\Ketbra{\xi}{\xi}
+		+ \left( 1 + \left| \Braket{\xi | \eta} \right|^2 \right)
+		\Ketbra{\xi^\perp}{\xi^\perp} \\
+		& \qquad + \sqrt{1 - \left| \Braket{\xi | \eta} \right|^2}
+		\left( \Braket{\xi | \eta} \Ketbra{\xi}{\xi^\perp}
+		+ \Braket{\eta | \xi} \Ketbra{\xi^\perp}{\xi} \right)
+	\end{align}
+	と書き直せ、
+	これを行列として書くと
+	\begin{align}
+		\left( \begin{array}{cc}
+			1 + |a|^2 & a \sqrt{1 - |a|^2} \\
+			a^* \sqrt{1 - |a|^2} & 1 - |a|^2
+		\end{array} \right) \qquad
+		\left( \text{ただし} a = \Braket{\xi | \eta} \right)
+	\end{align}
+	となる。
+	したがってこの演算子の固有値は
+	\begin{align}
+		\lambda = \lambda_{\pm} = 1 \pm |a|
+	\end{align}
+	と分かる。
+	それぞれに対応する固有状態を$\Ket{\lambda_{\pm}}$とし、
+	これらに直交する状態$\Ket{\perp}$を用いて、
+	任意の状態$\Ket{\psi}$を
+	\begin{align}
+		\Ket{\psi}
+		= \Braket{\lambda_+ | \psi} \Ket{\lambda_+}
+		+ \Braket{\lambda_- | \psi} \Ket{\lambda_-}
+		+ \Ket{\perp}
+	\end{align}
+	として表すと、
+	\begin{align}
+		1 = \Braket{\psi | \psi}
+		= \left| \Braket{\lambda_+ | \psi} \right|^2
+		+ \left| \Braket{\lambda_- | \psi} \right|^2
+		+ \Braket{\perp | \perp}
+	\end{align}
+	を得る。
+	ここで$\left| \Braket{\psi | \psi} \right| = 1$より、
+	$0 \leq \left| \Braket{\perp | \perp} \right| \leq 1$
+	であることを用いると、
+	\begin{align}
+		\alpha \coloneqq
+		\left| \Braket{\lambda_+ | \psi} \right|^2
+		+ \left| \Braket{\lambda_- | \psi} \right|^2
+	\end{align}
+	としたとき、
+	$0 \leq \alpha \leq 1$が分かる。
+	ここから
+	\begin{align}
+		\left| \Braket{\xi | \psi} \right|^2
+		+ \left| \Braket{\eta | \psi} \right|^2
+		&= \Braket{\psi |
+		\left( \Ketbra{\xi}{\xi} + \Ketbra{\eta}{\eta} \right) |
+		\psi} \\
+		&= \lambda_+ \left| \Braket{\lambda_+ | \psi} \right|^2
+		+ \lambda_- \left| \Braket{\lambda_- | \psi} \right|^2 \\
+		&= \lambda_+ \left| \Braket{\lambda_+ | \psi} \right|^2
+		+ \lambda_- \left( \alpha 
+		- \left| \Braket{\lambda_+ | \psi} \right|^2 \right) \\
+		&= \left( \lambda_+ - \lambda_- \right)
+		\left| \Braket{\lambda_+ | \psi} \right|^2
+		+ \alpha \lambda_- \\
+		&\leq \lambda_+ \alpha \quad
+		\left( \because 0 \leq
+		\left| \Braket{\lambda_+ | \psi} \right|^2 \leq \alpha \right) \\
+		&\leq \lambda_+ \quad \left( \because 0 \leq \alpha \leq 1 \right)
+	\end{align}
+	が分かる。
+	したがって、
+	\begin{align}
+		\max_{\Ket{\psi}} \left[ \left| \Braket{\xi | \psi} \right|^2
+		+ \left| \Braket{\eta | \psi} \right|^2 \right]
+		= 1 + \left| \Braket{\xi | \eta} \right|
+	\end{align}
+\end{tcolorbox}
+
+\subsection{QIP = QIP(3)の証明}
+$\mathrm{QIP} = \mathrm{QIP}(3)$を示す。
+$\mathrm{QIP}(3) \subseteq \mathrm{QIP}$であるのは明らかであるから、
+$\mathrm{QIP} \subseteq \mathrm{QIP}(3)$を示す。
+
+次のある$L \in \mathrm{QIP}(2^{t+1} + 1)$に対するプロトコルを考える。
+\begin{enumerate}
+	\item 証明者がレジスタ$P$、$M$に状態$\Ket{\psi}$を用意し、
+	検証者にレジスタ$M$を送る。
+	\item 検証者はレジスタ$V$にアンシラ$\Ket{0^{|V|}}$を用意し、
+	ユニタリ演算子$A_{1, MV}$を作用させ、
+	レジスタ$M$を証明者に送る。
+	\item 証明者はレジスタ$P$、$M$にユニタリ演算子$A_{2, PM}$を作用させ、
+	検証者にレジスタ$M$を送る。
+	\item 検証者はレジスタ$M$、$V$にユニタリ演算子$A_{3, MV}$を作用させ、
+	証明者にレジスタ$M$を送る。
+
+	\begin{center}
+		$\vdots$
+	\end{center}
+
+	\item 証明者はレジスタ$P$、$M$にユニタリ演算子$A_{2n, PM}$を作用させ、
+	検証者にレジスタ$M$を送る。
+	\item 検証者はレジスタ$M$、$V$にユニタリ演算子$A_{2n+1, MV}$を作用させ、
+	証明者にレジスタ$M$を送る。
+
+	\begin{center}
+		$\vdots$
+	\end{center}
+
+	\item 証明者はレジスタ$P$、$M$にユニタリ演算子$A_{2^{t+1}, PM}$を作用させ、
+	検証者にレジスタ$M$を送る。
+	\item 検証者はレジスタ$M$、$V$に
+	ユニタリ演算子$A_{2^{t+1}+1, MV}$を作用させ、
+	測定して$0$が出たら受理する。
+\end{enumerate}
+このプロトコルは$x \in L$のとき、
+ある証明者の行動が存在して$p_\mathrm{acc} \geq c$となり、
+$x \notin L$のとき、
+すべての検証者の行動に対して$p_\mathrm{acc} \leq s$となるとする。
+
+このとき次のマーリンが正直な場合の$\mathrm{QIP}(2^t+1)$プロトコルを考える。
+\begin{enumerate}
+	\item 証明者がレジスタ$P$、$M$、$V$に状態
+	$A_{2^t, PM} A_{2^t - 1, MV} \cdots A_{2, PM} A_{1, MV}
+	\left( \Ket{\psi} \otimes \Ket{0^{|V|}} \right)$
+	を用意し、検証者にレジスタ$M$、$V$を送る。
+	\item 検証者はランダムビット$s \in \{ 0, 1 \}$を生成し、
+	\begin{enumerate}
+		\item $s = 0$のとき、
+		レジスタ$M$、$V$にユニタリ演算子$A_{2^t + 1, MV}$を作用させる。
+		\item $s = 1$のとき、なにもしない。
+	\end{enumerate}
+	そして証明者に$s$とレジスタ$M$を送る。
+	\item 以降は
+	\begin{enumerate}
+		\item $s = 0$のとき、
+		元の$\mathrm{QIP}(2^{t+1} + 1)$プロトコルを続ける。
+		\item $s = 1$のとき、
+		元のプロトコルの逆を続ける。
+	\end{enumerate}
+
+	\item 
+	\begin{enumerate}
+		\item $s = 0$のとき、
+		最後の状態を測定して0が出たら受理する。
+		\item $s = 1$のとき、
+		最後の状態の$|V|$ビットを測定し、
+		全て0なら受理する。
+	\end{enumerate}
+\end{enumerate}
+このプロトコルは$x \in L$のとき、
+マーリンが正直なら受理確率は
+\begin{align}
+	p_\mathrm{acc}
+	= \frac{p_\mathrm{test}}{2} + \frac{p_\mathrm{comp}}{2}
+	\geq \frac{c}{2} + \frac{1}{2}
+\end{align}
+となる。
+また$x \notin L$のとき、
+受理確率は
+\begin{align}
+	p_\mathrm{acc}
+	&= \frac{1}{2} \max_{\Ket{\xi}}
+	\left| \left( \Bra{\xi} \otimes \Bra{0} \right)
+	A_{2^{t+1} + 1, MV}
+	\underbrace{B_{2^{t - 1}, PV}}_{t \geq 1 \text{でなければならない}}
+	A_{2^{t+1} - 2, MV} \cdots B_{1, PV}
+	A_{2^{t} + 1, MV} \Ket{\Psi}_{PMV} \right|^2 \\
+	&\qquad +\frac{1}{2} \max_{\Ket{\eta}}
+	\left| \left( \Bra{\eta} \otimes \Bra{0^{|V|}} \right)
+	A_{1, MV}^\dagger D_{2^{t-1}, PV} A_{3, MV}^\dagger \cdots D_{2, PV}
+	A_{2^{t} - 1, MV}^\dagger D_{1, PV} \Ket{\Psi}_{PMV} \right|^2 \\
+	&\leq \frac{1}{2} + \frac{1}{2} \max_{\Ket{\xi}, \Ket{\eta}}
+	\left| \left( \Bra{\xi} \otimes \Bra{0} \right)
+	A_{2^{t+1} + 1, MV} B_{2^{t - 1}, PV} A_{2^{t+1} - 2, MV} \cdots B_{1, PV}
+	A_{2^{t} + 1, MV} \right. \\
+	&\qquad \qquad \qquad \quad \left.
+	D_{1, PV}^\dagger A_{2^t - 1, MV} D_{2, PV}^\dagger
+	\cdots A_{3, MV} D_{2^{t-1}, PV} A_{1, MV}
+	\left( \Ket{\eta} \otimes \Ket{0^{|V|}} \right) \right| \\
+	&\leq \frac{1}{2} + \frac{s}{2}
+\end{align}
+となる。
+ここで
+\begin{align}
+	\left( \frac{1}{2} + \frac{c}{2} \right)
+	- \left( \frac{1}{2} + \frac{s}{2} \right)
+	= \frac{c - s}{2} \geq 1/\mathrm{poly}
+\end{align}
+である。
+以上から、$\mathrm{QIP}(2^{t+1} + 1) \subseteq \mathrm{QIP}(2^t + 1)$が
+任意の整数$s \geq 1$で成り立つから、
+$\mathrm{QIP} \subseteq \mathrm{QIP}(3)$が成り立つ。
+\qed
+\end{document}

@@ -1,0 +1,102 @@
+\documentclass[a4paper,12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+
+\title{分布}
+
+\begin{document}
+\maketitle
+
+$a < b$を用いて$x \in [a, b]$に何かが分布しているとき，
+$x \in [p, q](a \le p \le q \le b)$に分布している割合が
+\begin{equation}
+	\int_p^q f(x) {\rm d}x
+\end{equation}
+となるとき，$f(x)$を分布(関数)と呼ぶ．
+定義より，分布は以下の性質を満たす．
+\begin{align}
+	&\int_a^b f(x) {\rm d}x = 1 \\
+	&f(x) \ge 0 \quad (x \in [a, b])
+\end{align}
+これを物理で用いるときは，$x \in [x, x + {\rm d}x]$に分布している割合を分布と呼び，
+上の定義よりそれは，
+\begin{equation}
+	\int_x^{x + {\rm d}x} f(x^{\prime}) {\rm d} x^{\prime}
+	= f(x) {\rm d}x
+\end{equation}
+となる．
+以下これを用いる．
+
+ここで，連続全単射(競技単調増加もしくは競技単調減少)である関数$y = y(x)$と，
+その逆関数$x = x(y)$を用いて変数変換することを考えると，
+\begin{equation}
+	\int_p^q f(x) {\rm d}x
+	= \int_{y(p)}^{y(q)} f(x(y)) \dif{x(y)}{y} {\rm d}y
+\end{equation}
+となる．
+このとき条件より，${\rm d}x/{\rm d}y$は常に正もしくは負である．
+
+正のとき，$y(x)$は狭義単調増加関数であるから，$y(p) < y(q)$となる．
+したがって，$x \in [p, q]$に分布している割合，
+すなわち$y \in [y(p), y(q)]$に分布している割合が
+\begin{equation}
+	\int_{y(p)}^{y(q)} f(x(y)) \dif{x}{y} {\rm d}y
+\end{equation}
+で与えられるから，
+\begin{equation}
+	f(x(y)) \dif{x}{y} {\rm d}y
+\end{equation}
+を$y$を用いたときの新たな分布とすればよい．
+
+負のとき，$y(x)$は狭義単調減少関数であるから，$y(p) > y(q)$となる．
+したがって，$x \in [p, q]$に分布している割合を$y$を用いて考えると，
+$y \in [y(q), y(p)]$に分布している割合を考えることになる．
+それは
+\begin{equation}
+	\int_{y(p)}^{y(q)} f(x(y)) \dif{x(y)}{y} {\rm d}y
+	= \int_{y(q)}^{y(p)} f(x(y)) \left[ - \dif{x}{y} \right] {\rm d}y
+\end{equation}
+で与えられる．
+これは，
+\begin{equation}
+	f(x(y)) \left[ - \dif{x}{y} \right] {\rm d}y
+\end{equation}
+を$y$を用いたときの新たな分布と考えることと同じである．
+
+以上より，${\rm d}x/{\rm d}y$が正負の場合をまとめると，
+\begin{equation}
+	f(x(y)) \left| \dif{x}{y} \right| {\rm d}y
+\end{equation}
+を新たな分布とすることになる．
+
+$y(x)$が単調でない場合は，極大極小を取る点で分割して，
+それぞれの逆関数に$x = x_i (y)$と番号をつけて変数変換すれば上と同様に考えられる．
+
+$y(x)$が多価の場合は，それぞれを$y_1,\ y_2,\ \cdots,\ y_n$のように番号をつけ，
+それぞれについて上と同様に考えれば良い．
+
+これらをすべてまとめると，結局$x \in [p, q]$の分布を変数変換して求めるときは，
+${y(x) | x \in [p, q]}$の範囲で積分を実行すればよく，このときの分布は
+\begin{equation}
+	\sum f(x(y)) \left| \dif{x(y)}{y} \right| {\rm d}y
+\end{equation}
+とすればよい(ここでの和は全ての$x, y$についてとる)．
+
+\end{document}

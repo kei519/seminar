@@ -1,0 +1,250 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\newtheorem*{theorem*}{定理}
+\renewcommand{\proofname}{証明}
+\allowdisplaybreaks[4]
+
+\title{5章章末 (11)解答}
+
+\begin{document}
+\maketitle
+
+\begin{theorem*}
+	静電場のときいくつかの導体表面上に$n$個の電極$S_i$から、
+	電流$I_i$が流れ込んでくるとき、その定常電流は
+	\begin{align}
+		F = \int (\vec{E} - \vec{E}_{ex}) \cdot \vec{i}_e \ddif^3 x
+		= \int \left( \frac{\vec{i}_e^2}{\sigma}
+		- 2 \vec{E}_{ex} \cdot \vec{i}_e \right) \ddif^3 x
+	\end{align}
+	が最小になるように分布する。
+\end{theorem*}
+
+\begin{proof}
+以後「導体」という言葉は繋がれている導体だけでなく、電極も含めたものとする。
+電流に関して常に
+\begin{align}
+	&\vec{i}_e (\vec{x}) = \sigma (\vec{x})
+	( \vec{E} (\vec{x}) + \vec{E}_{ex} (\vec{x}) ) \\
+	&\! \Div \vec{i}_e (\vec{x}) = 0 \\
+	&\int_{S_i} \vec{i}_e \cdot \vec{n} (\vec{x}) \ddif S = I_i
+\end{align}
+が成り立つ。
+また、電極外には電流は流れていかないことから、電極接続部を除く導体表面では
+\begin{align}
+	\vec{i}_e (\vec{x}) \cdot \vec{n} (\vec{x}) = 0 \quad
+	\left( \vec{x} \in \mbox{導体表面} \middle\backslash \bigcup S_i \right)
+	\label{eq:i=0}
+\end{align}
+であると考えられる（？）。
+加えて静電場では
+\begin{align}
+	&\Rot \vec{E} (\vec{x}) = 0 \label{eq:rot} \\
+	&\phi (\vec{x}) = \phi_i \quad (\vec{x} \in S_i) \label{eq:const}
+\end{align}
+であり（？）
+\begin{align}
+	\vec{E} (\vec{x}) = -\Grad \phi (\vec{x})
+\end{align}
+と書ける。
+
+定常でない、すなわち\eqref{eq:rot}を満たさない仮想的な電流$\vec{i}'_e (\vec{x})$と
+電場$\vec{E}' (\vec{x})$を考えると、これらは
+\begin{align}
+	&\vec{i}'_e (\vec{x}) = \sigma (\vec{x})
+	\left( \vec{E}' (\vec{x}) + \vec{E}_{ex} (\vec{x}) \right) \\
+	&\! \Div \vec{i}'_e (\vec{x}) = 0 \\
+	&\int_{S_i} \vec{i}'_e (\vec{x}) \cdot \vec{n} (\vec{x}) \ddif S = I_i \\
+	&\vec{i}'_e (\vec{x}) \cdot \vec{n} (\vec{x}) = 0 \quad
+	\left( \vec{x} \in \mbox{導体表面} \middle\backslash \bigcup S_i \right)
+	\label{eq:i'=0}
+\end{align}
+を満たす。
+両者の$F$はそれぞれ
+\begin{align}
+	F' &= \int (\vec{E}' - \vec{E}_{ex}) \cdot \vec{i}'_e \ddif^3 x \\
+	F &= \int (\vec{E}  - \vec{E}_{ex})\cdot \vec{i}_e \ddif^3 x
+\end{align}
+と書ける。
+いま証明したいことは、
+\begin{align}
+	F' > F
+\end{align}
+である。
+そこで、
+\begin{align}
+	\delta \vec{E} (\vec{x}) &= \vec{E}' (\vec{x}) - \vec{E} (\vec{x}) \\
+	\delta \vec{i}_e (\vec{x}) &= \vec{i}'_e (\vec{x}) - \vec{i}_E (\vec{x})
+\end{align}
+とおくと、
+\begin{align}
+	&\delta \vec{i}_e = \sigma \delta \vec{E} \\
+	&\! \Div \delta \vec{i}_e = 0 \\
+	&\int_{S_i} \delta \vec{i}_e \cdot \vec{n} \ddif S = 0
+	\label{eq:didS=0}
+\end{align}
+が成り立つ。
+これを踏まえた上で$F'$を計算すると、
+\begin{align}
+	F' &= \int (\vec{E} + \delta \vec{E} - \vec{E}_{ex})
+	\cdot (\vec{i}_e + \delta \vec{i}_e) \ddif^3 x \\
+	&= \int (\vec{E} - \vec{E}_{ex}) \cdot \vec{i}_e \ddif^3 x
+	+ \int \delta \vec{E} \cdot \delta \vec{i}_e \ddif^3 x
+	+ \int [\delta \vec{E} \cdot \vec{i}_e +
+	(\vec{E} - \vec{E}_{ex}) \cdot \delta \vec{i}_e] \ddif^3 x \\
+	&= F + \int \sigma (\delta \vec{E})^2 \ddif^3 x
+	+ 2\int \vec{E} \cdot \delta \vec{i}_e \ddif^3 x
+\end{align}
+となる。
+導体外部では$\sigma = 0$であるから、この積分は導体内部に限られる。
+ここで
+\begin{align}
+	\vec{E} \cdot \delta \vec{i}_e &= -\Grad \phi \cdot \delta \vec{i}_e \\
+	&= -\Div [\phi \delta \vec{i}_e] + \phi \Div \vec{i}_e \\
+	&= -\Div [\phi \delta \vec{i}_e]
+\end{align}
+を用いれば、
+\begin{align}
+	\int_{\mbox{\small 導体内部}} \vec{E} \cdot \delta \vec{i}_e \ddif^3 x
+	= -\int_{\mbox{\small 導体表面}} \phi \delta \vec{i}_e \cdot \ddif \vec{S}
+\end{align}
+これは電極接続部を除いた導体表面では\eqref{eq:i=0}\eqref{eq:i'=0}より
+$\delta \vec{i}_e \cdot \ddif \vec{S} = 0$となることと、
+$S_i$上では$\phi$が一定であることを用いると、
+\begin{align}
+	\int_{\mbox{\small 導体内部}} \vec{E} \cdot \delta \vec{i}_e \ddif^3 x
+	&= -\sum_i \phi_i \int_{S_i} \delta \vec{i}_e \cdot \ddif \vec{S} \\
+	&= 0 \quad (\because \eqref{eq:didS=0})
+\end{align}
+となる。
+したがって、
+\begin{align}
+	F' = F + \int_{\mbox{\small 導体内部}} \sigma (\delta \vec{E})^2 \ddif^3 x
+\end{align}
+となることが分かる。
+これは導体内部で$\sigma > 0$であることに注意すると常に$F' > F$である。
+すなわち、\eqref{eq:rot} \eqref{eq:const}を満たす定常電流の$F$は最小となる。
+\end{proof}
+
+\begin{theorem*}
+	電気伝導率が$\sigma$で与えられる、
+	内部で電流密度$\vec{i}_e$に垂直な方向には
+	外部起電力$\vec{E}_{ex}$も一様な導体$V$に対して、
+	一様な定常電流$I$が表面$A$から$B$に対して流れているとき、その導体の抵抗を
+	\begin{align}
+		R = \frac{E^{ex} + \phi(A) - \phi(B)}{I}
+	\end{align}
+	で定義すれば、$V$におけるJoule熱$U$は
+	\begin{align}
+		U = \int_V \ddif^3 x \frac{\vec{i}_e^2}{\sigma}
+		= \int_V \ddif^3 x (\vec{E} + \vec{E}_{ex}) \cdot \vec{i}_e
+		= RI^2
+	\end{align}
+	とかける。
+	ここで$E^{ex}$は外部起電力（電圧）であり、
+	\begin{align}
+		\int_{A \to B} \vec{E}_{ex} \cdot \ddif \vec{x}
+	\end{align}
+	で定義される。
+\end{theorem*}
+\begin{proof}
+	いま導体表面$A$から$B$に電流$I$が流れ込む場合を考えている。
+	したがって、表面における法線ベクトルを導体の外側に取ると、
+	\begin{align}
+		&\begin{aligned}
+			&\int_A \vec{i}_e \cdot \ddif \vec{S} = -I \\
+			&\int_B \vec{i}_e \cdot \ddif \vec{S} = I \\
+		\end{aligned} \label{eq:boundary_condition} \\
+		&\vec{i}_e \cdot \vec{n} = 0 \qquad (\mbox{それ以外の面上})
+		\label{eq:in=0}
+	\end{align}
+	が成り立ち、また定常電流であるから、$\vec{E} = -\Grad \phi$と書いたときに
+	\begin{align}
+		\phi(A) = {\rm const.} \qquad \phi(B) = {\rm const.}
+	\end{align}
+	であることに注意する。
+	すると、
+	\begin{align}
+		\Div (\phi \vec{i}_e) = \Grad \phi \cdot \vec{i}_e + \phi \Div \vec{i}_e
+	\end{align}
+	より
+	\begin{align}
+		U &= \int_V \ddif^3 x ( \vec{E} + \vec{E}_{ex} ) \cdot \vec{i}_e \\
+		&= \int_V \ddif^3 x
+		\bigl[ \phi \Div \vec{i}_e - \Div(\phi \vec{i}_e) \bigr]
+		+ \int_V \vec{E}_{ex} \cdot \vec{i}_e \\
+		&= -\int_S \phi \vec{i}_e \cdot \ddif \vec{S}
+		+ I \int_{A \to B} \vec{E}_{ex} \cdot \ddif \vec{x} \qquad
+		(\because \Div \vec{i}_e = 0, \ \vec{i}_e, \vec{E}_{ex} \mbox{が一様}) \\
+		&= -\phi(A) \int_A \vec{i}_e \cdot \ddif \vec{S}
+		- \phi(B) \int_B \vec{i}_e \cdot \ddif \vec{S} + I E^{ex}
+		\qquad (\because \eqref{eq:in=0}) \\
+		&= I ( E^{ex} + \phi(A) - \phi(B) )
+		\qquad (\because \eqref{eq:boundary_condition}) \\
+		&= RI^2
+	\end{align}
+	となり、題意は示された。
+\end{proof}
+
+この抵抗の定義
+\begin{align}
+	R = \frac{E^{ex} + \phi(A) - \phi(B)}{I}
+\end{align}
+の直感的説明をしておく。
+外部起電力がない場合には明らかで、電位の高い方から低い方に流れたときに、
+その電位差を電流で割ったもので通常の抵抗と同じ働きをする。
+次に外部起電力がある場合では、
+簡単のため$\vec{E}_{ex}$が$A \to B$方向を向いているとすれば$E^{ex}$は正であり、
+また内部抵抗がなければ電位は$E^{ex}$だけ上がる、
+つまり$\phi(B) - \phi(A) = E^{ex}$となるはずである。
+このときは内部抵抗がないという言葉通りに$R = 0$となる。
+逆に内部抵抗があれば$B$に到達する前に電位が減少するということであり、
+$\phi(B) - \phi(A) < E^{ex}$であろうと考えられる。
+このときは
+\begin{align}
+	R = \frac{E^{ex} - ( \phi(B) - \phi(A) )}{I} > 0
+\end{align}
+となり内部抵抗がある様子を表しているだろうと考えられる。
+
+ここまでを踏まえて、導体内部を$V$として
+\begin{align}
+	F = \int_V \left( \frac{\vec{i}_e^2}{\sigma}
+	- 2 \vec{E}_{ex} \cdot \vec{i}_e \right) \ddif^3 x
+\end{align}
+について考える。
+ここでもし抵抗のない導線に外部起電力と抵抗がいくつか付けられた、
+電流密度と起電力が先ほどと同じ条件を満たす回路を考えれば、
+\begin{align}
+	F &= \sum_i I_i^2 R_i
+	- 2 \sum_a I_a \int_C \vec{E}^a_{ex} \cdot \ddif \vec{x} \\
+	&= \sum_i I_i^2 R_i - 2 \sum_a E_a^{ex} I_a
+\end{align}
+となり、Kirchhoffの法則時のものと一致する。
+なおここで第1項目には、外部起電力の内部抵抗が含まれていても良い。
+
+\end{document}

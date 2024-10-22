@@ -1,0 +1,503 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\title{\S 9.1 \ 遅延ポテンシャルと先進ポテンシャル}
+\author{}
+
+\begin{document}
+\maketitle
+
+\section{本題}
+
+前章では自由電磁波が真空中、物質中でどのように伝搬するかを調べてきたが、
+この章では電磁波の発生について調べる。
+電磁波は電荷分布の変動によって電磁場も変動することで発生する。
+つまり電磁波の発生について調べるためには、
+一般のMaxwell方程式に戻って考えなければならない。
+
+真空中でのMaxwell方程式は
+\begin{gather}
+	\Rot \vec{E}(\vec{x}, t) + \pdif{\vec{B}(\vec{x}, t)}{t} = 0 \\
+	\Div \vec{B}(\vec{x}, t) = 0 \\
+	\Rot \vec{B} - \frac{1}{c^2} \pdif{\vec{E}(\vec{x}, t)}{t}
+	= \mu_0 \vec{i}_e (\vec{x}, t) \\
+	\Div \vec{E}(\vec{x}, t) = \frac{1}{\varepsilon_0} \rho(\vec{x}, t)
+\end{gather}
+であるが、Lorentzゲージにおけるポテンシャルの方程式を考えたほうが簡単で、それは
+\begin{gather}
+	\begin{gathered}
+		\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \vec{A}(\vec{x}, t)
+		= -\mu_0 \vec{i}_e(\vec{x}, t) \\
+		\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right) \phi(\vec{x}, t)
+		= -\frac{1}{\varepsilon_0} \rho(\vec{x}, t)	
+	\end{gathered}
+	\label{eq:wave} \\
+	\Div \vec{A}(\vec{x}, t) + \frac{1}{c^2} \pdif{\phi(\vec{x}, t)}{t} = 0
+	\label{eq:Lorentz}
+\end{gather}
+となる。
+自由電磁場では電荷分布がなくスカラーポテンシャル$\phi(\vec{x}, t)$を0に
+選ぶことができたが、今回はそうはできない。
+
+方程式\eqref{eq:wave}の特解を考えるために、
+電磁ポテンシャル、電流電荷密度を次のように時間に関してFourier変換しておく。
+\begin{gather}
+	\vec{A}(\vec{x}, t) = \int_{-\infty}^{\infty} \ddif \omega
+	e^{-i\omega t} \vec{A}(\vec{x}, \omega) \\
+	\phi(\vec{x}, t) = \int_{-\infty}^{\infty} \ddif \omega
+	e^{-i\omega t} \phi(\vec{x}, \omega) \\
+	\vec{i}_e(\vec{x}, t) = \int_{-\infty}^{\infty} \ddif \omega
+	e^{-i\omega t} \vec{i}_e(\vec{x}, \omega) \\
+	\rho(\vec{x}, t) = \int_{-\infty}^{\infty} \ddif \omega
+	e^{-i\omega t} \rho(\vec{x}, \omega)
+\end{gather}
+そうすれば方程式\eqref{eq:wave}、\eqref{eq:Lorentz}は
+\begin{gather}
+	\begin{gathered}
+		\left( \Delta + \frac{\omega^2}{c^2} \right) \vec{A}(\vec{x}, \omega)
+		= -\mu_0 \vec{i}_e(\vec{x}, \omega) \\
+		\left( \Delta + \frac{\omega^2}{c^2} \right) \phi(\vec{x}, \omega)
+		= -\frac{1}{\varepsilon_0} \rho(\vec{x}, \omega)
+	\end{gathered} \label{eq:f_wave} \\
+	\Div \vec{A}(\vec{x}, \omega) - \frac{i\omega}{c^2} \phi(\vec{x}, \omega) = 0
+	\label{eq:f_Lorentz}
+\end{gather}
+と書き換えられる。
+これは非斉次項が右辺にあるHelmholtz方程式である。
+この非斉次項のために振動数$\omega$と波数$k$の分散関係$\omega = ck$は成り立たなくなる。
+
+\eqref{eq:f_wave}の無限遠方で消える解を求めたいが、
+これは静電場のときのようにGreen関数$G(\vec{x}, \omega)$、つまり
+\begin{gather}
+	\begin{gathered}
+	\left( \Delta + \frac{\omega^2}{c^2} \right) G(\vec{x}, \omega)
+	= - \delta^3(\vec{x}) \\
+	\lim_{|\vec{x}| \to \infty} G(\vec{x}, \omega) = 0
+	\end{gathered} \label{eq:Green}
+\end{gather}
+を満たす関数を求めればよい。
+なぜならこのGreen関数を用いて
+\begin{gather}
+	\vec{A}(\vec{x}, \omega) = \mu_0 \int \ddif^3 x'
+	G(\vec{x} - \vec{x}', \omega) \vec{i}_e(\vec{x}', \omega) \\
+	\phi(\vec{x}, \omega) = \frac{1}{\varepsilon_0} \int \ddif^3 x'
+	G(\vec{x} - \vec{x}', \omega) \rho(\vec{x}', \omega)
+\end{gather}
+とすればこれらは
+\begin{align}
+	\left( \Delta + \frac{\omega^2}{c^2} \right) \vec{A}(\vec{x}, \omega)
+	&= \mu_0 \int \ddif^3 x' \left( \Delta + \frac{\omega^2}{c^2} \right)
+	G(\vec{x} - \vec{x}', \omega) \vec{i}_e(\vec{x}', \omega) \\
+	&= -\mu_0 \int \ddif^3 x' \delta^3(\vec{x} - \vec{x}')
+	\vec{i}_e(\vec{x}' \omega) \\
+	&= -\mu_0 \vec{i}_e(\vec{x})
+\end{align}
+となり（$\phi$についても同様）方程式\eqref{eq:f_wave}を満たし、かつ
+\begin{align}
+	\Div \vec{A}(\vec{x}, \omega)
+	- \frac{i \omega}{c^2} \phi(\vec{x}, \omega)
+	&= \int \ddif^3	x' \left( \mu_0 \Grad G(\vec{x} - \vec{x}', \omega) \cdot
+	\vec{i}_e(\vec{x}', \omega)
+	- \frac{i\omega}{c^2 \varepsilon_0} G(\vec{x} - \vec{x}')
+	\rho(\vec{x}', \omega)
+	\right) \\
+	&= \mu_0 \int \ddif^3 x' \left( -\Grad' G(\vec{x} - \vec{x}', \omega) \cdot
+	\vec{i}_e(\vec{x}', \omega) - i\omega G(\vec{x} - \vec{x}', \omega)
+	\rho(\vec{x}', \omega) \right) \\
+	&= \mu_0 \int \ddif^3 x' G(\vec{x} - \vec{x}', \omega) \Bigl(
+	\Div' \vec{i}_e(\vec{x}', \omega) - i\omega \rho(\vec{x}', \omega)
+	\Bigr) \qquad (\because \mbox{境界上では$G$も$\vec{i}_e$も0}) \\
+	&= 0 \qquad (\because \mbox{電荷保存則})
+\end{align}
+となり方程式\eqref{eq:f_Lorentz}も満たすからである。
+また無限遠方で0になることを求めるのは、
+無限遠方で0になる$\vec{A}$と$\phi$を求めたいからである。
+
+したがって最初のMaxwell方程式を解く問題はGreen関数$G$を求める問題に帰着する。
+このGreen関数は教科書では与えられているが、
+今回は空間に関してもFourier変換することで計算により求めることを考える。
+その前にまず教科書で与えられたGreen関数
+\begin{gather}
+	G_{\rm ret}(\vec{x}, \omega) = \frac{1}{4\pi}
+	\frac{e^{+i \frac{\omega}{c}|\vec{x}|}}{|\vec{x}|} \\
+	G_{\rm adv}(\vec{x}, \omega) = \frac{1}{4\pi}
+	\frac{e^{-i \frac{\omega}{c}|\vec{x}|}}{|\vec{x}|}
+\end{gather}
+がそれぞれ\eqref{eq:Green}を満たすことを確認する。
+\begin{align}
+	\lim_{|\vec{x}| \to \infty} G(\vec{x}, \omega) = 0
+\end{align}
+は明らかである。
+次に$|\vec{x}| = r$と書けば
+\begin{align}
+	\Delta G_{\substack{\rm ret \\ \rm adv}}(\vec{x}, \omega)
+	&= \frac{1}{4\pi} \Div \Grad
+	\left( \frac{e^{\pm i \frac{\omega}{c} r}}{r} \right) \\
+	&= \frac{1}{4\pi} \Div \left[
+	e^{\pm i \frac{\omega}{c} r} \Grad \frac{1}{r} 
+	+ \frac{1}{r} \Grad e^{\pm i \frac{\omega}{c} r} \right] \\
+	&= \frac{1}{4\pi} \left[ e^{\pm i \frac{\omega}{c} r}
+	\Delta \left( \frac{1}{r} \right)
+	+ 2 \Grad \left( \frac{1}{r} \right) \cdot
+	\Grad e^{\pm i \frac{\omega}{c} r} + \frac{1}{r}
+	\Delta e^{\pm i \frac{\omega}{c} r} \right] \\
+	&= - e^{\pm i \frac{\omega}{c} r} \delta^3(\vec{x})
+	+ \frac{2}{4\pi} \dif{}{r} \left( \frac{1}{r} \right) \cdot
+	\dif{}{r} e^{\pm i \frac{\omega}{c} r}
+	+ \frac{1}{4\pi r} \frac{1}{r^2}
+	\dif{}{r} \left(r^2 \dif{}{r} e^{\pm i \frac{\omega}{c} r} \right) \\
+	&= -\delta^3(\vec{x})
+	\mp \frac{2i\omega}{4\pi c} \frac{1}{r^2} e^{\pm i \frac{\omega}{c} r}
+	\pm \frac{i \omega}{4\pi c} \frac{1}{r} \frac{1}{r^2} \left(
+	2r e^{\pm i \frac{\omega}{c} r} \pm \frac{i\omega}{c} r^2
+	e^{\pm i \frac{\omega}{c} r} \right) \\
+	&= -\delta^3(\vec{x})
+	- \frac{\omega^2}{c^2} \frac{1}{4\pi} \frac{e^{\pm i \frac{\omega}{c} r}}{r}
+\end{align}
+となるから、
+\begin{align}
+	\left( \Delta + \frac{\omega^2}{c^2} \right)
+	G_{\substack{\rm ret \\ \rm adv}} (\vec{x}, \omega)
+	= -\delta^3(\vec{x})
+\end{align}
+も満たす。
+
+では$G$を求めよう。
+まず$G$をFourier変換して
+\begin{align}
+	G(\vec{x}, \omega) =
+	\int \ddif^3 k G(\vec{k}, \omega) e^{i \vec{k} \cdot \vec{x}}
+\end{align}
+と書くと、Fourier変換から出てくる関数は2乗可積分である必要があるから、
+$G(\vec{x}, \omega)$は$G(\vec{k}, \omega)$のFourier変換から出せることを踏まえると、
+$|\vec{x}| \to \infty$のとき$G \to 0$は自動的に満たされる。
+\footnote{とパッと思ったのだが、実際には反例が存在するらしい。
+未検証だが\url{https://okwave.jp/qa/q8505067.html}を参照。}
+したがって方程式\eqref{eq:Green}は
+\begin{align}
+	\int \ddif^3 k
+	\left( -\vec{k}^2 + \frac{\omega^2}{c^2} \right) G(\vec{k}, \omega)
+	e^{i \vec{k} \cdot \vec{x}}
+	&= -\delta^3(\vec{x}) \\
+	&= -\frac{1}{(2\pi)^3} \int \ddif^3 k e^{i\vec{k} \cdot \vec{x}}
+\end{align}
+であるから
+\begin{align}
+	G(\vec{k}, \omega)
+	= \frac{1}{(2\pi)^3} \cfrac{1}{\vec{k}^2 - \cfrac{\omega^2}{c^2}}
+\end{align}
+となることが分かる。
+したがって
+\begin{align}
+	G(\vec{x}, \omega) = \frac{1}{(2\pi)^3} \int \ddif^3 k
+	\cfrac{1}{\vec{k}^2 - \cfrac{\omega^2}{c^2}} e^{i \vec{k} \cdot \vec{x}}
+\end{align}
+を計算すれば$G(\vec{x}, \omega)$が求まる。
+以後$p = \omega/c$を用いることにする。
+ここからこの計算を進めていく。
+\begin{align}
+	G(\vec{x}, \omega) &= \frac{1}{(2\pi)^3}
+	\int_{0}^{2\pi} \ddif \phi \int_{-1}^{1} \ddif \cos \theta
+	\int_{0}^{\infty} \ddif k \
+	k^2 \frac{1}{k^2 - p^2} e^{ikx \cos \theta} \\
+	&= \frac{1}{(2\pi)^2} \frac{1}{ix} \int_{0}^{\infty} \ddif k \
+	k \frac{e^{ikx} - e^{-ikx}}{k^2 - p^2}
+\end{align}
+ここでこの積分が$k=\pm p$で発散することを避けるために極を微小にずらして、
+分母を$k^2 - p^2 \pm i\varepsilon$として
+最後に$\varepsilon \to 0$の極限を取ることにする。
+\footnote{このようにして良い理由は補足を参照。}
+このようなやり方は物理ではしばしば行われる。
+そうすれば$\varepsilon$の
+1次まで\footnote{どうせ$\varepsilon \to 0$を考えるためである。}で
+\begin{align}
+	k^2 - p^2 \pm i\varepsilon &= k^2 - ( p^2 \mp i\varepsilon ) \\
+	&= \left( k + \sqrt{p^2 \mp i\varepsilon} \right)
+	\left( k - \sqrt{p^2 - i\varepsilon} \right) \\
+	&= \left[ k + \left(p \mp \frac{i\varepsilon}{2p}\right) \right]
+	\left[ k - \left(p \mp \frac{i\varepsilon}{2p}\right) \right]
+\end{align}
+となるから、$i\varepsilon/2p$を新たに$\varepsilon$と置き換えて
+\begin{align}
+	G(\vec{x}, \omega)
+	= \frac{1}{2(2\pi)^2} \frac{1}{ix} \lim_{\varepsilon \to +0} \left(
+	\int_{-\infty}^{\infty} \ddif k
+	\frac{k}{(k + p \mp i\varepsilon)(k - p \pm i\varepsilon)} e^{ikx}
+	- \int_{-\infty}^{\infty} \ddif k
+	\frac{k}{(k + p \mp i\varepsilon)(k - p \pm i\varepsilon)} e^{-ikx}
+	\right)
+	\label{IntOfG}
+\end{align}
+と書ける。
+ここで積分路を複素平面での半径無限大の上下の半円としても、
+上下の円周上ではそれぞれ$e^{ikx}, e^{-ikx}$の項の積分が
+0になる\footnote{これも補足参照。}ことから実軸上での積分と一致する。
+このようにすれば留数定理を用いることができるから、
+第2項は時計回りであることに注意して計算すると
+\begin{align}
+	G(\vec{x}, \omega)
+	&= \frac{1}{2(2\pi)^2} \frac{1}{ix} \lim_{\varepsilon \to +0} 2\pi i \left[
+		\frac{1}{2} e^{\mp i(p - i\varepsilon)x}
+		+ \frac{1}{2} e^{\mp i(p - i\varepsilon)x}
+	\right] \\
+	&= \frac{1}{4\pi x} e^{\mp ipx}
+\end{align}
+となり求めたいものが求まった。
+
+以上から求めた電磁ポテンシャルは
+\begin{align}
+	\vec{A}(\vec{x}, t)
+	&= \mu_0 \int_{-\infty}^{\infty} \ddif \omega e^{-i\omega t} \int \ddif^3 x'
+	G_{\substack{\rm ret \\ \rm adv}} (\vec{x} - \vec{x}', \omega)
+	\vec{i}_e(\vec{x}', \omega) \\
+	&= \frac{\mu_0}{4\pi} \int \ddif^3 x' \frac{1}{|\vec{x} - \vec{x}'|}
+	\int_{-\infty}^{\infty} \ddif \omega
+	e^{-i\omega \left( t \mp \frac{|\vec{x} - \vec{x}'|}{c} \right)}
+	\cdot \frac{1}{2\pi} \int_{-\infty}^{\infty} \ddif t' e^{i\omega t'}
+	\vec{i}_e(\vec{x}, t') \\
+	&= \frac{\mu_0}{4\pi} \int_{-\infty}^{\infty} \ddif t'
+	\int \ddif^3 x'
+	\cfrac{\delta \left( t - t' \mp \cfrac{|\vec{x} - \vec{x}'|}{c}\right)}
+	{|\vec{x} - \vec{x}'|}
+	\vec{i}_e (\vec{x}', t')
+\end{align}
+これは不変デルタ関数の一部$D_{\rm ret}, D_{\rm adv}$がそれぞれ
+\begin{align}
+	D_{\substack{\rm ret \\ \rm adv}} (\vec{x} - \vec{x}', t - t')
+	&= \frac{1}{4\pi c} \delta(|\vec{x} - \vec{x}'| \mp c(t - t')) \\
+	&= \frac{1}{4\pi c^2} \delta(t - t' \mp |\vec{x} - \vec{x}'|/c)
+\end{align}
+であることを思い出せば
+\begin{align}
+	\vec{A}(\vec{x}, t) = \mu_0 c^2 \int_{-\infty}^{\infty} \ddif t'
+	\int \ddif^3 x'
+	D_{\substack{\rm ret \\ \rm adv}} (\vec{x} - \vec{x}', t - t')
+	\vec{i}_e (\vec{x}', t')
+\end{align}
+とも書ける。
+同様に
+\begin{align}
+	\phi(\vec{x}, t) = \frac{c^2}{\varepsilon_0}
+	\int_{-\infty}^{\infty} \ddif t' \int \ddif^3 x'
+	D_{\substack{\rm ret \\ \rm adv}} (\vec{x} - \vec{x}', t - t')
+	\rho(\vec{x}', t')
+\end{align}
+である。
+
+ここで$D$ができてきた理由を少し考えてみよう。
+\S 8.2 で見たように
+\begin{align}
+	\left( \Delta - \frac{1}{c^2} \pdif{^2}{t^2} \right)
+	D_{\substack{\rm ret \\ \rm adv}} (\vec{x}, t)
+	= -\frac{1}{c^2} \delta(t) \delta^3(\vec{x})
+\end{align}
+である。
+\footnote{実際に見たのはretのみであるが、$D$がHelmholtz方程式の解であることと
+$D = D_{\rm ret} - D_{\rm adv}$から明らかである。}
+これは時間に関してFourier変換せずに
+Green関数を求めると$G$の代わりに$c^2 D$が出てくることを示している。
+このことから$\vec{A}, \phi$は$D$の畳み込み積分で求められることになる。
+
+この時間積分を実行してしまうと
+\begin{gather}
+	\vec{A}(\vec{x}, t) = \frac{\mu_0}{4\pi} \int \ddif^3 x'
+	\vec{i}_e (\vec{x} - \vec{x}', t') \\
+	\phi(\vec{x}, t) = \frac{1}{4\pi \varepsilon_0} \int \ddif^3 x'
+	\rho (\vec{x} - \vec{x}', t') \\
+	t' = t \mp \frac{|\vec{x} - \vec{x}'|}{c}
+\end{gather}
+となる。
+これは当たり前であるが、電荷分布、電流密度が定常である場合には
+第4、5章で求めたものと同じになる。
+
+以上の表式において複合の上を取った電磁ポテンシャルを遅延ポテンシャル、
+下を取ったものを先進ポテンシャルと呼ぶ。
+これらの物理的意味を考える。
+遅延ポテンシャルに関しては場所$\vec{x}$の時刻$t$でのポテンシャルは、
+場所$\vec{x}'$から過去の時刻$t' = t - |\vec{x} - \vec{x}'|/c$に出発した情報が
+形成しているということである。
+次に先進ポテンシャルであるが、こちらは遅延ポテンシャルと同様に受け取ると
+場所$\vec{x}$の時刻$t$でのポテンシャルは、
+場所$\vec{x}'$から未来の時刻$t' = t + |\vec{x} - \vec{x}'|/c$に出発した情報が
+形成しているということであるが、通常の因果律に照らして考えると、
+場所$\vec{x}'$、時刻$t'$にある電荷分布、電流密度を用意したければ
+あらゆる位置$\vec{x}$から過去の時刻$t = t' - |\vec{x} - \vec{x}'|/c$に
+適切な電磁波を放射すればよいということである。
+ただ古典電磁気は完全に決定論的なので、現在までの完全な情報から未来は完全に決定されるし、
+その逆もある、
+つまり現在からの完全な情報から過去も完全に決定されると言っているだけに過ぎない
+（と思われる）。
+\footnote{とは言うものの、ほんまか？と思うところはある。
+なぜなら今まではMaxwell方程式とLorentz力は別個に扱っていたため、
+いくら過去の電磁ポテンシャルが分かっていたところで、
+荷電粒子が受ける力はわからず、そのため電磁場から
+荷電粒子がどのような影響を受けるのかは調べられないのではないかと考えてしまうからだ。
+しかし電磁場が完全に決定されていれば
+Maxwell方程式から電荷密度を調べることが可能であるのももちろん事実であり、
+それを踏まえるとMaxwell方程式からLorentz力もしっかりと導出できるということであろうか？
+その確認は流石に計算量がおかしい（そもそも計算可能なのかもわからないが）ので難しい。}
+またここから電荷分布が変動した情報は速さ$c$で伝わることが分かる。
+
+\section{補足}
+\subsection{極をずらせる理由}
+まず超関数について少し触れておく。
+超関数とは関数に作用して実数を返すようなもので、
+最も身近なものとしてはデルタ関数$\delta(x)$がある。
+デルタ関数それ自体は関数ではなく、積分という形で関数に作用することによって実数を返すもの、
+つまり
+\begin{align}
+	\int_{-\infty}^{\infty} \ddif x \delta(x) \varphi(x) = \varphi(0)
+\end{align}
+が成立するものである。
+以後ではこのように積分を実行することで関数から実数を出すものを超関数として扱うことにする。
+
+2つの超関数$f, g$が超関数として等しいとは
+\begin{align}
+	\int_{-\infty}^{\infty} \ddif x f(x) \varphi(x)
+	= \int_{-\infty}^{\infty} \ddif x g(x) \varphi(x)
+\end{align}
+が成り立つときである。
+デルタ関数は超関数であるからGreen関数も超関数であり、
+これらは超関数の意味で等しいということである。
+このように考えると、
+\begin{align}
+	\int_{-\infty}^{\infty} \ddif x'
+	\frac{1}{2\pi} \int_{-\infty}^{\infty} \ddif k e^{ik(x - x')} \varphi(x')
+	&= \frac{1}{2\pi} \int_{-\infty}^{\infty}\ddif k e^{ikx}
+	\int_{-\infty}^{\infty}\ddif x' e^{-ikx'} \varphi(x') \\
+	&= \frac{1}{2\pi} \int_{-\infty}^{\infty} \ddif k
+	e^{ikx} \overline{\varphi}(k) \\
+	&= \varphi(x)
+\end{align}
+となるから超関数の意味で
+\begin{align}
+	\delta(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \ddif k e^{ikx}
+\end{align}
+であることが分かる。
+つまり\eqref{eq:f_Green}も超関数の意味である。
+以後「超関数の意味で」を省略する。
+
+\noindent
+\textcolor{red}{（冒頭は自分で考えたため誤りを含む可能性が大いにある）}
+
+\eqref{eq:Green}を書き換えた
+\begin{align}
+	\int \ddif^3 k
+	\left( -\vec{k}^2 + p^2 \right) G(\vec{k}, \omega)
+	e^{i \vec{k} \cdot \vec{x}}
+	&= -\frac{1}{(2\pi)^3} \int \ddif^3 k e^{i\vec{k} \cdot \vec{x}}
+\end{align}
+まで戻る。
+この右辺の被積分関数に積分しても0となる
+$\pm i\pi (k^2 - p^2) \delta(k^2 - p^2) / (2\pi)^3$を加える。
+つまり
+\begin{align}
+	\int \ddif^3 k
+	\left( -\vec{k}^2 + p^2 \right) G(\vec{k}, \omega)
+	e^{i \vec{k} \cdot \vec{x}}
+	&= -\frac{1}{(2\pi)^3} \int \ddif^3 k \Bigl[
+		1 \mp i\pi (k^2 - p^2) \delta(k^2 - p^2)
+	\Bigr] e^{i\vec{k} \cdot \vec{x}}
+\end{align}
+として考える。
+このようにすれば、
+問題があるのは右辺第1項で$k = p$のときであるが、その領域は2次元であり、
+3次元積分から取り除いても効かない。
+そこで右辺第1項の積分領域から
+$k \in [p - \varepsilon, p + \varepsilon]$領域を
+取り除いた領域$V_\varepsilon$で積分し、最後に$\varepsilon \to +0$とすることを考える。
+これは主値積分であり
+\begin{align}
+	(\mbox{右辺})
+	&= -\frac{1}{(2\pi)^3} \left[
+		\lim_{\varepsilon \to +0} \int_{V_\varepsilon} \ddif^3 k
+		e^{i \vec{k} \cdot \vec{x}}
+		\mp \int \ddif^3 k
+		(k^2 - p^2) \delta(k^2 - p^2) e^{i\vec{k} \cdot \vec{x}}
+	\right]\\
+	&= -\frac{1}{(2\pi)^3} \int \ddif^3 k \left(
+		\mathcal{P} \mp (k^2 - p^2) \delta(k^2 - p^2) e^{i\vec{k} \cdot \vec{x}}
+	\right)
+\end{align}
+と書き直せる。
+ここで$\mathcal{P}$はCauchyの主値を表している。
+そうすれば
+\begin{align}
+	G(\vec{k}, \omega) = \frac{1}{(2\pi)^3}
+	\left(\mathcal{P} \frac{1}{k^2 - p^2} \mp i\pi \delta(k^2 - p^2) \right)
+\end{align}
+を得る。
+
+\noindent
+\textcolor{red}{（ここまで）}
+
+この表式に
+\begin{align}
+	\lim_{\varepsilon \to +0} \frac{1}{x \pm i\varepsilon}
+	= \mathcal{P} \frac{1}{x} \mp i\pi \delta(x)
+	\label{eq:Sato}
+\end{align}
+を用いれば、
+\begin{align}
+	G(\vec{k}, \omega)
+	= \lim_{\varepsilon \to 0} \frac{1}{k^2 - p^2 \pm i\varepsilon}
+\end{align}
+が得られる。
+これが極をずらすことができた理由である。
+では最後に等式\eqref{eq:Sato}を証明して終わりにしよう。
+まず
+\begin{align}
+	\mathcal{P} \int_{-\infty}^{\infty} \frac{f(x)}{x} \ddif x
+\end{align}
+を考える。
+\footnote{実際に\eqref{IntOfG}では$[-\infty, \infty]$で積分している。}
+ここで積分範囲を複素数に拡張して複素平面で下半円$C_-$、
+もしくは上半円$C_+$で積分する事を考える。
+このときに$x=0$を半径$\varepsilon$の上下の半円$C_{\pm \varepsilon}$で避けて積分し、
+最後に$\varepsilon \to 0$とすることにする。
+そうすればで$f/z$の積分が円周上で消えるとき
+\footnote{$e^{ikx}/(k^2-p^2)$は消える。これは2.2節で見る。}
+\begin{align}
+	\lim_{\varepsilon \to +0} \int_{C_\mp} \frac{f(z)}{z} \ddif z
+	&= \lim_{\varepsilon \to +0}
+	\left( \int_{-\infty}^{+\varepsilon} + \int_{+\varepsilon}^{\infty} \right)
+	\frac{f(x)}{x} \ddif x
+	+ \lim_{\varepsilon \to +0}
+	\int_{C_{\pm \varepsilon}} \frac{f(z)}{z} \ddif z \\
+	&= \mathcal{P} \int_{-\infty}^{\infty} \frac{f(x)}{x} \ddif x
+	+ \lim_{\varepsilon \to +0} i
+	\int_{\pm \pi}^{0} f\left( \varepsilon e^{i \theta} \right) \ddif \theta \\
+	&= \mathcal{P} \int_{-\infty}^{\infty} \frac{f(x)}{x} \ddif x
+	\mp i\pi f(0)
+\end{align}
+となるが、$f$が正則\footnote{$e^{ikx}$は明らかに正則。}という条件を満たしていれば、
+右辺は
+
+
+\end{document}

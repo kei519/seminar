@@ -1,0 +1,202 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+
+\title{\S\ 30.\ 急激に振動する場における運動}
+
+\begin{document}
+\maketitle
+
+ここではある場$U$の中で運動している物体に，速く振動するような力が働く場合を考える．
+
+まずは簡単のために，1次元での運動を考察する．
+不変な場$U$の中で，周期的に運動している物体があるとする．
+その周期の大きさを$T$としたときに，$\omega \ll 1/T$を満たす速い振動数で振動する力
+\begin{equation}
+	f(x, t) = f_1(x) \cos \omega t + f_2(x) \sin \omega t
+\end{equation}
+の作用も受ける状況を考える．
+この場合の変位は，滑らか（後で説明）な変位$X$に振動的な変位$\xi$が加わった，つまり
+\begin{equation}
+	x(t) = X(t) + \xi(t) \label{eq:x}
+\end{equation}
+と書けるような運動になると考えられる．
+ここでは$f$は小さいとはしないが，
+$\xi \ll X$と仮定して（そのような状況のみを考えて）考察を進める．
+
+このとき，$f$の周期$2\pi/\omega$で物理量$Q(t)$の時間平均を取ったものを，
+\begin{equation}
+	\overline{Q} = \int_t^{t + \frac{2\pi}{\omega}} {\rm d}t^{\prime} Q(t^{\prime})
+\end{equation}
+と表すことにすると，
+$f$はそれ自身周期$2\pi/\omega$の三角関数だから，$\overline{f} = 0$となる．
+また場$U$下での変位からの差$xi$は，
+周期的な力$f$によって引き起こされていると考えられるから，
+これも$\overline{\xi}=0$である．
+また$X$の周期はだいたい$T \gg 1/\omega$であるから，$2\pi/\omega$ではほぼ変化せず，
+$\overline{X} \simeq X$である．
+つまり$\overline{x} = X$となり，
+これは振動よりも遅い時間スケールで見れば，ほとんど$X$の運動しか見えないことになる．
+これが$X$が滑らかといった意味である．
+
+このとき，物体の運動方程式は
+\begin{equation}
+	m\ddot{x} = -\dif{U}{x} + f \label{eq:EOM}
+\end{equation}
+と書ける．
+ここで式\eqref{eq:x}を用いると，$\xi$の1次の項まで取って，
+\begin{align}
+	\pdif{U}{x}(X+\xi) &\simeq \dif{U}{x}(X) + \xi \dif{}{x}\dif{U}{x}(X) \\
+	&\simeq \dif{U}{X} + \xi \frac{{\rm d}^2 U}{{\rm d}x^2} \qquad \\
+	f(X + \xi, t) &\simeq f(X, t) + \xi\pdif{f}{x} \\
+	&\simeq f(X, t) + \xi\pdif{f}{X}
+\end{align}
+となる（ここで最後の等式において$x = X + \xi \simeq X$を用いた）．
+すると式\eqref{eq:EOM}は
+\begin{equation}
+	m\ddot{X} + m\ddot{\xi} =
+	-\dif{U}{X} - \xi \frac{{\rm d}^2 U}{{\rm d}X^2}
+	+ f(X, t) + \xi \pdif{f}{X}
+	\label{eq:EOM2}
+\end{equation}
+と書ける．
+
+$\xi$すなわち微小振動項は，振動している力によって起こされる変位であると考えられるから，
+\eqref{eq:EOM2}からその項だけを取り出して，
+\begin{equation}
+	m\ddot{\xi} = f(X, t)
+\end{equation}
+が成り立つ．
+ここで$\xi$の他の項については，微小な$\xi$が掛かっているため無視できる．
+$\ddot{\xi}$は速く変化する（$\omega^2$に比例する）ため，無視できない．
+これは$X$の変化が$\xi$に比べて遅いから，簡単に解けて
+\begin{equation}
+	\xi = -\frac{f}{m\omega^2}
+\end{equation}
+となる．
+
+ここまでの関係を用いて式\eqref{eq:EOM2}を整理すると，
+\begin{equation}
+	m\ddot{X} = -\dif{U}{X} - \xi \frac{{\rm d}^2U}{{\rm d}X^2} + \xi \pdif{f}{X}
+\end{equation}
+となる．
+この式の時間平均を取ると，右辺の第2項は$X$が時間でほぼ変わらないことを考慮すると，
+$\xi$に比例する項であるから，0になる．
+したがって，
+\begin{equation}
+	m\ddot{X} = -\dif{U}{X} + \overline{\xi \pdif{f}{X}}
+	= -\dif{U}{X} - \frac{1}{m\omega^2}\overline{f\pdif{f}{X}}
+\end{equation}
+と書き直せる．
+これは有効ポテンシャル
+\begin{equation}
+	U_{\mbox{有効}} = U + \frac{1}{2m\omega^2} \overline{f^2}
+	= U + \frac{1}{4m\omega^2}(f_1^2 + f_2^2)
+	\label{eq:Ueff}
+\end{equation}
+を用いると，
+\begin{equation}
+	m\ddot{X} = -\dif{U_{\mbox{有効}}}{X}
+\end{equation}
+と書ける．
+式\eqref{eq:Ueff}において，
+\begin{align}
+	&\int_{t}^{t+T} {\rm d}t^{\prime} \cos^2 \frac{2\pi t^{\prime}}{T}
+	= \int_{t}^{t+T} {\rm d}t^{\prime} \sin^2 \frac{2\pi t^{\prime}}{T}
+	= \frac{T}{2} \\
+	&\int_{t}^{t+T} {\rm d}t^{\prime} \sin \frac{2\pi t}{T} \cos \frac{2\pi t^{\prime}}{T}
+	= 0
+\end{align}
+と，$x \simeq X$が時間的に変動しないことを用いた．
+
+同様にして，
+\begin{equation}
+	\overline{\dot{\xi}^2} = \frac{f_1^2 + f_2^2}{2m^2 \omega^2}
+\end{equation}
+と書き直せるから，
+これを式\eqref{eq:Ueff}に用いると，
+\begin{equation}
+	U_{\mbox{有効}} = U + \frac{m}{2} \overline{\dot{\xi}^2}
+\end{equation}
+とも表される．
+これは結局，まるで変動する場が存在して，
+ポテンシャルがその振幅の2乗に比例するかのような運動が行われることになる．
+
+質量$m$が場所$x$に依存する場合（デカルト座標を選ばなかった場合など）は，
+教科書には「計算がいくらか長くなる」と書かれているが，
+$\xi$を求める段階では$f$の$x$依存性のように，時間間隔が短いため定数と見なせて，
+それ以後では時間平均を取るため，
+ほぼ変更を受けずに有効ポテンシャルが得られると考えられる．
+
+一般座標$q_i$で書かれていた場合，振動する力がないときのラグランジアン$L$は
+\begin{equation}
+	L = \frac{1}{2}a_{ij} \dot{q_i} \dot{q_j} - U(q)
+\end{equation}
+であるから，そこに座標$q_i$に力
+\begin{equation}
+	f_i = f_i^{(1)} \cos \omega t + f_i^{(2)} \sin \omega t
+\end{equation}
+が掛かっている状況を考えると，運動方程式は
+\begin{equation}
+	\dif{}{t} \left[ a_{ij}(Q) \left( \dot{Q_j} + \dot{\xi_j} \right) \right]
+	= -\pdif{U}{Q_i} - \xi_j \frac{\partial^2 U}{\partial Q_j \partial Q_i}
+	+ f_i (Q, t) + \xi_j \pdif{f_i}{Q_j}
+\end{equation}
+となる．
+ここで1次元の場合と同じように$Q$，$\xi$を定義し，微小量$\xi$の2次以降を無視した．
+また，同じように$\xi$についての方程式を抜き出すと，
+\begin{equation}
+	\dif{}{t} \left( a_{ij}(Q) \dot{\xi_j} \right) = f_i(Q, t)
+\end{equation}
+を得るが，ここでも$Q$にのみ依存する項は，$Q$が定数であるとみなしてよく，結局
+\begin{align}
+	\ddot{\xi_j} = a^{-1}_{ji} f_i(Q, t) \\
+	\xi_i = -\frac{a^{-1}_{ij} f_j}{\omega^2} \label{eq:xi}
+\end{align}
+を得る．ここで$a^{-1}_{ij}$は$a_{ji}$の逆行列である．
+すると，時間平均を取って$Q$についての方程式
+\begin{equation}
+	\dif{}{t} \left( a_{ij}(Q) \dot{Q_j} \right) =
+	-\pdif{U}{Q_i} - \frac{a^{-1}_{jk}(Q)}{\omega^2}
+	\overline{ f_k \pdif{f_i}{Q_j}}
+\end{equation}
+が同様にして得られる．
+この$a^{-1}$は一般に$Q$依存性のみがあるから，
+時間平均を取っても元の$a^{-1}(Q)$に一致する．
+
+これも同様に有効ポテンシャル
+\begin{equation}
+	U_{\mbox{有効}} = U + \frac{a^{-1}_{ij}}{2\omega^2} \overline{f_i f_j}
+\end{equation}
+を導入すればよい．
+また，式\eqref{eq:xi}を用いると
+\begin{align}
+	&f_i = a_{ij} \omega^2 \xi_j \\
+	&\overline{f_i f_j} = \frac{1}{2}
+	\left( f_i^{(1)} f_j^{(1)} + f_i^{(2)} f_j^{(2)} \right)
+	= \omega^2 a_{ik} a_{jl} \overline{\dot{\xi_k} \dot{\xi_l}} \\
+	&U_{\mbox{有効}} = U +
+	\frac{1}{2} a^{-1}_{ij} a_{ik} a_{jl} \overline{\dot{\xi_k} \dot{\xi_l}}
+	= U + \frac{a_{ij}}{2} \overline{\dot{\xi_i} \dot{\xi_j}}
+\end{align}
+と書ける．
+
+\end{document}

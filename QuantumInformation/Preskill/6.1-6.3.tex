@@ -1,0 +1,759 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{\string~/preamble}
+
+\usepackage[inline]{enumitem}
+\renewcommand{\labelenumi}{(\theenumi)}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\makeatletter
+\renewcommand{\ALG@name}{アルゴリズム}
+\makeatother
+
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Ord}{Ord}
+
+\title{6.1-6.3}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{5}
+\section{Quantum Algorithms}
+\subsection{Some Quantum Algorithms}
+
+\subsection{Periodicity}
+\subsubsection{Finding the period}
+確率$4/\pi^2$（$\simeq 0.405$）以上の確率で
+\begin{align}
+	\frac{k}{r} - \frac{1}{2N} \leq \frac{y}{N} \leq \frac{k}{r}
+	+ \frac{1}{2N},
+	\quad 0 \leq k \leq r-1
+	\label{yの条件}
+\end{align}
+を満たす$y$を得る。
+
+もし$r< M \ll N$であることを予め知っていれば、
+$r < M$であることのみから推測できる
+取りうる$k/r$の値どうしの差は$1/M^2$よりも大きくなる。
+なぜなら、
+$\left| \frac{a}{b} - \frac{c}{d} \right|
+= \frac{|ad - bc|}{bd} > \frac{1}{M^2}$
+となるからである。
+したがって$N \geq M^2$であれば、
+$y/N$から幅$1/N \leq 1/M^2$だけずれたものである$k/r$はただ１つに
+定まることになる。
+つまり$k/r$は$y/N$から効率的に求めることができる。
+
+ここまでのことから、
+我々は確率$4/\pi^2$以上で
+大雑把には等確率で各$k \in \{0, 1, \dots, r-1\}$について$k/r$を得る。
+この$k$と$r$が互いに素であればこれで$r$を見つけられる。
+この$r$が実際に解となっているかはオラクルを用いれば簡単に確かめられる。
+もし$\gcd (k, r) \neq 1$であればこれは失敗し、
+実際に得られていたのは$r$の約数（$r_1$とする）であったことになる。
+
+もし失敗した場合の原因は
+\begin{enumerate*}
+	\item $-r/2 \leq yr \ (\mathrm{mod} \ N) \leq r/2$でない
+	\item $k$と$r$が互いに素でない
+\end{enumerate*}
+の２つが考えられる。
+これら２つの場合について、
+\begin{enumerate}
+	\item \label{条件を満たさないyの場合}
+	$-r/2 \leq yr \ (\mathrm{mod} \ N) \leq r/2$の近くの
+	$y$である可能性があるから、
+	少しだけ$y$を変えて試してみる。
+	\item \label{互いに素でない場合}
+	$r_1$の定数倍
+	（つまり$\gcd (k, r)$倍、そこまで大きくないと思われる）で試してみる。
+\end{enumerate}
+という対処法がある。
+これを行っても失敗する場合には、
+アルゴリズムを最初からやり直せばよい。
+
+このようにアルゴリズムを繰り返したときに、
+(\ref{条件を満たさないyの場合})は成功確率が$4/\pi^2$以上であるから
+数回の試行で解決する。
+そこで(\ref{互いに素でない場合})のときにどうであるか考えてみる。
+先の続きで２回目に得られた$y$から得たものが$k'/r$で、
+$k'$と$r$がまた互いに素でなかった場合どうなるかを考えてみる。
+このときは１回目と同様に$r$の約数（$r_2$とする）が得られていたことになるが、
+もしこのとき$k$と$k'$が互いに素であれば、
+\begin{align}
+	\frac{k}{r} = \frac{l}{r_1}, \quad l = \frac{k}{\gcd (k, r)} \\
+	\frac{k'}{r} = \frac{l'}{r_2}, \quad l' = \frac{k'}{\gcd (k', r)}
+\end{align}
+であるから
+$r = m r_1 = m' r_2$であり$m$と$m'$も互いに素、
+つまり
+\begin{gather}
+	\frac{m}{m'} = \frac{r_2}{r_1}
+	= \frac{r_2 / \gcd(r_1, r_2)}{r_1 / \gcd (r_1, r_2)} \\
+	m = \frac{r_2}{\gcd (r_1, r_2)}, \quad
+	m' = \frac{r_1}{\gcd (r_1, r_2)}
+\end{gather}
+でなければならず、
+\begin{align}
+	r = \frac{r_1 r_2}{\gcd (r_1, r_2)} = \lcm (r_1, r_2)
+\end{align}
+ということになる。
+こうなれば成功である。
+結局$k$と$k'$が互いに素である確率が分かればよい。
+$k$と$k'$が互いに素であるのは$k$と$k'$が共通の素因数を持たない場合である。
+ある自然数$k$がある素数$p$の倍数である確率は$1/p$であるから、
+ランダムに選んだ２つの自然数$k$、$k'$が互いに$p$の倍数である確率は$1/p^2$。
+つまり$k$と$k'$が互いに素である確率は
+\begin{align}
+	\Pr \left[ k, k' \text{が互いに素} \right]
+	= \prod_{p: 素数} \left( 1 - \frac{1}{p^2} \right)
+	= \frac{1}{\zeta(2)}
+	= \frac{6}{\pi^2}
+	\simeq 0.607
+\end{align}
+と高いことが分かる。
+したがって\ref{互いに素でない場合}についても数回の試行で成功する。
+以上からこのアルゴリズムは効率的に（大体定数回数で）
+周期を求められることが分かる。
+
+\begin{tcolorbox}[
+enhanced,
+colback = white,
+boxrule = 0.5pt,
+arc=2mm,
+breakable
+]
+	\underline{補足}
+
+	\begin{align}
+		\zeta(2) = \sum_{n = 1}^\infty \frac{1}{n^2}
+	\end{align}
+	であるがここで
+	\begin{align}
+		\left( 1 - \frac{1}{2^2} \right) \zeta(2)
+		&= \left( \frac{1}{1^2} + \frac{1}{2^2} + \frac{1}{3^2}
+		+ \cdots \right)
+		- \left( \frac{1}{2^2} + \frac{1}{4^2} + \frac{1}{6^2}
+		+ \cdots \right) \\
+		&= 1 + \frac{1}{3^2} + \frac{1}{5^2} + \cdots \\
+		\left( 1 - \frac{1}{3^2} \right)
+		\left( 1 - \frac{1}{2^2} \right) \zeta(2)
+		&= \left( \frac{1}{1^2} + \frac{1}{3^2} + \frac{1}{5^2}
+		+ \cdots \right)
+		- \left( \frac{1}{3^2} + \frac{1}{9^2} + \frac{1}{15^2}
+		+ \cdots \right) \\
+		&= 1 + \frac{1}{5^2} + \frac{1}{7^2} + \cdots
+	\end{align}
+	となっていくことが分かる。
+	つまり順次、
+	素数$p$について$1 - 1/p^2$を掛けていけば
+	分母が$p$の倍数の平方であるものは消えていく。
+	したがって最終的に
+	\begin{align}
+		\prod_{p: \text{素数}} \left( 1 - \frac{1}{p^2} \right) \zeta(2)
+		= 1
+	\end{align}
+	が得られる。
+\end{tcolorbox}
+
+\subsubsection{From FFT to QFT}
+量子Fourier変換（QFT）の実装について考える。
+Fourier変換は
+\begin{align}
+	\sum_x f(x) \Ket{x}
+	\to \sum_y \left( \frac{1}{\sqrt{N}}
+	\sum_x e^{2\pi i xy /N} f(x) \right) \Ket{y}
+	\label{eq:FT}
+\end{align}
+を行うものである。
+これは
+\begin{gather}
+	A_{yx} = e^{2\pi i xy/N} \\
+	v_x = f(x)
+\end{gather}
+を用いて$A \vec{v}$を求めるのに相当する。
+したがって古典計算機を用いて愚直に計算すると$O (N^2) = O(4^n)$必要である。
+しかし高速Fourier変換（FFT）アルゴリズムが知られており、
+それを用いれば$O (N \log N) = O (n 2^n)$で計算できる。
+
+QFTはFFTと比較しても早く、
+式\eqref{eq:FT}のように重ね合わせ状態で出てきてしまうが
+$O ( (\log N)^2 ) = O(n^2)$で計算できる。
+それを今から説明する。
+まず式\eqref{eq:FT}のようにするためには
+\begin{align}
+	\Ket{x} \to \frac{1}{\sqrt{N}} \sum_y e^{2\pi i xy/N} \Ket{y}
+\end{align}
+という操作さえできれば十分であるから、
+それをどう実装するかを考える。
+そのために$x$、$y$などの整数をバイナリ表現（２進数表示）して考える。
+すると
+\begin{gather}
+	x = x_{n-1} 2^{n-1} + \cdots + x_1 2^1 + x_0 \\
+	y = y_{n-1} 2^{n-1} + \cdots + y_1 2^1 + y_0 \\
+	\begin{aligned}
+	\frac{xy}{N} &= \frac{xy}{2^n} \\
+	&= (\mathrm{int}) + y_{n-1} 2^{-1} \cdot x_0
+	+ y_{n-2} 2^{-2} \cdot \left( x_{1} 2^1 + x_0 \right)
+	+ \cdots
+	+ y_{0} 2^{n} \cdot \left( x_{n-1} 2^{n-1} + \cdots + x_0 \right) \\
+	&= (\mathrm{int}) + y_{n-1} \cdot (.x_0)
+	+ y_{n-2} \cdot (.x_1 x_0) + \cdots
+	+ y_0 \cdot (.x_{n-1} \cdots x_0)
+	\end{aligned}
+\end{gather}
+となる。
+これらを用いるとQFTは
+\begin{align}
+	\Ket{x}
+	&\to \frac{1}{\sqrt{2^n}} \bigotimes_{k=0}^{n-1}
+	\sum_{y_k = 0}^1 e^{2 \pi i y_{k} \cdot (.x_{n-1-k} \cdots x_{0})}
+	\Ket{y_k} \\
+	&= \bigotimes_{k=0}^{n-1} \frac{1}{\sqrt{2}}
+	\left( \Ket{0} + e^{2 \pi i (.x_{n-1-k} \cdots x{0})} \Ket{1} \right) \\
+	&= \frac{1}{\sqrt{2}}
+	\left( \Ket{0} + e^{2 \pi i (.x_0)} \Ket{1} \right)
+	\otimes \frac{1}{\sqrt{2}}
+	\left( \Ket{0} + e^{2 \pi i (.x_1 x_0)} \Ket{1} \right)
+	\otimes \cdots
+	\otimes \frac{1}{\sqrt{2}}
+	\left( \Ket{0} + e^{2\pi i (.x_{n-1} \cdots x_0)} \Ket{1} \right)
+\end{align}
+を実装すれば良いことになる。
+これは
+\begin{gather}
+	H : \Ket{x}
+	\to \frac{1}{\sqrt{2}} \left( \Ket{0} + (-1)^{x} \Ket{1} \right)
+	= \frac{1}{\sqrt{2}} \left( \Ket{0} + e^{2\pi i (.x)} \Ket{1} \right) \\
+	R_d = \left( \begin{array}{cc}
+		1 & 0 \\
+		0 & e^{i \pi /2^d}
+	\end{array} \right), \quad
+	\Lambda (R_d) \Ket{x} \Ket{y}
+	= e^{i \pi xy / 2^d} \Ket{x}\Ket{y}
+\end{gather}
+という２つのゲートを使うことで実装できる。
+そのときゲートの数はアダマールが$n$個、
+コントロール$R_d$ゲートが$_n C_2 = n(n-1)/2$個必要であるから
+結局QFTの計算は$O (n^2) = O((\log N)^2)$で実装できる。
+
+また$d \leq m$までのコントロール$R_d$ゲートのみを使うことにすると、
+$xy/N$の計算で$y$の各ビットごとに最大
+\begin{align}
+	\sum_{k=m+1}^n 2^{-k} = 2^{-m} - 2^{-n} \leq 2^{-m}
+\end{align}
+の誤差が出てしまうから、
+全体として$n 2^{-m}$以下の誤差が出てしまう。
+そこで$m = \log (n / \varepsilon)$としておけば誤差を$\varepsilon$で抑えつつ、
+$O (n \log n) = O(\log N \log\log N )$で計算できるようになる。
+
+またQFTの直後に計測してしまう場合は単一のビットにのみ作用するゲートのみで
+実装できる。
+コントロール$R_d$がコントロールビットとターゲットビットを
+入れ替えても良いことに注目して入れ替えた回路を考える。
+するとビットにアダマールゲートが掛かったあとはコントロールしか作用しないため、
+アダマールゲートを掛けた直後に測定してしまっても問題ない。
+したがってその結果を用いて、
+それ以下のビットに$R_d$ゲートを作用させるかどうか決定することにすれば実装できる。
+
+\subsection{Factoring}
+\subsubsection{Factoring as period finding}
+素因数分解は周期発見問題に還元できる。
+その方法を示す。
+$N$を素因数分解するとする。
+まず擬似ランダムに$a < N$を選ぶ。
+そしてユークリッドの互除法（古典計算機で効率的に計算できる）を
+用いて$gcd(a, N)$を計算する。
+もし$gcd(a, N) \neq 1$であればそれが$N$の因数となっているから、
+$\gcd(a, N) = 1$の場合を考える。
+
+\begin{tcolorbox}[
+enhanced,
+colback = white,
+boxrule = 0.5pt,
+arc=2mm,
+breakable
+]
+	\underline{補足}
+
+	ユークリッドの互除法が実際に効率的に計算できるかを確認する。
+	これは$\gcd(N_1, N_2)$（ただし$N_1 \geq N_2$を計算するためにまず
+	$N_1$を$N_2$で割った余りを$R_1$、
+	$N_2$を$R_1$で割ったあまりを$R_2$とし、
+	その後は$R_j$を$R_{j+1}$で割ったあまりを$R_{j+2}$として
+	$R_j = 0$になるまで続ける。
+	というものである。
+	ここで$R_j$の性質から
+	\begin{align}
+		R_j = q R_{j+1} + R_{j+2}, \quad
+		q \geq 1, \quad R_{j+1} > R_{j+2}
+	\end{align}
+	であるから
+	\begin{align}
+		R_j \geq (q + 1) R_{j+2}
+		> 2 R_{j+2}
+	\end{align}
+	となり２回計算するごとに半分以下になっていくことが分かる。
+	したがって$R_{2j+1} < \left( \frac{1}{2} \right)^j N_1$である。
+	これが1以下になるのは$j = \log N_1$のときであるから、
+	結局$O(\log N)$回ループを回す必要がある。
+	そして１回のループで割り算を行っているが、
+	アルゴリズム\ref{割り算のアルゴリズム}から分かるように
+	１回の割り算の計算量オーダーは$O((\log N)^2)$である。
+	つまりユークリッドの互除法そのものには$O((\log N)^3)$の時間がかかる。
+\end{tcolorbox}
+
+
+
+\begin{algorithm}[H]
+	\caption{$a \div b = q \cdots r$}
+	\label{割り算のアルゴリズム}
+	\begin{algorithmic}[1]
+		\STATE $i \leftarrow 0$
+		\WHILE{$a - b \geq 0$}
+		\STATE $b$を1ビット左にシフト
+		\STATE $i \leftarrow i + 1$
+		\ENDWHILE
+		\STATE $b$を1ビット右にシフト
+		\STATE $a \leftarrow a - b$
+		\STATE $q \leftarrow 1$
+		\WHILE{$i > 0$}
+		\STATE $q$を1ビット左にシフト
+		\STATE $b$を1ビット右にシフト
+		\IF{$a - b \geq 0$}
+		\STATE $q \leftarrow q + 1$
+		\STATE $a \leftarrow a - b$
+		\ENDIF
+		\STATE $i \leftarrow i - 1$
+		\ENDWHILE
+		\STATE $r \leftarrow a$
+	\end{algorithmic}
+\end{algorithm}
+
+$N$と互いに素な$N$未満の自然数の集合$A$は
+$N$を法とした剰余の下での積で群をなしている。
+\begin{enumerate*}
+	\item 積について閉じていることは$a, b \in A$を取ってきたとき、
+	$a$、$b$はそれぞれ$N$に互いに素なことから$ab$も$N$と互いに素で
+	あることから分かる。
+	\item また単位元は1である。
+	\item 最後に逆元が存在するのを示すには、$ab \ (\mathrm{mod} \ N)$が
+	単射であることを示せばよい。
+	$b \neq c \in A$について$ab \equiv ac \ (\mathrm{mod} \ N)$
+	とすると
+	$a(b - c) = kN$となる整数$k$が存在することになるが、
+	これは$a$と$N$が互いに素なことから
+	$b - c = lN$となる整数$l$が存在することと同値である。
+	このような整数は$l = 0$しかあり得ない。
+	これは矛盾。
+\end{enumerate*}
+したがってこの群の元$a$にはそれぞれ位数とよばれる自然数$r$が存在して
+\begin{align}
+	a^r \equiv 1 \ (\mathrm{mod} \ N)
+\end{align}
+となる。
+そこで
+\begin{align}
+	f_{N, a} (x) = a^x \ (\mathrm{mod} \ N)
+\end{align}
+とすればこの$r$を見つけることは$f$の周期を発見することに帰着する
+（そしてこれは量子アルゴリズムで効率的に求められる）。
+これが素因数分解とつながっているのは、
+$a^{r} \equiv 1 \ (\mathrm{mod} \ N)$から
+\begin{align}
+	\left( a^{r/2} + 1 \right) \left( a^{r/2} - 1 \right)
+	= kN
+\end{align}
+となる整数$k$が存在するから、
+のちに述べるようにここから効率的に$N$の因数を見つけられるからである。
+
+したがってあとは$f_{N, a}$をゲートを用いて効率的に計算できるかを確認すればよい。
+パッと見は難しそうだが$x < 2^m$のとき
+\begin{align}
+	x = x_{m-1} 2^{m-1} + \cdots + x_1 2 + x_0
+\end{align}
+とバイナリ表示すると
+\begin{align}
+	a^x \ (\mathrm{mod} \ N)
+	= \left( a^{2^{m-1}} \right)^{x_{m-1}} \left( a^{2^{m-2}} \right)^{x_{m-2}}
+	\cdots \left( a \right)^{x_0} \ (\mathrm{mod} \ N)
+\end{align}
+と表されるから、
+結局$a^{2^j}$が分かっていれば効率的に求めることができる。
+これは古典でも簡単に求められる。
+なぜなら
+\begin{align}
+	a^{2^j} \ (\mathrm{mod} \ N) = \left( a^{2^{j-1}} \right)^2 \
+	(\mathrm{mod} \ N)
+\end{align}
+であるから
+これを$m-1$回繰り返すだけで$a^{2j}$の表を
+得られるからである。
+このルーチンにかかる時間は、
+１回の操作ごとに掛け算を行うため$O ((\log N)^2)$かかり、
+$0 \leq x < N$より$m < \log N$であるから
+ルーチンの回数も$O (\log N)$となる。
+したがって、
+この表を元に実装した$a^{2^j}$倍の量子ゲートを
+コントロールゲートとして用いれば$a^x\ (\mathrm{mod}\ N)$は計算できることになる。
+
+そうして周期$r$を見つけられたとする。
+この$r$が偶数であれば先に述べたように
+$\left( a^{r/2} + 1 \right) \left( a^{r/2} - 1 \right)$は
+$N$で割り切れることになる。
+このとき
+\begin{align}
+	\left( a^{r/2} - 1 \right) \equiv 0 \ (\mathrm{mod} \ N)
+\end{align}
+であれば位数が$r$であることに矛盾するから、
+これは起こらない。
+そこで考えられるのは
+$a^{r/2} + 1$が$N$で割り切れる場合と、
+これと$a^{r/2} - 1$と因数を分け合っている場合である。
+前者の場合は$N$の倍数を得ただけであるから失敗したことになる。
+しかし後者の場合には$\gcd (N, 2^{r/2} \pm 1)$を計算することで
+$N$の約数を見つけられる。
+
+以上のことから素因数分解が失敗するのは
+\begin{enumerate}
+	\item $r$が奇数
+	\item $a^{r/2} + 1 = kN$
+\end{enumerate}
+の場合である。
+これらが起こらないのはどのくらいの確率かを考える。
+
+ここからは$N$は２つの異なる素数$p_1$、$p_2$の積
+\begin{align}
+	N = p_1 p_2
+\end{align}
+である場合を考える。
+実はこれは最悪のケースになっている（後述）。
+このとき
+\begin{gather}
+	a \equiv a_1 \ (\mathrm{mod} \ p_1) \\
+	a \equiv a_2 \ (\mathrm{mod} \ p_2)
+\end{gather}
+となる$a_1 < p_1$、$a_2 < p_2$がただ１つ存在する。
+また逆にこの$a_1$、$a_2$を定めれば$a < p_1 p_2$はただ１つに定まる。
+唯一性は今までの議論から明らかである。
+存在性は互いに素な整数$N_1$、$N_2$に関して
+\begin{align}
+	x N_1 + y N_2 = 1
+\end{align}
+を満たす整数解$(x, y)$が存在する（ユークリッドの互除法から）ため、
+\begin{align}
+	x p_1 + y p_2 = 1
+\end{align}
+を満たす整数の組$(x, y)$を持ってきて
+\begin{align}
+	a = a_1 y p_2 + a_2 x p_1
+\end{align}
+と定めれば
+\begin{gather}
+	a \equiv a_1 y p_2 \equiv a_1 \ (\mathrm{mod} \ p_1) \\
+	a \equiv a_2 x p_1 \equiv a_2 \ (\mathrm{mod} \ p_2)
+\end{gather}
+となる。
+したがって$a$を$N = p_1 p_2$で割った余りで取り替えればよい。
+つまり$a$を１つ選ぶことと、$a_1$、$a_2$をそれぞれ選ぶことは１対１に対応する。
+
+このとき$a^r \equiv 1 \ (\mathrm{mod} \ p_1 p_2)$であるから
+\begin{align}
+	\begin{aligned}
+		a^r = kp_1 p_2 + 1 &\equiv 1 \ (\mathrm{mod} \ p_1) \\
+		&\equiv 1 \ (\mathrm{mod} \ p_2)
+	\end{aligned}
+	\label{pを法とした合同式}
+\end{align}
+となり
+\begin{gather}
+	a_1^r \equiv 1 \ (\mathrm{mod} \ p_1) \\
+	a_2^r \equiv 1 \ (\mathrm{mod} \ p_2)
+\end{gather}
+を得る。
+ここから$p_1$を法とした下での$a_1$の位数を$r_1$、
+$p_2$を法とした下での$a_2$の位数を$r_2$とすると、
+\begin{align}
+	r &= k r_1 \\
+	&= l r_2
+\end{align}
+でなければならないことが分かる。
+つまり$r$は$\lcm (r_1, r_2)$の整数倍でなければならない。
+ここで$a^{\lcm (r_1, r_2)}$を考えると、
+\begin{align}
+	a^{\lcm (r_1, r_2)} &\equiv 1 \ (\mathrm{mod} \ p_1) \\
+	&\equiv 1 \ (\mathrm{mod} \ p_2)
+\end{align}
+つまり
+\begin{align}
+	a^{\lcm (r_1, r_2)} - 1 &= k p_1\\
+	&= lp_2 \\
+	&= mp_1 p_2 \quad (\because \text{$p_1$、$p_2$は互いに素})
+\end{align}
+となるから
+\begin{align}
+	a^{\lcm (r_1, r_2)} \equiv 1 \ (\mathrm{mod} \ p_1 p_2)
+\end{align}
+でもあり、
+$r = \lcm (r_1, r_2)$である。
+ここで元の問題に戻ると$a$が奇数であった場合には失敗するから、
+$r_1$、$r_2$が両方奇数であれば失敗する。
+しかし$r_1$、$r_2$のどちらかが偶数であればまだ続けられる。
+その場合には式\eqref{pを法とした合同式}から以下の３通りが考えられる。
+\begin{enumerate}
+	\item $a^{r/2} \equiv -1 \ (\mathrm{mod} \ p_1)$かつ
+	$a^{r/2} \equiv -1 \ (\mathrm{mod} \ p_2)$
+	\label{両方-1}
+	\item $a^{r/2} \equiv +1 \ (\mathrm{mod} \ p_1)$かつ
+	$a^{r/2} \equiv -1 \ (\mathrm{mod} \ p_2)$
+	\label{p1では1}
+	\item $a^{r/2} \equiv -1 \ (\mathrm{mod} \ p_1)$かつ
+	$a^{r/2} \equiv +1 \ (\mathrm{mod} \ p_2)$
+	\label{p2では1}
+\end{enumerate}
+式\eqref{pを法とした合同式}からは
+$a^{r/2} \equiv +1 \ (\mathrm{mod} \ p_1)$かつ
+$a^{r/2} \equiv +1 \ (\mathrm{mod} \ p_2)$
+の状況も考えられるが、
+このときは
+\begin{align}
+	a^{r/2} - 1 &= kp_1 \\
+	&= lp_2 \\
+	&= m p_1 p_2
+\end{align}
+から$a^{r/2} \equiv 1 \ (\mathrm{mod} p_1 p_2)$となり
+$r$が位数であることに矛盾するため起こり得ない。
+
+(\ref{両方-1})の場合は上と同じ議論から
+$a^{r/2} \equiv -1 \ (\mathrm{mod} \ N)$となり失敗する。
+(\ref{p1では1})、(\ref{p2では1})の場合には成功する。
+
+これらを踏まえると
+\begin{gather}
+	r_1 = 2^{c_1} \cdot (\mathrm{odd}) \\
+	r_2 = 2^{c_2} \cdot (\mathrm{odd}')
+\end{gather}
+と書くことができるが、
+これで$c_1 = c_2$であればどうなるかを考える。
+このときは$r = r_1 \cdot (\mathrm{odd}) = r_2 \cdot (\mathrm{odd})$
+となるから、
+\begin{gather}
+	a^{r/2} \equiv \left( a^{r_1/2} \right)^{(\mathrm{odd})}
+	\equiv (-1)^{(\mathrm{odd})} \equiv -1 \
+	(\mathrm{mod} \ p_1) \\
+	a^{r/2} \equiv \left( a^{r_2/2} \right)^{(\mathrm{odd})}
+	\equiv (-1)^{(\mathrm{odd})} \equiv -1 \
+	(\mathrm{mod} \ p_2)
+\end{gather}
+であり(\ref{両方-1})の失敗する場合になっている。
+次に$c_1 > c_2 \geq 0$であればどうなるかを見る。
+このとき$r = 2 r_2 \cdot (\mathrm{int})$と書けるから、
+\begin{align}
+	a^{r/2} \equiv (a^{r_2})^{(\mathrm{int})} \equiv 1 \
+	(\mathrm{mod} \ p_2)
+\end{align}
+であり成功する。
+$c_1 < c_2$であれば1と2を入れ替えれば$c_1 > c_2$のときと同じである。
+したがって$c_1 \neq c_2$であれば成功する。
+
+つまりどのくらいの確率で$c_1 \neq c_2$となるかを考えれば良い。
+このためには素数$p$未満の自然数は$p$を法とした積のもとで
+位数$p - 1$の巡回群となっていることを用いる。
+位数$p - 1$の巡回群とはある元$a$が存在し、
+群の集合が
+$\{ a^1, a^2, \cdots, a^{p-2}, a^{p-1} (= 1) \}$と一致することを言う。
+またこの元$a$のことを原始元と呼ぶ。
+
+$p - 1 = 2^k s$と表す。
+ここで$s$は奇数である。
+そして位数$p - 1$の巡回群の全ての元についての位数を考えれば良い。
+ここで簡単のために１番悪い場合（後述）である$k = 1$の場合を考える。
+そしてその原始元を$b$とする（つまりその位数は$2s$）。
+するとこの群から元をランダムに選ぶときには結局$b$の何乗であるかだけを
+考えれば良い。
+すると$b$の偶数乗の位数は奇数、
+奇数乗の位数は偶数となる。
+つまりランダムに選んだ元の位数$r$は$r = 2^c \cdot (\mathrm{odd})$、
+$c \in \{0, 1\}$と書けるが、
+この$c$は$b$の偶数乗か奇数乗かということにのみ依っているから当確率で起こる。
+したがってある素数$p$を法とした下での積の位数は確率$1/2$で偶数、
+確率$1/2$で奇数ということになる。
+したがって$p_1 - 1 = 2s_1$、
+$p_2 - 1 = 2s_2$のとき成功するのは
+片方の位数が偶数、
+もう片方の位数が奇数である場合であるから、
+確率$1/2$で成功する。
+
+もし一般に$p_1 = 2^{k_1} s_1$、
+$p_2 = 2^{k_2} s_2$と表したときに$k_1, k_2 = 1$とは限らないとしたら、
+$a_1$、$a_2$が原始元の$2^{c_1} \cdot (\mathrm{odd})$、
+$2^{c_2} \cdot (\mathrm{odd})$乗であった場合
+$c_1 \in \{0, 1, \cdot, k_1\}$、
+$c_2 \in \{0, 1, \cdot, k_2\}$は等確率で選ばれる。
+そして位数は$2^{k_1 - c_1} \cdot (\mathrm{odd})$、
+$2^{k_2 - c_2} \cdot (\mathrm{odd})$となる。
+したがって失敗するのは$k_1 - c_1 = k_2 - c_2$
+つまり$c_1 - c_2 = k_1 - k_2$のときであるから、
+そうなるのは$\min (k_1, k_2) + 1$通りであることが分かる。
+だから失敗する確率は
+\begin{align}
+	\frac{\min (k_1, k_2) + 1}{(k_1 + 1) (k_2 + 1)}
+	= \begin{cases}
+		\displaystyle \frac{1}{k_1 + 1} & k_1 \geq k_2 \\
+		\displaystyle \frac{1}{k_2 + 1} & k_1 \leq k_2
+	\end{cases} \quad
+	\leq \frac{1}{2}
+\end{align}
+であり確かに$k_1 = k_2 = 1$の場合が最悪のケースになっている。
+
+また$N$が３つ以上の異なる素数の積である場合は、
+同じようなことをすれば良いと思われるが、
+$r_1$、$r_2$、$r_3$のうち１つでも偶数があれば良く、
+確率が恐らく向上することになるため、
+$N = p_1 p_2$が最悪のケースであるのだと考えられる。
+最も最悪なケースである$N = p^\alpha$は
+そもそもこのようなアルゴリズムを用いることができない。
+しかしこのような場合は
+\begin{align}
+	\alpha = \frac{\log N}{\log p} \leq \log N
+\end{align}
+であるから$N$の2から$\log N$乗根までを計算して整数になれば
+それが$p$ということになる。
+冪乗根自体の計算はニュートン法でできる（らしい）し、
+出てきた解が実際の解かどうかもすぐ計算できる。
+
+\subsubsection{RSA}
+上記の素因数分解アルゴリズムが実際に実装されると、
+現在広く使われているRSA公開鍵暗号が安全でなくなる。
+そのことについて説明する。
+
+まず共通鍵暗号と公開鍵暗号について説明する。
+共通鍵暗号はその名の通り共通鍵を共有する必要があり、
+それを通信によって行ってしまうと
+盗聴されたときに安全ではなくなってしまう。
+そこで暗号化のための鍵（公開鍵）と復号化のための鍵（秘密鍵）を分け、
+共通鍵を通信によってやり取りする公開鍵暗号が提案された。
+これは公開鍵の情報から秘密鍵の情報を得られない（得るのが難しい）必要がある。
+これはつまり、
+暗号化にそのものを計算するのは簡単だが、
+その逆を求めるのは難しい一方向性関数を用いるということである。
+RSA暗号は素因数分解の難しさを用いた一方向性関数を用いる。
+またこのRSA暗号は普段のインターネット通信で暗号化が必要な際
+（例えばクレジットカードの番号などを送るとき）に用いられている。
+
+ではRSA暗号のプロトコルを説明する。
+\begin{enumerate}
+	\item 秘密鍵と公開鍵の作り方
+	\begin{enumerate}
+		\item 大きい2つの素数$p$、$q$を選び、$N = pq$とする。
+		\item Euler関数$\varphi (N)$（$N$と互いに素な$N$未満の数の総数）を
+		計算する。
+		これは
+		\begin{align}
+			\varphi (N) &= \underbrace{(N - 1)}_{\text{$N$以外}}
+			- \underbrace{(q - 1)}_{\text{$p$の倍数}}
+			- \underbrace{(p - 1)}_{\text{$q$の倍数}} \\
+			&= N - p - q + 1 \\
+			&= (p - 1)(q - 1)
+		\end{align}
+		であるから
+		$p$、$q$を知っていれば簡単に計算できる。
+		\item 疑似ランダムに$\varphi (N)$と互いに素な$e (< \varphi (N))$を選ぶ。
+		\item $e$と$\varphi (N)$は互いに素だから、
+		ユークリッドの互除法から
+		\begin{align}
+			1 = d \cdot e + x \varphi (N)
+		\end{align}
+		を満たす整数の組$(d, x)$が存在する。
+		（その中で$1 < d < N$となるものを選ぶ。
+		$d = 1$は$e < \phi (N)$から起こり得ない。）
+		\item $(N, d)$を秘密鍵、$(N, e)$を公開鍵とする。
+	\end{enumerate}
+	（※）$\varphi (N)$は$p$、$q$を知らないと計算できないが、
+	そのためには$N$を素因数分解しなければならず、
+	古典では難しいと考えられている。
+	\item 通信のやり方
+	\begin{enumerate}
+		\item Aがメッセージ$a < N$をBに送りたいとする。
+		このとき$a$は$N$と互いに素になるように取る。
+		（もしどちらかを満たしていなければ、
+		$a$を分割して両方満たす$a_1$、$a_2$などとすれば良いと思われる。）
+		\item $b = f(a) \coloneqq a^e \ (\mathrm{mod} \ N)$をBに送る。
+		\item $B$は
+		\begin{align}
+			f^{-1} (b) &\coloneqq a^d \ (\mathrm{mod} N) \\
+			&= \left( a^e \right)^d \ (\mathrm{mod} N) \\
+			&= a^{ed} \ (\mathrm{mod} N) \\
+			&= a \cdot \underbrace{a^{\varphi (N)}}_{= 1  \ (\mathrm{mod} N)}
+			\ (\mathrm{mod} N) \\
+			&= a \ (\mathrm{mod} N)
+		\end{align}
+		となり復元できる。
+	\end{enumerate}
+	ここで$a^{\varphi (N)} = 1 \ (\mathrm{mod} N)$となる理由を説明する。
+	まず$N$未満の$N$と互いに素な数の集合を考えると、
+	その総数は$\varphi (N)$であるから$\{x_i\}_{i=1}^{\varphi (N)}$と書ける。
+	これは$N$を法とした下で群をなしているから、
+	$\{ ax_i \ (\mathrm{mod} N) \}_i = \{x_i\}$となる。
+	したがって
+	\begin{align}
+		\prod_{i=1}^{\varphi (N)} a x_i
+		&\equiv \prod_{i=1}^{\varphi (N)} x_i \ (\mathrm{mod} N) \\
+		a^{\varphi (N)} \prod_{i=1}^{\varphi (N)} x_i
+		&\equiv \prod_{i=1}^{\varphi (N)} x_i \ (\mathrm{mod} N)
+	\end{align}
+	が成り立つ。
+	この各$x_i$は$N$と互いに素だから両辺を$x_i$で割ることができる。
+	すると
+	\begin{align}
+		a^{\varphi (N)} \equiv 1 \ (\mathrm{mod} N)
+	\end{align}
+	を得る。
+\end{enumerate}
+以上で安全に暗号化してやり取りできることが分かった。
+
+しかしもし盗聴者の計算能力が（素因数分解できるほど）高ければ、
+簡単に$\varphi (N)$を
+そしてそこから$d$を計算することができるため
+この暗号方法は安全ではなくなってしまう。
+また実はわざわざ$N$を素因数分解する必要はない。
+それは
+\begin{align}
+	\left( a^e \right)^{\tilde{d}} = a \ (\mathrm{mod} N)
+\end{align}
+とできれば良いから、
+$\tilde{d} e = k \Ord_N (a) + 1$となる
+$\tilde{d}$を求められれば十分だからである。
+ここで$\Ord_N (a)$は$N$を法とした下での積についての群の$a$の位数である。
+このためには$\Ord_N (a)$を求められれば良い。
+なぜなら$a^{\varphi (N)} = 1 \ (\mathrm{mod} N)$だから
+$\varphi (N)$は$\Ord_N (a)$の倍数になっている。
+（そうでないとすると、
+$\varphi (N) = k \Ord_N (a) + l$
+（ただし$1 \leq l < \Ord_N (a)$を満たす整数）と書けることになるが、
+すると$a^{\varphi (N)} = a^l = 1 \ (\mathrm{mod} N)$となり
+$\Ord_N (a)$が位数であることに矛盾。）
+そして$e$と$\varphi (N)$は互いに素だから
+$e$と$\Ord_N (a)$も互いに素であり、
+ユークリッドの互除法から$\tilde{d}$を求められる。
+問題は$b = a^e$から$\Ord_N (a)$を求められるかということであるが、
+実は$\Ord_N (a) = \Ord_N \left( a^e \right)$となる。
+これは$\left( a^e \right)^{\Ord_N (a)} = 1 \ (\mathrm{mod} N)$から
+$\Ord_N (a^e)$は$\Ord_N (a)$の約数となるため、
+\begin{align}
+	\left( a^e \right)^k = a^{ek} = 1 \ (\mathrm{mod} N)
+\end{align}
+となる$\Ord_N '(a)$の約数$k$が存在することになる。
+ここで$k \neq \Ord_N (a)$であるとすると
+$ek$は$\Ord_N (a)$の倍数でなくなり
+$\Ord_N (a)$が位数であることに矛盾するためである。
+したがって実は$\Ord_N (b)$を計算する能力だけで十分である。
+
+ここまでの話から、
+量子計算機が実装されると普段の通信が全て安全でなくなってしまう。
+しかし量子計算機はそれだけではなく、
+４章で見た（らしい）
+量子鍵配送（QKD）と呼ばれる共通鍵を安全に通信する方法を提供してくれる。
+
+\end{document}

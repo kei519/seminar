@@ -1,0 +1,283 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+\usepackage{cancel}
+\usepackage{color}
+\renewcommand{\CancelColor}{\color{red}}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{\S 4.3 \ ベクトル・ポテンシャルの多重極展開}
+
+\begin{document}
+\maketitle
+
+静電場の場合と同じ様に、一般の電流密度$\vec{i}_{e}(\vec{x}')$について積分
+\begin{align}
+	\vec{A}(\vec{r}) = \frac{\mu}{4\pi} \int
+	\frac{\vec{i}_e(\vec{x}')}{|\vec{r} - \vec{x}'|} \ddif^3 x'
+	\tag{2.8} \label{eq:BS}
+\end{align}
+を実行するのは大変だから、分布が有限の領域にのみ存在して、
+遠方では展開できる状態を考えます。原点周りに限って$x/r$で展開した
+\begin{align}
+	\vec{A}(\vec{r}) &= \frac{\mu}{4\pi} \sum_{l=0}^{\infty} \frac{1}{r^{l+1}}
+	\int \vec{i}_e(\vec{x}') |\vec{x}'|^l P_l(\cos \theta') \ddif^3 x'
+	\tag{3.1} \\
+	&= \sum_{l=0}^{\infty} A_l(\vec{x})
+\end{align}
+の最初の2項だけを考えます。
+
+最初の項は
+\begin{align}
+	\vec{A}_0(\vec{r}) = \frac{\mu}{4\pi} \frac{1}{r}
+	\int \vec{i}_e(\vec{x}')\ddif^3 x'
+	= 0
+\end{align}
+となることを示します。
+
+一般的に成り立つ
+\begin{align}
+	\Div' \Bigl( x_k' \vec{i}_e(\vec{x}') \Bigr)
+	&= \partial'_l \Bigl(x'_k \vec{i}_e(\vec{x}') \Bigr)_l \\
+	&= \delta_{kl} \Bigl( \vec{i}_e(\vec{x}') \Bigr)_l
+	+ x'_k \partial'_l \Bigl( \vec{i}_e(\vec{x}') \Bigr)_l \\
+	&= \Bigl( \vec{i}_e(\vec{x}') \Bigr)_k + x'_k \Div' \vec{i}_e(\vec{x}')
+\end{align}
+に、定常電流場での電荷保存則$\Div \vec{i}_e = 0$を用いて、両辺を体積積分すると、
+左辺は定常電流が有限領域にのみ存在していることから$0$となり、結局
+\begin{align}
+	\int \vec{i}_e(\vec{x}') \ddif^3 x' = 0 \tag{3.5} \label{eq:i=0}
+\end{align}
+が得られ、$\vec{A}_0$が$0$となることが分かります。
+
+次に2項目
+\begin{align}
+	\vec{A}_1(\vec{r}) &= \frac{\mu}{4\pi} \frac{1}{r^2}
+	\int \vec{i}_e(\vec{x}') |\vec{x}'| P_1(\cos \theta') \ddif^3 x' \\
+	&= \frac{\mu}{4\pi} \frac{1}{r^2}
+	\int \vec{i}_e(\vec{x}') |\vec{x}'| \cos \theta' \ddif^3 x' \\
+	&= \frac{\mu}{4\pi} \frac{1}{r^3}
+	\int \vec{i}_e(\vec{x}') (\vec{x}' \cdot \vec{r}) \ddif^3
+\end{align}
+の変形を考えます。
+一般的に成り立つ
+\begin{align}
+	\Div' \Bigl( x'_k (\vec{x}' \cdot \vec{r}) \vec{i}_e(\vec{x'}) \Bigr)
+	&= \partial'_l
+	\Bigl( x'_k (\vec{x}' \cdot \vec{r}) \vec{i}_e(\vec{x'}) \Bigr)_l \\
+	&= (\vec{x}' \cdot \vec{r}) \Bigl( \vec{i}_e(\vec{x'}) \Bigr)_k
+	+ x'_k r_l \Bigl( \vec{i}_e(\vec{x'}) \Bigr)_l
+	+ x'_k (\vec{x}' \cdot \vec{r}) \partial_l \Bigl( \vec{i}_e(\vec{x'}) \Bigr)_l
+	\\
+	&= (\vec{x}' \cdot \vec{r}) \Bigl( \vec{i}_e(\vec{x'}) \Bigr)_k
+	+ x'_k (\vec{i}_e(\vec{x'}) \cdot \vec{r})
+	+ x'_k (\vec{x}' \cdot \vec{r}) \Div' \vec{i}_e(\vec{x'})
+\end{align}
+を先程と同様に積分することで、
+\begin{align}
+	\int \vec{i}_e(\vec{x}') (\vec{x}' \cdot \vec{r}) \ddif^3 x'
+	+ \int \vec{x}' (\vec{i}_e(\vec{x'}) \cdot \vec{r}) \ddif^3 x'
+	= 0
+\end{align}
+が得られ、また一般的に成り立つ
+\begin{align}
+	[\vec{x}' \times \vec{i}_e(\vec{x}')] \times \vec{r}
+	&= \vec{i}_e(\vec{x}') (\vec{x}' \cdot \vec{r})
+	- \vec{x}' (\vec{i}_e(\vec{x}') \cdot \vec{r})
+\end{align}
+から
+\begin{align}
+	\int \vec{i}_e(\vec{x}') (\vec{x}' \cdot \vec{r}) \ddif^3 x'
+	- \int \vec{x}' (\vec{i}_e(\vec{x}') \cdot \vec{r}) \ddif^3 x'
+	&= \int [\vec{x}' \times \vec{i}_e(\vec{x}')] \times \vec{r} \ddif^3 x'
+\end{align}
+が得られます。
+これらの両辺を足し合わせることで、
+\begin{align}
+	\int \vec{i}_e(\vec{x}') (\vec{x}' \cdot \vec{r}) \ddif^3 x'
+	= \frac{1}{2} \left( \int x' \times \vec{i}_e(\vec{x}') \right) \ddif^3 x'
+	\times \vec{r}
+\end{align}
+となり、磁気双極子モーメント
+\begin{align}
+	\vec{m} = \frac{1}{2} \int \vec{x}' \times \vec{i}_e(\vec{x}') \ddif^3 x'
+\end{align}
+を導入すれば、
+\begin{align}
+	\vec{A}_1(\vec{r}) = \frac{\mu}{4\pi} \frac{\vec{m} \times \vec{r}}{r^3}
+\end{align}
+と書けることが分かります。
+ここで注意しておくことは、磁気双極子モーメント$\vec{m}$は座標を新しく
+$\vec{x}' = \vec{x} + \vec{a}$としたときに、
+\begin{align}
+	\vec{m}' &= \frac{1}{2} \int \vec{x}' \times
+	\vec{i}'_e(\vec{x}') \ddif^3 x' \\
+	&= \frac{1}{2} \int \Bigl[ (\vec{x} + \vec{a}) \times
+	\vec{i}_e (\vec{x}' - \vec{a}) \Bigr] \ddif^3 x \\
+	&= \frac{1}{2} \int \vec{x} \times \vec{i}_e(\vec{x}) \ddif^3 x
+	+ \frac{1}{2} \vec{a} \times
+	\cancelto{\eqref{eq:i=0}\mbox{より}}{\int \vec{i}_e(\vec{x}) \ddif^3 x} \\
+	&= \vec{m}
+\end{align}
+となることから、座標の取り方に依存しないということです。
+これを踏まえると、
+新たに座標$\vec{x}'$を原点と取り直して磁気モーメントを考えて良いことになるので、
+$N$個のの点$\vec{x}'_i$周りの互いに素な領域$V_i$を考えて、
+それぞれを原点とみなしたときの磁気モーメント
+\begin{align}
+	\vec{m}_i = \frac{1}{2} \int_{V_i} (\vec{x} - \vec{x}'_i) \times
+	\vec{i}_e(\vec{x} - \vec{x}'_i) \ddif^3 x
+\end{align}
+を作れば、
+\begin{align}
+	\vec{A}(\vec{r}) = \frac{\mu}{4\pi} \sum_{i=1}^N
+	\frac{\vec{m}_i \times (\vec{r} - \vec{x}'_i)}{|\vec{r} - \vec{x}'_i|^3}
+\end{align}
+と書けることになります。
+ここで各点における$V_i$を巨視的な意味での微小領域になるようにし、
+$N \to \infty$とする極限を考えれば、
+教科書の言う磁気モーメントの巨視的な平均値$\vec{M}(\vec{x})$を得られて、
+\begin{align}
+	\vec{A}(\vec{r}) = \frac{\mu}{4\pi} \int_V
+	\frac{\vec{M}(\vec{x}) \times (\vec{r} - \vec{x})}{|\vec{r} - \vec{x}|^3}
+	\ddif^3 x
+	\tag{3.15} \label{eq:density}
+\end{align}
+と書けるのではないでしょうか。
+
+磁気双極子モーメントの具体例として、
+\emph{平面}閉曲線$C$に沿って流れる\emph{線状}電流のものを考えてみます。
+原点$O$を$C$が作る平面内に取ると、$\vec{i}_e \ddif S'$は単に$I \ddif x'$と見なせて、
+その磁気双極子モーメントは
+\begin{align}
+	\vec{m} = \frac{I}{2} \int_C \vec{x}' \times \ddif \vec{x}'
+\end{align}
+と書けます（図3.2）。
+ここで$\vec{x}' \times \ddif \vec{x}' / 2$の大きさは
+$\vec{x}'$と$\ddif \vec{x}'$が作る三角形の面積と等しく、
+向きはどの点においても電流の向きに回すと右ねじが進む紙面に垂直な方向だから、
+その向きを$\vec{k}$とすれば、$C$が作る面の面積を$S$として、
+\begin{align}
+	\vec{m} = IS\vec{k}
+\end{align}
+と書けることになります。
+ここで先程の議論を思い出すと、教科書に書かれている、
+「単位面積当たり$I$の磁気モーメントを持つ磁石を、
+曲線$C$の囲む平面$S$に垂直にしきつめたものと同等」
+という記述はだいぶキモいと思います。
+そもそもこれって自身の記述であるところの\eqref{eq:density}とも
+整合しない気がするんですが、そこのところどうなんですかね。
+
+\begin{screen}
+	\underline{補足}
+
+	一般的に
+	\begin{align}
+		\int_S ( \ddif \vec{S} \times \nabla) f
+		= \int_{\partial S} \ddif \vec{s} f
+	\end{align}
+	が成り立つことが知られているので、そこから
+	\begin{align}
+		\left[ \frac{1}{2} \int_C \vec{x}' \times \ddif \vec{x}' \right]_i
+		&= -\frac{1}{2} \int_C \varepsilon_{ijk} \ddif \vec{x}'_j \vec{x}'_k \\
+		&= -\frac{1}{2} \int_S \varepsilon_{ijk}
+		\Bigl( \varepsilon_{jlm} \ddif S_l \partial'_m \Bigr) \vec{x}'_k \\
+		&= -\frac{1}{2} \int_S \varepsilon_{ijk} \varepsilon_{mjl} \delta_{km}
+		\ddif S_l \\
+		&= -\frac{1}{2} \int_S \delta_{km}
+		(\delta_{im}\delta_{kl} - \delta_{il} \delta_{km}) \ddif S_l\\
+		&= -\frac{1}{2} \int_S ( \ddif S_i - 3 \ddif S_i) \\
+		&= \left[\int_S \ddif \vec{S}\right]_i
+	\end{align}
+	が分かります。
+	ここから、$C$が同一平面内であれば左辺の積分の大きさが面積に一致することが分かります。
+\end{screen}
+
+最後に\eqref{eq:density}に戻って、
+$\Rot \vec{M}$がある種の電流とみなせることを見ておきます。
+一般に成り立つ
+\begin{align}
+	\Biggl[ \Rot \left(\frac{\vec{M}(\vec{x})}{|\vec{r} - \vec{x}|}\right)
+	\Biggr]_i
+	&= \varepsilon_{ijk} \partial_j
+	\left( \frac{\vec{M}(\vec{x})}{|\vec{r} - \vec{x}|}\right)_k \\
+	&= \varepsilon_{ijk} \frac{\partial_j M(\vec{x})_k}{|\vec{r} - \vec{x}|}
+	+ \varepsilon_{ijk} \frac{(\vec{r} - \vec{x})_j}{|\vec{r} - \vec{x}|^3}
+	M_k(\vec{x}) \\
+	&= \Biggl[ \frac{\Rot \vec{M}(\vec{x})}{|\vec{r} - \vec{x}|} 
+	- \frac{\vec{M}(\vec{x}) \times (\vec{r} - \vec{x})}{|\vec{r} - \vec{x}|^3}
+	\Biggr]_i
+\end{align}
+を用いると、\eqref{eq:density}は
+\begin{align}
+	\vec{A}(\vec{r}) = \frac{\mu}{4\pi} \Biggl[
+		\int_V \frac{\Rot \vec{M}(\vec{x})}{|\vec{r} - \vec{x}|} \ddif^3 x
+		- \int_V \Rot \left(\frac{\vec{M}(\vec{x})}{|\vec{r} - \vec{x}|}\right)
+		\ddif^3 x
+	\Biggr]
+\end{align}
+と書き換えられ、この右辺第2項は
+\begin{align}
+	\int_V \Rot \left(\frac{\vec{M}(\vec{x})}{|\vec{r} - \vec{x}|}\right)\ddif^3 x
+	= \oint_{\partial V} \ddif \vec{S} \times
+	\frac{\vec{M}(\vec{x})}{|\vec{r} - \vec{x}|}
+\end{align}
+となって、$\vec{M}$が有限領域にのみ分布していれば0となり消えます。
+したがって最終的に、
+\begin{align}
+	\vec{A}(\vec{r}) = \frac{\mu}{4\pi}
+	\int_V \frac{\Rot \vec{M}(\vec{x})}{|\vec{r} - \vec{x}|} \ddif^3 x
+\end{align}
+が得られ、これは\eqref{eq:BS}と見比べると
+\begin{align}
+	\vec{i}_m(\vec{x}) = \Rot \vec{M}(\vec{x})
+\end{align}
+なる電流が生み出している磁場ともみなせることが分かります。
+これが示したかったことであり、この$\vec{i}_m$は\S 3.1の(1.15)で与えられた、
+外部磁場によって電気双極子の方向が揃い、
+それによって生ずる磁化に基づく磁化電流になっています。
+
+\begin{description}
+	\item[例題2]
+	Biot-Savartの法則が見つかった当時は、電流が電荷の流れであることは知られておらず、
+	動線の各素片がある種の緊張状態にあると考えられていたらしいです。
+	なので、電流素片$I \ddif \vec{x}'$が位置$\vec{x}$微小磁場
+	\begin{align}
+		\ddif \vec{B}(\vec{x}) = \frac{\mu I}{4\pi}
+		\frac{\ddif \vec{x}' \times (\vec{x} - \vec{x}')}
+		{|\vec{x} - \vec{x}'|^3}
+	\end{align}
+	を作ると考えられていました。
+	したがって定常電流間に働く力を、
+	各回路の微小素片の間に働く力として考えてみることにします。
+
+	これは作用・反作用を満たさないが、実際は電流は電荷の流れで素片ではなく、
+	全体を考えなければならないために起こる問題です。
+	全体の一部だけ考えたせいで、
+	作用・反作用が満たされないということは普通に起こることなので。
+\end{description}
+
+\end{document}

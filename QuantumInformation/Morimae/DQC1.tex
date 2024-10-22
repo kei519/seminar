@@ -1,0 +1,106 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{\string~/preamble}
+
+\usepackage{qcircuit}
+\DeclareMathOperator*{\Tr}{Tr}
+
+\title{P.168の確率}
+\author{}
+
+\begin{document}
+\maketitle
+
+以下の回路においての$o$ので観測確率を$p(o)$とする。
+\[
+\begin{array}{c}
+	\Qcircuit @C=1.3em @R=.8em {
+		\lstick{} & \multigate{3}{V_x} & \meter & o \\
+		\lstick{} & \ghost{V_x} & \qw & \\
+		\lstick{} & \ghost{V_x} & \qw & \\
+		\lstick{} & \ghost{V_x} & \qw & \
+		\inputgroupv{1}{4}{.8em}{.8em}{\Ket{1^n}}
+	}
+\end{array}
+\]
+この回路を使って
+\[
+\begin{array}{c}
+	\Qcircuit @C=1.3em @R=.8em {
+	\lstick{\Ket{0}} & \targ & \qw & \ctrl{1} & \qw & \targ & \meter & o \\
+	\lstick{} & \ctrl{-1} & \multigate{3}{V_x} & \control \qw &
+	\multigate{3}{V_x^\dagger} & \ctrl{-1} & \qw & \\
+	\lstick{} & \ctrl{-1} & \ghost{V_x} & \qw &
+	\ghost{V_x^\dagger} & \ctrl{-1} & \qw & \\
+	\lstick{} & \ctrl{-1} & \ghost{V_x} & \qw &
+	\ghost{V_x^\dagger} & \ctrl{-1} & \qw & \\
+	\lstick{} & \ctrl{-1} & \ghost{V_x} & \qw &
+	\ghost{V_x^\dagger} & \ctrl{-1} & \qw & \
+	\inputgroupv{2}{5}{.8em}{.8em}{\displaystyle \frac{I^{\otimes n}}{2^n}}
+}
+\end{array}
+\]
+という回路を考えたときに$o$での観測確率$\tilde{p}(o = 1)$を求める。
+
+まず状態の遷移がどうなるかを考える。
+\begin{align}
+	\Ketbra{0}{0} \otimes \frac{I^{\otimes n}}{2^n}
+	&\to \frac{1}{2^n} \left[ \Ketbra{0}{0} \otimes
+	\underbrace{\left( \cdots \right)}_{\Ketbra{1^n}{1^n}\text{なし}}
+	+ \Ketbra{1}{1} \otimes \Ketbra{1^n}{1^n} \right] \\
+	&\to \frac{1}{2^n} \left[ \Ketbra{0}{0} \otimes
+	V_x \left( \cdots \right) V_x^\dagger
+	+ \Ketbra{1}{1} \otimes V_x \Ketbra{1^n}{1^n} V_x^\dagger \right] \\
+	&\to \frac{1}{2^n} \left[ \Ketbra{0}{0} \otimes
+	V_x \left( \cdots \right) V_x^\dagger
+	+ \Ketbra{1}{1} \otimes Z_1 V_x \Ketbra{1^n}{1^n}
+	V_x^\dagger Z_1^\dagger \right] \\
+	&\to \frac{1}{2^n} \left[ \Ketbra{0}{0} \otimes
+	\underbrace{\left( \cdots \right)}_{\Ketbra{1^n}{1^n}\text{なし}}
+	+ \Ketbra{1}{1} \otimes V_x^\dagger Z_1 V_x \Ketbra{1^n}{1^n}
+	V_x^\dagger Z_1^\dagger V_x \right] \\
+	&\to \frac{1}{2^n} \left[ \Ketbra{0}{0} \otimes \left( \cdots \right)
+	+ \Ketbra{1}{1} \otimes \left( V_x^\dagger Z_1 V_x \Ketbra{1^n}{1^n}
+	V_x^\dagger Z_1^\dagger V_x - A \right)
+	+ \Ketbra{0}{0} \otimes A \right]
+\end{align}
+ここで$A$の部分を計算すると
+\begin{align}
+	A &= \Tr \left[ V_x^\dagger Z_1 V_x \Ketbra{1^n}{1^n}
+	V_x^\dagger Z_1^\dagger V_x \cdot \Ketbra{1^n}{1^n} \right]
+	\Ketbra{1^n}{1^n}\\
+	&= \left| \Braket{1^n | V_x^\dagger Z_1 V_x | 1^n} \right|^2
+	\Ketbra{1^n}{1^n}
+\end{align}
+である。
+絶対値の中身を取り出すと
+\begin{align}
+	\Braket{1^n | V_x^\dagger Z_1 V_x | 1^n}
+	&= \Braket{1^n | V_x^\dagger Z_1 \left\{ \left( \Ketbra{0}{0}
+	+ \Ketbra{1}{1} \right) \otimes I^{\otimes n-1} \right\}
+	V_x | 1^n} \\
+	&= \Braket{1^n | V_x^\dagger \left( \Ketbra{0}{0}
+	\otimes I^{\otimes n-1} \right) V_x | 1^n}
+	- \Braket{1^n | V_x^\dagger \left( \Ketbra{1}{1}
+	\otimes I^{\otimes n-1} \right) V_x | 1^n} \\
+	&= \Tr \left[ \left( \Ketbra{0}{0} \otimes I^{\otimes n-1} \right)
+	V_x \Ketbra{1^n}{1^n} V_x^\dagger \right]
+	- \Tr \left[ \left( \Ketbra{1}{1} \otimes I^{\otimes n-1} \right)
+	V_x \Ketbra{1^n}{1^n} V_x^\dagger \right] \\
+	&= p(o = 0) - p(o = 1)
+\end{align}
+を得る。
+以上から最終的に
+\begin{align}
+	p\left( \tilde{o} = 1 \right)
+	&= \Tr \left[ \left( \Ketbra{1}{1} \otimes I^{\otimes n} \right)
+	\rho \right] \\
+	&= \frac{1}{2^n} \Tr \left[ V_x^\dagger Z_1 V_x \Ketbra{1^n}{1^n}
+	V_x^\dagger Z_1^\dagger V_x - A \right] \\
+	&= \frac{1 - \Tr \left[ A \right]}{2^n} \\
+	&= \frac{\left( p(o = 0) + p(o = 1) \right)^2 
+	- \left( p(o = 0) - p(o = 1) \right)^2}{2^n} \\
+	&= \frac{4 p(o = 0) p(o = 1)}{2^n}
+\end{align}
+が成り立つことが分かる。
+
+\end{document}

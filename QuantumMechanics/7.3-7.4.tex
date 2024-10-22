@@ -1,0 +1,1159 @@
+\documentclass[a4paper, 10pt, uplatex]{jsarticle}
+\input{./preamble}
+
+\usepackage{qcircuit}
+\usepackage{cancel}
+
+\newcommand{\redcancel}[1]{
+	\textcolor{red}{\cancel{\textcolor{black}{#1}}}
+}
+
+\title{7.3-7.4}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{7}
+
+\setcounter{subsection}{2}
+\subsection{測定後状態}
+\subsubsection{測定後状態の導出}
+測定器系$D$の観測を行ったあとに対象系$S$の状態がどうなるかを考える。
+そのためにもう少し数学的に状況をしっかりと定義しておく。
+まず初期状態が$\hat{\rho}_{SD}$であり、
+系$D$で物理量$M$（目盛、メーター）の測定を行い、
+その後に系$S$のある物理量$O$の測定を行う場合を考える。
+このときメーターの読み間違いがないように$M$には縮退がなく、
+対応するエルミート行列$\hat{M}$の固有値を$m$、
+それに対応する固有状態を$\Ket{u_m}$、
+対応する射影演算子を$\hat{P}_M (m) \coloneqq \Ketbra{m}{m}$と書くことにする。
+また$O$に対応するエルミート行列を$\hat{O}$とし
+その固有値を$o_n$、
+対応する射影演算子を$\hat{P}_O (n)$としておく。
+\begin{gather}
+	\begin{array}{c}
+		\Qcircuit @C=1.3em @R=.8em {
+			\lstick{\Ket{\psi}_S} & \multigate{1}{\hat{U}_{SD}} & \qw &
+			\meter & \rstick{\Ket{\psi'}} \qw \\
+			\lstick{\Ket{0}_D} & \ghost{\hat{U}_{SD}} & \meter & \qw
+			& \rstick{\Ket{m}} \qw
+		}
+	\end{array} \\
+	\centering
+	\left( \text{このような測定を測定過程や間接測定（恐らく）と呼ぶ} \right)
+\end{gather}
+
+これらを踏まえた上で等価であるはずの以下の２つの場合を考える。
+\begin{enumerate}
+	\item $M$の測定を行った結果が$m$、
+	$O$の測定を行った結果が$o_n$であった場合
+	\label{cs:同時測定}
+	\item $M$の測定を行った結果が$m$であり、
+	その後系$S$の状態$\hat{\rho} (m)$に対して$O$を測定して$o_n$が出た場合
+	\label{cs:測定後}
+\end{enumerate}
+ここで求めたいのは$\hat{\rho} (m)$である。
+そのためにこれら２つの場合の確率分布
+$\Pr \left[ O = o_n, M = m \right]$を考える。
+\begin{enumerate}
+	\item この場合は今まで同様に
+	\begin{align}
+		\Pr \left[ O = o_n, M = m \right]
+		&= \Tr_{SD} \left[ \hat{\rho}_{SD}
+		\left( \hat{P}_O (n) \otimes \hat{P}_M (m) \right) \right] \\
+		&= \Tr_S \left[ \Tr_D \left[ \hat{\rho}_{SD}
+		\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]
+		\hat{P}_O (n)\right]
+	\end{align}
+	と書ける。
+	\item このときは条件付き確率を用いて
+	\begin{align}
+		\Pr \left[ O = o_n, M = m \right]
+		&= \Pr \left[ O = o_n \middle| M = m \right]
+		\Pr \left[ M = m \right] \\
+		&= \Tr_S \left[ \hat{\rho} (m) \hat{P}_O (n) \right]
+		\Tr_D \left[ \Tr_S \left[ \hat{\rho}_{SD} \right]
+		\hat{P}_M (m) \right] \\
+		&= \Tr_S \left[ \hat{\rho} (m) \hat{P}_O (n) \right]
+		\Tr_{SD} \left[ \hat{\rho}_{SD}
+		\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]
+	\end{align}
+\end{enumerate}
+したがって
+\begin{align}
+	\Tr_S \left[ \hat{\rho} (m) \hat{P}_O (n) \right]
+	= \Tr_S \left[ \left( 
+		\frac{\Tr_D \left[ \hat{\rho}_{SD}
+		\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+		{\Tr_{SD} \left[ \hat{\rho}_{SD}
+		\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	\right) \hat{P}_O (n) \right]
+	\label{eq:測定後確率}
+\end{align}
+が任意の$\hat{\rho}_{SD}$、$\hat{M}$、$\hat{O}$について成り立つことになる。
+任意の状態ベクトル$\Ket{\psi}$に対して、
+$\hat{O}$を固有値$n$を持ち、
+それに対応する固有ベクトルが$\Ket{\psi}$になるように選べば
+式\eqref{eq:測定後確率}は
+\begin{align}
+	\Braket{\psi | \hat{\rho} (m) | \psi}
+	= \Braket{\psi |
+	\frac{\Tr_D \left[ \hat{\rho}_{SD}
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	{\Tr_{SD} \left[ \hat{\rho}_{SD}
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	| \psi}
+\end{align}
+と書き直せ、
+これが任意の状態$\Ket{\psi}$について成り立つことになるから、
+測定系$D$で$M = m$が観測されたあとの対象系$S$の状態は
+\begin{align}
+	\hat{\rho} (m)
+	= \frac{\Tr_D \left[ \hat{\rho}_{SD}
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	{\Tr_{SD} \left[ \hat{\rho}_{SD}
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	= \frac{\Tr_D \left[ \hat{\rho}_{SD}
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right]}
+	{\Pr \left[ M = m \right]}
+	\label{eq:測定後状態}
+\end{align}
+と求まる。
+これは
+\begin{align}
+	\Tr_S \left[ \hat{\rho} (m) \right] = 1
+\end{align}
+であるし、
+任意の状態$\Ket{\psi}_S$に関して
+\begin{align}
+	\Braket{\psi | \hat{\rho} (m) | \psi}
+	&= \frac{\left( \Bra{\psi}_S \otimes \Bra{m}_D \right)
+	\hat{\rho}_{SD} \left( \Ket{\psi}_S \otimes \Ket{m}_D \right)}
+	{\Pr \left[ M = m \right]} \\
+	&= \frac{\Bra{\psi}_S \Bra{m}_D \hat{\rho}_{SD}
+	\Ket{\psi}_S \Ket{m}_D}{\Pr \left[ M = m \right]} \\
+	&\geq 0
+\end{align}
+であるから、
+確かに密度行列である。
+
+\textcolor{red}{射影仮説や波動関数の収縮の話がある。}
+
+\setcounter{subsubsection}{2}
+\subsubsection{量子測定解析に役立つ様々な数学的道具}
+最も一般的な測定がどのようなものか考えるために、
+少しずつ数学的な置き換えを考えていく。
+
+はじめに測定値の観測確率と測定後の状態を決められる測定、
+つまり前節で扱った測定について考える。
+まず$\hat{\rho}_{SD}$は
+ユニタリ演算子$\hat{U}_{SD}$で準備されたから
+\begin{align}
+	\hat{\rho}_{SD}
+	= \hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+	\hat{U}_{SD}^\dagger
+\end{align}
+と書け、
+式\eqref{eq:測定後状態}は
+\begin{align}
+	\Pr \left[ M = m \right] \hat{\rho} (m)
+	&= \Tr_D \left[ \hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0}_D
+	\right) \hat{U}_{SD}^\dagger \left( \hat{I} \otimes \hat{P}_M (m) \right)
+	\right]
+	\label{eq:相互作用付きの相互作用状態} \\
+	&= \Tr_D \left[ \hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0}_D
+	\right) \hat{U}_{SD}^\dagger \left( \hat{I} \otimes \hat{P}_M (m) \right)^2
+	\right] \\
+	&= \Tr_D \left[ \left( \hat{I} \otimes \hat{P}_M (m) \right) \hat{U}_{SD}
+	\left( \hat{\rho} \otimes \Ketbra{0}{0}_D \right) \hat{U}_{SD}^\dagger
+	\left( \hat{I} \otimes \hat{P}_M (m) \right) \right] \\
+	&= \Tr_D \left[ \left( \hat{I} \otimes \Ketbra{u_m}{u_m} \right)
+	\hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0}_D \right)
+	\hat{U}_{SD}^\dagger \left( \hat{I} \otimes \Ketbra{u_m}{u_m} \right)
+	\right]
+	\label{eq:トレース前}
+\end{align}
+と書き換えられる。
+ここで$\hat{\rho}_{SD}$をある基底で展開して
+\begin{align}
+	\hat{\rho}_{SD}
+	= \sum_{nn'} \sum_{mm'} \rho_{nm:n'm'}
+	\left( \Ket{n}_S \otimes \Ket{u_m}_D \right)
+	\left( \Bra{n'}_S \otimes \Bra{u_{m'}}_D \right)
+\end{align}
+としたとき
+\begin{align}
+	\rho_{nm:n'm'}
+	= \Bra{n}_S \Braket{u_m |_D \ \hat{\rho}_{SD} | n'}_S
+	\Ket{u_{m'}}_D
+\end{align}
+であり
+\begin{align}
+	\Tr_D \left[ \hat{\rho}_{SD} \right]
+	&= \sum_{nn'} \sum_m \rho_{nm:n'm} \Ketbra{n}{n'}_S \\
+	&= \sum_{nn'} \sum_m \Ket{n}_S
+	\Bra{n}_S \Braket{u_m |_D \hat{\rho}_{SD} | n'}_S
+	\Bra{n'}_S \Ket{u_{m}}_D \\
+	&= \sum_m \Braket{u_m |_D\ \hat{\rho}_{SD} | u_{m'}}_D
+\end{align}
+とも書ける。
+したがって式\eqref{eq:トレース前}は
+\begin{align}
+	\Pr \left[ M = m \right] \hat{\rho} (m)
+	&= \Braket{u_m |_D \ 
+	\hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0}_D \right)
+	\hat{U}_{SD}^\dagger | u_m}_D
+\end{align}
+となる。
+\begin{problem}
+	\begin{align}
+		\hat{U}_{SD} \left( \hat{\rho} \otimes \Ketbra{0}{0}_D \right)
+		\hat{U}^\dagger_{SD}
+		= \left( \hat{U}_{SD} \Ket{0}_D \right) \hat{\rho}
+		\left( \Bra{0}_D \hat{U}^\dagger_{SD} \right)
+	\end{align}
+	を示せ。
+
+	\tcblower
+
+	$\hat{U}_{SD}$の$ab$行$cd$列成分を$\left( \hat{U}_{SD} \right)_{ab:cd}$、
+	$\hat{\rho}$の$a$行$c$列成分を$\left( \hat{\rho} \right)_{ac}$、
+	$\Ket{0}$の$a$成分を$v_a$とする。
+	そこで左辺の$ab$行$cd$列成分を考えると、
+	\begin{align}
+		(\text{左辺})_{ab:cd}
+		&= \sum_{nm} \sum_{n'm'} \left( \hat{U}_{SD} \right)_{ab:nm}
+		\left( \left( \hat{\rho} \right)_{nn'} v_m v^*_{m'} \right)
+		\left( \hat{U}^\dagger_{SD} \right)_{n'm':cd} \\
+		&= \sum_{nn'} \left( \sum_m \left( \hat{U}_{SD} \right)_{ab:nm}
+		v_m \right) \left( \hat{\rho} \right)_{nn'} \left( \sum_{m'}
+		v^*_{m'} \left( \hat{U}^\dagger_{SD} \right)_{n'm':cd} \right) \\
+		&= \sum_{nn'} \left( \hat{U}_{SD} \Ket{0}_D \right)_{ab:n}
+		\left( \hat{\rho} \right)_{nn'}
+		\left( \Bra{0}_D \hat{U}^\dagger_{SD} \right)_{n':cd} \\
+		&= \left( \left( \hat{U}_{SD} \Ket{0}_D \right) \hat{\rho}
+		\left( \Bra{0}_D \hat{U}^\dagger_{SD} \right)
+		\right)_{ab:cd} \\
+		&= (\text{右辺})_{ab:cd}
+	\end{align}
+	が分かる。
+\end{problem}
+以上から
+\begin{align}
+	\Pr \left[ M = m \right] \hat{\rho} (m)
+	= \left( \Braket{u_m | \hat{U}_{SD} | 0}_D \right) \hat{\rho}
+	\left( \Braket{0 | \hat{U}_{SD} | u_m}_D \right)
+\end{align}
+と書き直せる。
+この$\Braket{u_m | \hat{U}_{SD} | 0}_D$は$S$上に作用する
+$N_S$次正方行列であり、
+これを\textbf{測定演算子}
+\begin{align}
+	\hat{M} (m) \coloneqq \Braket{u_m | \hat{U}_{SD} | 0}_D
+\end{align}
+として定義する。
+すると式\eqref{eq:測定後状態}は
+\begin{align}
+	\hat{\rho} (m)
+	= \frac{1}{\Pr \left[ M = m \right]}
+	\hat{M} (m) \hat{\rho} \hat{M}^\dagger (m)
+\end{align}
+とも書けることが分かる。
+また$\Tr_S \left[ \hat{\rho} (m) \right] = 1$であるから
+\begin{align}
+	\Pr \left[ M = m \right]
+	&= \Tr_S \left[ \hat{M} (m) \hat{\rho} \hat{M}^\dagger (m) \right] \\
+	&= \Tr_S \left[ \hat{M}^\dagger (m) \hat{M} (m) \hat{\rho} \right]
+	\label{eq:測定演算子の下での確率}
+\end{align}
+と計算できる。
+ここまでから測定演算子$\hat{M} (m)$さえ知っていれば
+測定器の測定結果の出現確率も、
+測定後の$S$の状態も得ることができる。
+
+\begin{problem}
+	\begin{align}
+		\sum_m \hat{M}^\dagger (m) \hat{M} (m) = \hat{I}_S
+		\label{eq:測定演算子の規格化}
+	\end{align}
+	を示せ。
+
+	\tcblower
+
+	定義から
+	\begin{align}
+		\sum_m \hat{M}^\dagger (m) \hat{M} (m)
+		&= \sum_m \Braket{0 | \hat{U}^\dagger_{SD} | u_m}_D
+		\Braket{u_m | \hat{U}_{SD} | 0}_D \\
+		&= \Braket{0 | \hat{I}_{SD} | 0}_D \\
+		&= \hat{I}_S
+	\end{align}
+	と求まる。
+\end{problem}
+逆に式\eqref{eq:測定演算子の規格化}を満たす正方行列の組
+$\{ \hat{M} \left( m \right) \}_m$から逆に
+式\eqref{eq:相互作用付きの相互作用状態}を満たす
+$\hat{P}_M (m)$、$\hat{U}_{SD}$、$\Ketbra{0}{0}$をいつでも構成できることが
+知られている。
+したがって先に述べた測定機を用いた測定と、
+測定演算子$\{ \hat{M}_m \}_m$の組は等価になる。
+これが観測確率、測定後の状態を知ることのできる最も広い測定である。
+
+次に観測確率を知ることのできる測定について考える。
+上の議論から測定値の観測確率は求められるが、
+測定後の状態がどうなるか知らなくても良い場合には
+式\eqref{eq:測定演算子の下での確率}から
+\textbf{正作用素値測度}、
+\textbf{POVM}（positive operator valued measure）と呼ばれる
+エルミート演算子
+\begin{align}
+	\hat{\Pi} (m) \coloneqq \hat{M}^\dagger (m) \hat{M} (m)
+\end{align}
+を知っていれば十分である。
+この場合は確率は
+\begin{align}
+	\Pr \left[ M = m \right] = \Tr_S \left[ \hat{\Pi} (m) \hat{\rho} \right]
+\end{align}
+と計算できる。
+このエルミート行列$\hat{\Pi} (m)$は
+\begin{align}
+	\Braket{\psi | \hat{\Pi} (m) | \psi}_S
+	&= \Braket{\psi | \hat{M}^\dagger (m) \hat{M} (m) | \psi} \\
+	&= \left\| \hat{M} (m) \Ket{\psi} \right\|^2 \\
+	&\geq 0
+\end{align}
+であるから正値演算子$\hat{\Pi} (m) \geq 0$であり、
+また
+\begin{align}
+	\sum_m \hat{\Pi}_m = \sum_m \hat{M}^\dagger (m) \hat{M} (m)
+	= \hat{I}_S
+\end{align}
+を満たす。
+これも逆にPOVMから具体的な測定値系の初期状態と
+ユニタリ発展を作ることができる。
+したがってPOVMが最も一般の測定になっている。
+
+\subsubsection{理想測定}
+$S$系の物理量$A$を理想測定したいときにも測定器系を通して行うことができる。
+（こうすることで対象系$S$の状態だけであれば射影仮説を用いなくてもできる。）
+そのために任意の$S$系の状態
+\begin{align}
+	\Ket{\psi} = \sum_a c_a \Ket{a}
+\end{align}
+に対して、
+$D$系のある初期状態$\Ket{0}$、
+正規直交基底$\{ \Ket{u_a} \}_a$を用いて
+\begin{align}
+	\hat{U}_{SD} \Ket{\psi}_S \Ket{0}_D
+	= \sum_a c_a \Ket{a}_S \Ket{u_a}_D
+\end{align}
+とできる演算子$\hat{U}_{SD}$を考える。
+するとこれは$S$系の任意の状態
+\begin{gather}
+	\Ket{\psi} = \sum_a c_a \Ket{a} \\
+	\Ket{\phi} = \sum_a d_a \Ket{a}
+\end{gather}
+について
+\begin{align}
+	\left( \Bra{\phi}_S \Bra{0}_D \right) \hat{U}^\dagger_{SD}
+	\hat{U}_{SD} \left( \Ket{\psi}_S \Ket{0}_D \right)
+	&= \left( \sum_{a'} d_{a'}^* \Bra{a'}_S \Bra{u_{a'}}_D \right)
+	\left( \sum_a c_a \Ket{a}_S \Ket{u_a}_D \right) \\
+	&= \sum_a d_a^* c_a \\
+	&= \left( \Bra{\phi}_S \Bra{0} \right)
+	\left( \Ket{\psi}_S \Ket{0}_D \right)
+\end{align}
+となり内積を保存する。
+したがってこの$\hat{U}_{SD}$はあるユニタリ演算子に取れ、
+物理的に１つのある装置で実装できる。
+（$D$系が$\Ket{0}$である場合に限ればユニタリ演算子になっていて、
+全体で定義したい場合には$\Ket{i}$のような状態どうしが
+直交するようなものを選べば良い。）
+
+このユニタリ操作$\hat{U}_{SD}$を作用させたあとの状態
+$\Ket{\Psi}_{SD} = \hat{U}_{SD} \Ket{\psi}_S \Ket{0}_D$において、
+$D$系で$\Ket{u_a}$の状態が観測されるのと、
+直接$S$系の状態$\Ket{\psi}$を測って$\Ket{a}$が観測されるのは
+ほぼ同じになっていることを説明する。
+まず$S$系で測定して$\Ket{a}$が観測される確率は
+\begin{align}
+	\Pr \left[ A = a \right]
+	= \left| \Braket{u_a | \psi} \right|^2
+	= \left| c_a \right|^2
+\end{align}
+であり$S$系の状態は$\Ket{a}$に遷移する。
+次に$D$系を測定して$\Ket{u_a}$が観測される確率は
+\begin{align}
+	\Pr \left[ M = a \right]
+	&= \Tr_{SD} \left[ \Ketbra{\Psi}{\Psi}_{SD}
+	\left( \hat{I} \otimes \Ketbra{u_a}{u_a} \right) \right] \\
+	&= \Tr_{SD}
+	\left[ \left( \sum_{b'} c_{b'} \Ket{b'}_S \Ket{u_{b'}}_D \right)
+	\left( \sum_b c^*_b \Bra{b}_S \Bra{u_b}_D \right)
+	\left( \hat{I} \otimes \Ketbra{u_a}{u_a} \right) \right] \\
+	&= \Tr_S \left[ \left| c_a \right|^2 \Ketbra{a}{a}_S \right] \\
+	&= \left| c_a \right|^2
+\end{align}
+となり、
+また測定後の$S$系の状態は
+\begin{align}
+	\frac{1}{\Pr \left[ M = a \right]}
+	\Tr_D \left[ \Ketbra{\Psi}{\Psi}_{SD} \Ketbra{u_a}{u_a}_D \right]
+	= \Ketbra{a}{a}_S
+\end{align}
+である。
+したがってこれら２つは$D$系が付いているかいないかを除けば
+全く同じ状況になっている。
+これは結局$D$系の測定を通して$S$系の理想測定を行えることを示している。
+
+\subsubsection{縮退のある物理量の理想測定後の状態}
+上の状況で物理量$A$に縮退があった場合には、
+縮退の自由度を表す変数$\alpha$を導入して
+\begin{align}
+	\hat{A} \Ket{a, \alpha} = a \Ket{a, \alpha}
+\end{align}
+を満たす固有状態を考えれば良い。
+すると任意の$S$系の状態は
+\begin{align}
+	\Ket{\psi} = \sum_a \sum_\alpha c_{a, \alpha} \Ket{a, \alpha}
+\end{align}
+と展開でき、
+ユニタリ演算子$\hat{U}_{SD}$は
+\begin{align}
+	\hat{U}_{SD} \Ket{\psi}_S \Ket{0}_D
+	= \sum_a \sum_\alpha c_{a, \alpha} \Ket{a, \alpha}_S \Ket{u_a}
+\end{align}
+を満たすように取れば良い。
+すると$S$系で$a$が測定される確率は、
+射影演算子$\hat{P}_A (a) = \sum_\alpha \Ketbra{a, \alpha}{a, \alpha}$を用いて
+\begin{align}
+	\Pr \left[ A = a \right]
+	= \Tr \left[ \Ketbra{\psi}{\psi} \hat{P}_A (a) \right]
+	= \Braket{\psi | \hat{P}_A (a) | \psi}
+	= \left| c_{a, \alpha} \right|^2
+\end{align}
+と書ける。
+測定後の状態はこの教科書ではこのままでは特に何も言えない。
+しかし間接測定ではどうなるかを言える。
+
+間接測定の場合は、
+$\Ket{u_a}$が観測される確率は
+\begin{align}
+	\Pr \left[ M = a \right]
+	&= \Tr_{SD} \left[ \Ketbra{\Psi}{\Psi}_{SD}
+	\left( \hat{I} \otimes \Ketbra{u_a}{u_a} \right) \right] \\
+	&= \Tr_S \left[
+		\left( \sum_{\alpha'} c_{a, \alpha'} \Ket{a, \alpha'} \right)
+		\left( \sum_\alpha c^*_{a, \alpha} \Bra{a, \alpha} \right)
+	 \right] \\
+	 &= \sum_\alpha \left| c_{a, \alpha} \right|^2
+\end{align}
+となり$S$系の場合と一致し、
+測定後の状態は
+\begin{align}
+	\frac{1}{\Pr \left[ M = a \right]}
+	\Tr_D \left[ \Ketbra{\Psi}{\Psi}_{SD}
+	\left( \hat{I} \otimes \Ketbra{u_a}{u_a} \right) \right]
+	&= \frac{1}{\Pr \left[ A = a \right]}
+	\left( \sum_{\alpha'} c_{a, \alpha'} \Ket{a, \alpha'} \right)
+	\left( \sum_\alpha c^*_{a, \alpha} \Bra{a, \alpha} \right) \\
+	&= \frac{\hat{P}_A (a) \Ketbra{\psi}{\psi} \hat{P}_A (a)}
+	{\Braket{\psi | \hat{P}_A (a) | \psi}}
+\end{align}
+であることが分かる。
+これはもちろん純粋状態であり
+\begin{align}
+	\frac{1}{\sqrt{\Braket{\psi | \hat{P}_A (a) | \psi}}}
+	\hat{P}_A (a) \Ket{\psi}
+\end{align}
+つまり、
+$\hat{P}_A (a)$を用いて射影したあとに規格化した状態になっている。
+
+\subsubsection{様々な量子測定}
+この章で述べた間接測定には色々なクラスがある。
+そのうちの１つはここまでで触れた$D$系の観測で$S$系の理想測定を実現するもので、
+$\Pr \left[ A = a \right]$と$\Pr \left[ M = a \right]$が一致し、
+更に測定後の状態が$\Ket{a}$になるようなものである。
+次のクラスは\textbf{正確な測定}と呼ばれ、
+理想測定と同様に観測確率は一致するが測定後の状態は$\Ket{a}$となるとは
+限らないものである。
+最後に最も大きいクラス（？）は観測確率も測定後状態も一致するとは
+限らない場合である。
+これを\textbf{一般測定}と呼ぶ。
+また一般測定のうちで観測後の状態を他の実験に使えない、
+つまり測定後の状態を決めることができないものを特に
+\textbf{POVM測定}と呼ぶ（ことがある）。
+（POVMを用いた測定は測定後状態が決まらないためPOVM測定になっている。
+これが名前の由来だろう。）
+
+\subsection{不確定性関係}
+\subsubsection{ロバートソン不等式}
+ここでは有名な不確定性関係の説明を行う。
+そのためにまず\textbf{量子ゆらぎ}の定式化から始める。
+物理量$A$の量子ゆらぎは$A$の標準偏差
+\begin{align}
+	\Delta A \left( \hat{\rho} \right)
+	&\coloneqq \sqrt{\Braket{\left( A
+	- \Braket{A}_{\hat{\rho}} \right)^2}_{\hat{\rho}}} \\
+	&= \sqrt{\Tr \left[ \hat{\rho} \left( \hat{A}
+	- \Tr \left[ \hat{\rho} \hat{A} \right] \hat{I} \right)^2 \right]} \\
+	&= \sqrt{\Tr \left[ \hat{\rho} \hat{A}^2 \right]
+	- \left( \Tr \left[ \hat{\rho} \hat{A} \right] \right)^2}
+\end{align}
+で定義される。
+
+\begin{problem}[label=pr:3]
+	$\Delta A$が0であるとき、
+	その量子状態$\hat{\rho}$は$\hat{A}$の固有状態であることを示せ。
+
+	\tcblower
+
+	$\hat{A}$のスペクトル分解を
+	\begin{align}
+		\hat{A} = \sum_\lambda a(\lambda) \hat{P} (\lambda)
+	\end{align}
+	とする。
+	このとき$\lambda \neq \lambda'$であれば
+	$a(\lambda) \neq a \left( \lambda' \right)$であり、
+	また各$\hat{P}(\lambda)$は射影演算子である。
+	このようにすると、
+	\begin{align}
+		p(\lambda)
+		\coloneqq \Pr \left[ A = a(\lambda) \right]
+		= \Tr \left[ \hat{\rho} \hat{P} (\lambda) \right]
+	\end{align}
+	で与えられるから
+	$\Delta A$内の各期待値は
+	\begin{gather}
+		\Tr \left[ \hat{\rho} \hat{A}^2 \right]
+		= \sum_\lambda a^2(\lambda) p(\lambda) \\
+		\Tr \left[ \hat{\rho} \hat{A} \right]
+		= \sum_\lambda a(\lambda) p(\lambda)
+	\end{gather}
+	と書けることが分かる。
+	ここで$\sum_\lambda p(\lambda) = 1$であることと、
+	コーシーシュワルツの不等式を用いると
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{A}^2 \right]
+		&= \sum_\lambda \left[ a(\lambda) \sqrt{p(\lambda)} \right]^2
+		\cdot \sum_{\lambda'} \left( \sqrt{p (\lambda')} \right)^2 \\
+		&\geq \left[ \sum_\lambda a(\lambda) p(\lambda) \right]^2
+		\qquad \left( \text{等号成立は
+		$a(\lambda) \sqrt{p(\lambda)} = k \sqrt{p(\lambda)}$
+		のとき} \right) \\
+		&= \left( \Tr \left[ \hat{\rho} \hat{A} \right] \right)^2
+	\end{align}
+	という関係が満たされることが分かる。
+	
+	問題に戻って$\Delta A = 0$となる場合を考えると、
+	これは等号成立つまり
+	$a(\lambda) \sqrt{p(\lambda)} = k \sqrt{p(\lambda)}$
+	のときであると分かる。
+	この$p(\lambda)$は確率分布であり0でないものが存在するから、
+	そのうちの１つを$p(\lambda_0)$とする。
+	したがって$k = a(\lambda_0)$であることが分かるが、
+	すると$\lambda \neq \lambda_0$について
+	$(a(\lambda) - a(\lambda_0)) \sqrt{p(\lambda)} = 0$が
+	成り立たなければならない。
+	スペクトル分解の仕方から$a(\lambda) \neq a(\lambda_0)$であるから
+	$p(\lambda) = 0$でならなければならない。
+	以上のことから
+	\begin{align}
+		p(\lambda)
+		= \Tr \left[ \hat{\rho} \hat{P}(\lambda) \right]
+		= \begin{cases}
+			1 & (\lambda = \lambda_0) \\
+			0 & (\lambda \neq \lambda_0)
+		\end{cases}
+	\end{align}
+	を得る。
+
+	また新たに$\hat{P}_\perp \coloneqq \hat{I} - \hat{P}(\lambda_0)$を
+	導入すると、
+	\begin{align}
+		0
+		&= 1 - \Tr \left[ \hat{\rho} \hat{P} (\lambda_0) \right] \\
+		&= \Tr \left[ \hat{\rho} \hat{P}_\perp \right] \\
+		&= \Tr \left[ \sqrt{\hat{\rho}} \sqrt{\hat{\rho}}
+		\hat{P}_\perp \hat{P}_\perp \right] \\
+		&= \Tr \left[ \left( \hat{P}_\perp \sqrt{\hat{\rho}} \right)^\dagger
+		\left( \hat{P}_\perp \sqrt{\hat{\rho}} \right) \right]
+	\end{align}
+	が成り立つ。
+	ここで任意の行列$\hat{A}$に対して
+	\begin{gather}
+		\left( \hat{A}^\dagger \hat{A} \right)^\dagger
+		= \hat{A}^\dagger \hat{A} \\
+		\Braket{\psi | \hat{A}^\dagger \hat{A} | \psi}
+		= \left\| \hat{A} \Ket{\psi} \right\|^2
+		\geq 0
+	\end{gather}
+	となるから$\hat{A}^\dagger \hat{A}$正値演算子である。
+	したがって$\Tr \left[ \hat{A}^\dagger \hat{A} \right]$、
+	つまり$\hat{A}^\ddagger \hat{A}$の固有値の和が0であるときには
+	$\hat{A}^\dagger \hat{A} = 0$であることが分かる。
+	つまり任意のベクトル$\Ket{\psi}$について
+	$\left\| \hat{A} \Ket{\psi} \right\|^2 = 0$、
+	すなわち$\hat{A} \Ket{\psi} = 0$が成り立つから$\hat{A} = 0$を得られる。
+	これを先の式に適用すると$\hat{P}_\perp \sqrt{\hat{\rho}} = 0$を得る。
+	すると$\hat{P}_\perp \hat{\rho} = 0$つまり
+	$\hat{\rho} = \hat{P}(\lambda_0) \hat{\rho}$が成り立たなければならない。
+	またこのエルミート共役の関係$\hat{\rho} = \hat{\rho} \hat{P}(\lambda_0)$も
+	成り立たなければならない。
+	
+	以上のことから
+	\begin{align}
+		\hat{\rho} \hat{A}
+		&= \sum_\lambda a(\lambda) \hat{\rho} \hat{P}(\lambda) \\
+		&= \sum_\lambda a(\lambda) \hat{\rho} \hat{P}(\lambda_0)
+		\hat{P}(\lambda) \\
+		&= a(\lambda_0) \hat{\rho} \hat{P}(\lambda_0) \\
+		&= a(\lambda_0) \hat{\rho} \\
+		&=\hat{A} \hat{\rho}
+	\end{align}
+	が成り立つ。
+	ここから$\hat{\rho}$と$\hat{A}$が交換するため
+	$\hat{\rho}$は$\hat{A}$と同じ固有ベクトルで
+	\begin{align}
+		\hat{\rho} = \sum_\lambda \sum_\alpha \rho_{\lambda, \alpha}
+		\Ketbra{a(\lambda), \alpha}{a(\lambda), \alpha}
+	\end{align}
+	とスペクトル展開できる。
+	したがって
+	\begin{align}
+		\hat{\rho} \hat{A}
+		&= \sum_\lambda \sum_\alpha \rho_{\lambda, \alpha} a(\lambda)
+		\Ketbra{a(\lambda), \alpha}{a(\lambda), \alpha} \\
+		&= a(\lambda_0) \hat{\rho} \\
+		&= a(\lambda_0) \sum_\lambda \sum_\alpha \rho_{\lambda, \alpha}
+		\Ketbra{a(\lambda), \alpha}{a(\lambda), \alpha}
+	\end{align}
+	とならなければならないため、
+	\begin{align}
+		\sum_{\lambda \neq \lambda_0} \sum_\alpha
+		\Bigl[ a(\lambda) - a(\lambda_0) \Bigr] \rho_{\lambda, \alpha}
+		\Ketbra{a(\lambda),\alpha}{a(\lambda),\alpha}
+		= 0
+	\end{align}
+	つまり
+	\begin{align}
+		\rho_{\lambda, \alpha} = 0 \qquad
+		\left( \lambda \neq \lambda_0 \right)
+	\end{align}
+	である必要がある。
+	結局$\Delta A = 0$のときの状態は
+	\begin{align}
+		\hat{\rho}
+		= \sum_\alpha \rho_{\lambda_0, \alpha}
+		\Ketbra{a(\lambda_0), \alpha}{a(\lambda_0), \alpha}
+	\end{align}
+	である。
+
+	これでは問題そのものを示せてはいない。
+	縮退がない場合には確かに$A$の固有状態になっている。
+	しかし縮退がある場合には、
+	ある基底$\Ket{a(\lambda_0), \alpha}$について
+	$\hat{\rho} = \Ketbra{a(\lambda_0), \alpha}{a(\lambda_0), \alpha}$と
+	なっていれば良いが、
+	ここまでの解答ではそうでない場合も許容されている。
+	つまり結論としては$\Delta A = 0$の場合状態は、
+	$A$のある固有値に対応する固有状態の混合状態になっている、
+	ということになってしまう。
+	\footnotemark
+\end{problem}
+\footnotetext{以後簡単のため、
+物理量$A$に対してその固有状態、
+またある固有値に対する固有状態の混合状態の２つをまとめて固有状態と呼ぶ。}
+
+ここから逆に$\hat{\rho}$が$A$の様々な固有状態の重ね合わせになっている場合には
+$\Delta A \neq 0$となる。
+以上を踏まえて$\left[ \hat{A}, \hat{B} \right] \neq 0$となる
+２つの物理量$\hat{A}$と$\hat{B}$について考えてみる。
+これらは同時対角化できないため、
+$\hat{A}$の固有状態であるが$\hat{B}$の固有状態でない
+状態が存在できる（その逆もしかり）ため、
+$\Delta A$もしくは$\Delta B$の少なくともどちらか１つは0でない状態が存在できる
+だろうと予想される。
+このことは\textbf{ロバートソン不等式}
+\begin{align}
+	\Delta A \Delta B
+	\geq \frac{1}{2} \left| \Tr \left[ \hat{\rho}
+	\left[ \hat{A}, \hat{B} \right] \right] \right|
+	\label{eq:ロバートソン不等式}
+\end{align}
+から分かる。
+
+\begin{problem}
+	ロバートソン不等式を示せ。
+
+	\tcblower
+
+	$N$次複素正方行列$\hat{X} = (X_{nn'})$、
+	$\hat{Y} = (Y_{nn'})$を$N^2$次元複素ベクトルとして見て
+	コーシーシュワルツの不等式を用いると
+	\begin{align}
+		\left( \sum_{nn'} |X|^2_{nn'} \right)
+		\left( \sum_{mm'} |Y|^2_{mm'} \right)
+		\geq \left| \sum_{nn'} X^*_{nn'} Y_{nn'} \right|^2
+		\label{eq:行列コーシーシュワルツ}
+	\end{align}
+	となる。
+	ここで
+	\begin{gather}
+		\sum_{nn'} |X|^2_{nn'}
+		= \Tr \left[ \hat{X}^\dagger \hat{X} \right] \\
+		\sum_{nn'} X^*_{nn'} Y_{nn'}
+		= \Tr \left[ X^\dagger Y \right]
+	\end{gather}
+	と書けることを用いれば式\eqref{eq:行列コーシーシュワルツ}は
+	\begin{align}
+		\Tr \left[ \hat{X}^\dagger \hat{X} \right]
+		\Tr \left[ \hat{Y}^\dagger \hat{Y} \right]
+		\geq \left| \Tr \left[ \hat{X}^\dagger \hat{Y} \right] \right|^2
+		\label{eq:トレースコーシーシュワルツ}
+	\end{align}
+	と書き換えられる。
+	ここで密度演算子$\hat{\rho}$と
+	エルミート演算子$\hat{A}'$、$\hat{B}'$を用いて
+	$\hat{X} = \hat{A}' \sqrt{\hat{\rho}}$、
+	$\hat{Y} = \hat{B}' \sqrt{\hat{\rho}}$とすれば
+	式\eqref{eq:トレースコーシーシュワルツ}は
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{A}'^2 \right]
+		\Tr \left[ \hat{\rho} \hat{B}'^2 \right]
+		\geq \left| \Tr \left[ \hat{\rho} \hat{A}' \hat{B}' \right] \right|^2
+	\end{align}
+	となる。
+	ここで右辺の評価を行うことにする。
+	\begin{align}
+		\hat{A}' \hat{B}'
+		= \frac{1}{2} \left( \hat{A}' \hat{B}' + \hat{B}' \hat{A}' \right)
+		+ \frac{1}{2} \left( \hat{A}' \hat{B}' - \hat{B}' \hat{A}' \right)
+	\end{align}
+	であるから
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{A}' \hat{B}' \right]
+		= \frac{1}{2} \Tr \left[ \hat{\rho}
+		\left( \hat{A}' \hat{B}' + \hat{B}' \hat{A}' \right) \right]
+		+ \frac{1}{2} \left[ \hat{\rho}
+		\left( \hat{A}' \hat{B}' - \hat{B}' \hat{A}' \right) \right]
+	\end{align}
+	とできる。
+	こうすると右辺第１項は実数、
+	第２項は純虚数になっていることが
+	\begin{align}
+		\Tr \left[ \hat{\rho} 
+		\left( \hat{A}' \hat{B}' + \hat{B}' \hat{A}' \right) \right]^*
+		&= \Tr \left[ \left\{ \hat{\rho} \left( \hat{A}' \hat{B}'
+		+ \hat{B}' \hat{A}' \right) \right\}^\dagger \right] \\
+		&= \Tr \left[ \hat{\rho} \left( \hat{A}' \hat{B}'
+		+ \hat{B}' \hat{A}' \right) \right] \\
+		\Tr \left[ \hat{\rho}
+		\left( \hat{A}' \hat{B}' - \hat{B}' \hat{A}' \right) \right]^*
+		&= \Tr \left[ \left\{ \hat{\rho} \left( \hat{A}' \hat{B}'
+		- \hat{B}' \hat{A}' \right) \right\}^\dagger \right] \\
+		&= \Tr \left[ \hat{\rho} \left( \hat{B}' \hat{A}'
+		- \hat{A}' \hat{B}' \right) \right] \\
+		&= - \Tr \left[ \hat{\rho} \left( \hat{A}' \hat{B}'
+		- \hat{B}' \hat{A}' \right) \right]
+	\end{align}
+	から分かる。
+	したがって
+	\begin{align}
+		\left| \Tr \left[ \hat{\rho} \hat{A}' \hat{B}' \right] \right|^2
+		&= \frac{1}{4} \left| \Tr \left[ \hat{\rho}
+		\left( \hat{A}' \hat{B}' + \hat{B}' \hat{A}' \right) \right] \right|^2
+		+ \frac{1}{4} \left| \Tr \left[ \hat{\rho}
+		\left( \hat{A}' \hat{B}' - \hat{B}' \hat{A}' \right) \right] \right|^2
+		\\
+		&\geq \frac{1}{4} \left| \hat{\rho}
+		\left[ \hat{A}', \hat{B}' \right] \right|^2
+	\end{align}
+	とできる。
+	ここで
+	$\hat{A}' = \hat{A} - \Tr \left[ \hat{\rho} \hat{A} \right] \hat{I}$、
+	$\hat{B}' = \hat{B} - \Tr \left[ \hat{\rho} \hat{B} \right] \hat{I}$と
+	置くと
+	\begin{align}
+		\Tr \left[ \hat{\rho} \hat{A}'^2 \right]
+		&= \Tr \left[ \hat{\rho} \left( \hat{A}
+		- \Tr \left[ \hat{\rho} \hat{A} \right] \hat{I} \right)^2 \right] \\
+		&= \Tr \left[ \hat{\rho} \hat{A}^2 \right]
+		- \Tr \left[ \hat{\rho} \hat{A} \right]^2 \\
+		&= \left( \Delta A \right)^2 \\
+		\left[ \hat{A}', \hat{B}' \right]
+		&= \left[ \hat{A} - \Tr \left[ \hat{\rho} \hat{A} \right] \hat{I},
+		\hat{B} - \Tr \left[ \hat{\rho} \hat{B} \right] \hat{I} \right] \\
+		&= \left[ \hat{A}, \hat{B} \right]
+		- \Tr \left[ \hat{\rho} \hat{B} \right]
+		\left[ \hat{A}, \hat{B} \right]
+		- \Tr \left[ \hat{\rho} \hat{A} \right]
+		\left[ \hat{I}, \hat{B} \right]
+		+ \Tr \left[ \hat{\rho} \hat{A} \right] \Tr \left[ \hat{\rho} \hat{B}
+		\right] \left[ \hat{I}, \hat{I} \right] \\
+		&= \left[ \hat{A}, \hat{B} \right]
+	\end{align}
+	であるから
+	\begin{align}
+		\left( \Delta A \right)^2 \left( \Delta B \right)^2
+		\geq \left| \frac{1}{2}
+		\Tr \left[ \hat{\rho} \left[ \hat{A}, \hat{B} \right] \right]
+		\right|^2
+	\end{align}
+	となりロバートソン不等式を得る。
+\end{problem}
+
+\pagebreak		% したくはないが、何故かtcolorboxと本文が被ってしまうため
+この不等式は、
+量子力学において全ての物理量が確定した値を持つ状態が存在しないことを示している。
+\footnote{\ref{ap:考察}を参照。}
+この意味で式\eqref{eq:ロバートソン不等式}は
+\textbf{不確定性関係}と呼ぶことが多い。
+
+また$\hat{A}$、$\hat{B}$が\textbf{可換}、
+すなわち$\hat{A} \hat{B} = \hat{B} \hat{A}$
+もしくは$\left[ \hat{A}, \hat{B} \right] = 0$の場合である。
+このときは必ずある正規直交基底$\{ \Ket{n} \}$が存在して
+\begin{gather}
+	\hat{A} \Ket{n} = a_n \Ket{n} \\
+	\hat{B} \Ket{n} = b_n \Ket{n}
+\end{gather}
+となるため、
+ある$n$について$\hat{\rho} = \Ketbra{n}{n}$と取れば
+$\Delta A = \Delta B = 0$となり式\eqref{eq:ロバートソン不等式}の
+等号を実際に達成することができる。
+\footnotemark[1]
+
+\subsubsection{小澤不等式}
+次に測定過程における不確定性関係を考えたい。
+先程の不確定性関係に出てくる$\Delta A$、$\Delta B$は
+測定する前の初期状態$\hat{\rho}$にのみ依っている。
+つまりこれは、
+同じ状態$\hat{\rho}$を用意した上で$A$と$B$を別々に測定したとして
+$A$、$B$がどの程度揺らぐかということを問題にしていた。
+ここではそうではなく、
+測定器と相互作用させ$A$と相関のある量をメーター$M$から測定したときに
+どうなるかということを考える。
+今の場合は$A$そのものの値を知ることはできないが、
+測定器のメーターを通して$A$の値が得られるように準備することが多いだろう。
+したがって$A$の誤差$\varepsilon (A)$として、
+メーター$M$で得られる物理量と、
+相互作用の前の状態で$A$を測ったときの差がどうなるかを求めたい。
+また$A$（と相関のある$M$）を測定するために作用させた測定相互作用によって
+他の物理量$B$の値も元の値から擾乱してしまうであろうから、
+その擾乱$\eta (B)$についても考えたい。
+
+まず$A$の誤差$\varepsilon (A)$をしっかりと定義する。
+測定相互作用$\hat{U}_{SD}$を経たあとの$M$に対応する
+ハイゼンベルグ演算子
+\begin{align}
+	\hat{M}_{\mathrm{H}}
+	\coloneqq \hat{U}^\dagger_{SD} \left( \hat{I} \otimes \hat{M} \right)
+	\hat{U}_{SD}
+\end{align}
+を導入する。
+そして先程述べた精神に基づく$A$の誤差演算子を
+\begin{align}
+	\hat{N} (A) \coloneqq \hat{M}_\mathrm{H} - \hat{A} \otimes \hat{I}
+\end{align}
+と定義する。
+すると誤差$\varepsilon (A)$は
+\begin{align}
+	\varepsilon (A)
+	\coloneqq \sqrt{\Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+	\underbrace{\hat{N}^2 (A)}_\text{正値} \right]}
+\end{align}
+定義されるべきだと考えられる。
+また測定相互作用後の$B$に対応するハイゼンベルグ演算子を
+\begin{align}
+	\hat{B}_{\mathrm{H}}
+	\coloneqq \hat{U}^\dagger_{SD} \left( \hat{B} \otimes \hat{I} \right)
+	\hat{U}_{SD}
+\end{align}
+と定義すれば、
+$B$の擾乱演算子
+\begin{align}
+	\hat{D}
+	\coloneqq \hat{B}_{\mathrm{H}} - \hat{B} \otimes \hat{I}
+\end{align}
+を導入することで擾乱$\eta (B)$を
+\begin{align}
+	\eta (B) 
+	\coloneqq \sqrt{\Tr \left[ \left( \hat{\rho} \otimes
+	\Ketbra{0}{0} \right) \hat{D}^2 (B) \right]}
+\end{align}
+と定義すれば良さそうだということが分かる。
+すると
+\begin{align}
+	\varepsilon (A) \eta (B) + \varepsilon (A) \Delta B
+	+ \Delta A \eta (B)
+	\geq \frac{1}{2}
+	\Tr \left[ \hat{\rho} \left[ \hat{A}, \hat{B} \right] \right]
+	\label{eq:小澤不等式}
+\end{align}
+という関係が成り立つ。
+これは\textbf{小澤不等式}として知られている。
+$\hat{A}$と$\hat{B}$が非可換の場合には
+式\eqref{eq:小澤不等式}の右辺が正になる状態が存在する。
+\footnote{\ref{ap:非可換}参照。}
+先取りをすると、
+粒子の量子力学では位置と運動量に対応するエルミート演算子
+$\hat{x}$、$\hat{p}$は
+\begin{align}
+	\left[ \hat{x}, \hat{p} \right] = i \hbar
+\end{align}
+という交換関係を満たす。
+したがって測定過程によって粒子の位置を測定する場合
+\begin{align}
+	\varepsilon (x) \eta(p) + \varepsilon (x) \Delta p
+	+ \Delta x \eta(p) \geq \frac{\hbar}{2}
+\end{align}
+となる。
+したがって位置の揺らぎ$\Delta x$、運動量の揺らぎ$\Delta p$を有限に保ったまま
+$\varepsilon (x) = \eta (p) = 0$とすることは不可能である。
+つまり位置、運動量の揺らぎが有限の場合は、
+位置の測定誤差もしくは運動量の擾乱の少なくともどちらかは
+有限になるような測定しか実現できないということになる。
+また
+\begin{align}
+	\varepsilon (A) \varepsilon (B) + \varepsilon (A) \Delta B
+	+ \Delta A \varepsilon (B)
+	\geq \frac{1}{2} \left| \Tr \left[ \hat{\rho}
+	\left[ \hat{A}, \hat{B} \right] \right] \right|
+	\label{eq:小澤不等式2}
+\end{align}
+という小澤不等式も示されている。
+
+\begin{problem}
+	式\eqref{eq:小澤不等式}と
+	式\eqref{eq:小澤不等式2}の小澤不等式を証明せよ。
+
+	\tcblower
+
+	$\hat{B}_\mathrm{H}$、$\hat{M}_\mathrm{H}$について
+	\begin{align}
+		\left[ \hat{M}_\mathrm{H}, \hat{B}_\mathrm{H} \right]
+		&= \left[ \hat{U}^\dagger_{SD} \left( \hat{I} \otimes \hat{M} \right)
+		\hat{U}_{SD}, \hat{U}^\dagger_{SD}
+		\left( \hat{B} \otimes \hat{I} \right) \hat{U}_{SD} \right] \\
+		&= \hat{U}^\dagger_{SD} \left[ \hat{I} \otimes \hat{M},
+		\hat{B} \otimes \hat{I} \right] \hat{U}_{SD} \\
+		&= 0
+		\label{eq:交換関係}
+	\end{align}
+	となる。
+	ここで誤差演算子、擾乱演算子の定義から
+	\begin{gather}
+		\hat{M}_\mathrm{H}
+		= \hat{A} \otimes \hat{I} + \hat{N} (A) \\
+		\hat{B}_\mathrm{H}
+		= \hat{B} \otimes \hat{I} + \hat{D} (B)
+	\end{gather}
+	とも書ける。
+	これを式\eqref{eq:交換関係}に用いると
+	\begin{align}
+		\left[ \hat{A} \otimes \hat{I}, \hat{B} \otimes \hat{I} \right]
+		+ \left[ \hat{A} \otimes \hat{I}, \hat{D}(B) \right]
+		+ \left[ \hat{N}(A), \hat{B} \otimes \hat{I} \right]
+		+ \left[ \hat{N}(A), \hat{D}(B) \right]
+		= 0
+	\end{align}
+	を得る。
+	したがって
+	\begin{align}
+		&\Tr_{SD} \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\left[ \hat{A} \otimes \hat{I}, \hat{D}(B) \right] \right]
+		+ \Tr_{SD} \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\left[ \hat{N}(A), \hat{B} \otimes \hat{I} \right] \right]
+		+ \Tr_{SD} \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\left[ \hat{N}(A), \hat{D}(B) \right] \right] \\
+		&= - \Tr_{SD} \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\left[ \hat{A} \otimes \hat{I}, \hat{B} \otimes \hat{I} \right]
+		\right] \\
+		&= \Tr_S \left[ \hat{\rho} \left[ \hat{A}, \hat{B} \right] \right]
+	\end{align}
+	が分かる。
+	ここでロバートソン不等式を左辺の各項に用いると
+	\begin{align}
+		\Delta A \Delta D(B) + \Delta N(A) \Delta B + \Delta N(A) \Delta D(B)
+		\geq \frac{1}{2}
+		\Tr_S \left[ \hat{\rho} \left[ \hat{A}, \hat{B} \right] \right]
+		\label{eq:ロバートソンの変形}
+	\end{align}
+	が成り立つ。
+	そして
+	\begin{gather}
+		\varepsilon (A)
+		= \sqrt{\Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{N}^2 (A) \right]}
+		\geq \sqrt{\Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{N}^2 (A) \right]
+		- \left( \Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{N}(A) \right] \right)^2}
+		= \Delta N(A) \\
+		\eta (B)
+		= \sqrt{\Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{D}^2 (B) \right]}
+		\geq \sqrt{\Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{D}^2 (B) \right]
+		- \left( \Tr \left[ \left( \hat{\rho} \otimes \Ketbra{0}{0} \right)
+		\hat{D}(B) \right] \right)^2}
+		= \Delta D(B)
+	\end{gather}
+	という関係が成り立つことを式\eqref{eq:ロバートソンの変形}に用いると
+	\begin{align}
+		\varepsilon (A) \eta (B) + \varepsilon (A) \Delta B
+		+ \Delta A \eta (B)
+		\geq \frac{1}{2} \Tr \left[ \hat{\rho}
+		\left[ \hat{A}, \hat{B} \right] \right]
+	\end{align}
+	が得られる。
+	
+	式\eqref{eq:小澤不等式2}についてはよく分からなかった。
+\end{problem}
+
+\appendix
+\section{物理量の揺らぎについて}
+\label{ap:考察}
+全ての物理量が確定的になっている状態が存在しないことを示したい。
+示すために不確定性関係を使うならば、
+あらゆる状態$\hat{\rho}$について
+$\left| \Tr \left[ \hat{\rho} \left[ \hat{A}, \hat{B} \right] \right] \right|
+> 0$となるエルミート演算子$\hat{A}, \hat{B}$の組が
+存在することを示さなければならない。
+そんなことできるのかどうか分からなかった。
+しかし最小不確定性状態（等号を達成する状態）が
+$\hat{A}$、$\hat{B}$両方の固有状態に限られることは分かった
+（このとき右辺は0）ので、
+そのことについて述べておく。
+
+そのことを示すために不確定性関係\eqref{eq:ロバートソン不等式}の
+等号成立条件を確認する。
+この不等式の導出から、
+等号が成立するための条件は
+\begin{gather}
+	\hat{Y} = k \hat{X} \quad \left( k \in \mathbb{C} \right)
+	\label{eq:コーシーシュワルツの等号成立} \\
+	\Tr \left[ \hat{\rho} \left( \hat{A}' \hat{B}'
+	+ \hat{B}' \hat{A}' \right) \right] = 0
+	\label{eq:絶対値の等号成立}
+\end{gather}
+である。
+まず式\eqref{eq:コーシーシュワルツの等号成立}を変形していくと
+\begin{align}
+	\hat{Y} &= k \hat{X} \\
+	\hat{B}' \sqrt{\hat{\rho}}
+	&= k \hat{A}' \sqrt{\hat{\rho}} \\
+	\left( \hat{B} - \Tr \left[ \hat{\rho} \hat{B} \right] \right) \hat{\rho}
+	&= k \left( \hat{A} - \Tr \left[ \hat{\rho} \hat{A} \right] \right)
+	\hat{\rho}
+	\label{eq:コーシーシュワルツの等号成立2}
+\end{align}
+を得る。
+次に\eqref{eq:絶対値の等号成立}を
+\begin{align}
+	\hat{A}' \hat{B}' + \hat{B}' \hat{A}'
+	= \hat{A} \hat{B} + \hat{B} \hat{A}
+	- 2\Tr \left[ \hat{\rho} \hat{A} \right] \hat{B}
+	- 2\Tr \left[ \hat{\rho} \hat{B} \right] \hat{A}
+	+ 2\Tr \left[ \hat{\rho} \hat{A} \right]
+	\Tr \left[ \hat{\rho} \hat{B} \right]
+\end{align}
+と式\eqref{eq:コーシーシュワルツの等号成立2}を用いつつ変形していくと
+\begin{align}
+	\Tr \left[ \hat{\rho} \left( \hat{A}' \hat{B}'
+	+ \hat{B}' \hat{A}' \right) \right]
+	&= \Tr \left[ \hat{\rho} \left( \hat{A} \hat{B} + \hat{B} \hat{A}
+	- \redcancel{2\Tr \left[ \hat{\rho} \hat{A} \right] \hat{B}}
+	- 2\Tr \left[ \hat{\rho} \hat{B} \right] \hat{A}
+	+ \redcancel{2\Tr \left[ \hat{\rho} \hat{A} \right]
+	\Tr \left[ \hat{\rho} \hat{B} \right]}
+	\right) \right] \\
+	&= \Tr \left[ \hat{A} \left( \hat{B} \hat{\rho}
+	- \Tr \left[ \hat{\rho} \hat{B} \right] \hat{\rho} \right) \right]
+	+ \Tr \left[ \left( \hat{\rho} \hat{B}
+	- \hat{\rho} \Tr \left[ \hat{\rho} \hat{B} \right] \right)
+	\hat{A} \right] \\
+	&= k \Tr \left[ \hat{A} 
+	\left( \hat{A} - \Tr \left[ \hat{\rho} \hat{A} \right] \right)
+	\hat{\rho} \right]
+	+ k \Tr \left[ \hat{\rho}
+	\left( \hat{A} - \Tr \left[ \hat{\rho} \hat{A} \right] \right)
+	\hat{A} \right] \\
+	&= 2k \left\{ \Tr \left[ \hat{\rho} \hat{A}^2 \right]
+	- \left( \Tr \left[ \hat{\rho} \hat{A} \right] \right)^2 \right\} \\
+	&= 0
+\end{align}
+つまり
+\begin{align}
+	\Delta A \left( \hat{\rho} \right) = 0 \
+	\text{または} \
+	k = 0
+\end{align}
+である。
+$\Delta A = 0$の場合は問題\ref{pr:3}よりある実数$a$が存在して
+$\hat{\rho} \hat{A} = a \hat{\rho}$を満たす状態であることが分かる。
+これを式\eqref{eq:コーシーシュワルツの等号成立2}に代入すると
+\begin{align}
+	\left( \hat{B} - \Tr \left[ \hat{\rho} \hat{B} \right] \right) \hat{\rho}
+	= k \left( a \hat{\rho} - a \hat{\rho} \right)
+	= 0
+\end{align}
+となり
+$\hat{B} \hat{\rho} = \Tr \left[ \hat{\rho} \hat{B} \right] \hat{\rho}
+= b \hat{\rho}$
+（$b \coloneqq \Tr \left[ \hat{B} \hat{\rho} \right] \in \mathbb{R}$）
+を得る。
+
+$k = 0$の場合は式\eqref{eq:コーシーシュワルツの等号成立2}から
+$\hat{B} \hat{\rho} = b \hat{\rho}$または$\Delta B = 0$を得る。
+これはつまり、
+状態$\hat{\rho}$は$A$の固有状態でもあり、
+$B$の固有状態でもある状態であるということになる。
+したがって$\hat{A} \Ket{\psi} = a \Ket{\psi}$かつ
+$\hat{B} \Ket{\psi} = b \Ket{\psi}$となる状態$\Ket{\psi}$が存在すれば、
+$\hat{\rho} = \Ketbra{\psi}{\psi}$と取ることで等号が成立する
+（容易に確認できる）。
+
+固有状態しか最小不確定性状態にならないということは、
+有限準位の場合で揺らぎがあるときには、
+不確定性関係の等号を成立し得ないことになる。
+ただし無限準位の場合は異なり、
+例えば粒子の位置と運動量の場合は
+\begin{align}
+	\Delta x \Delta p = \frac{\hbar}{2}
+\end{align}
+を満たす状態が存在することが知られている。
+
+\section{非可換の場合の右辺}
+\label{ap:非可換}
+物理量$A$、$B$に対応したエルミート演算子$\hat{A}$、$\hat{B}$が非可換の場合、
+この章で紹介した不等式の右辺がどうなるかを考える。
+まず
+\begin{align}
+	\left[ \hat{A}, \hat{B} \right]^\dagger
+	&= \left( \hat{A} \hat{B} - \hat{B} \hat{A} \right)^\dagger \\
+	&= \left( \hat{B} \hat{A} - \hat{A} \hat{B} \right) \\
+	&= -\left[ \hat{A}, \hat{B} \right]
+\end{align}
+から$\left[ \hat{A}, \hat{B} \right]$は反エルミート行列であることが分かる。
+したがって$\hat{A}$、$\hat{B}$が可換でない場合は
+零でないエルミート行列$\hat{C}$を用いて
+\begin{align}
+	\left[ \hat{A}, \hat{B} \right] = i \hat{C}
+\end{align}
+と書けることになる。
+この$\hat{C}$は零でないエルミート行列だから
+0でない実数固有値を少なくとも１つ持つ。
+そのうちの１つを$c$とし対応する固有状態を$\Ket{c}$とすると、
+$\hat{\rho} = \Ketbra{c}{c}$と取れば
+\begin{align}
+	\left| \Tr \left[ i \Ketbra{c}{c} \hat{C} \right] \right|
+	= \left| i c \right|
+	= |c|
+	> 0
+\end{align}
+したがって右辺が正の値を取る状態が必ず存在する。
+
+\end{document}

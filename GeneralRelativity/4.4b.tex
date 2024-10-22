@@ -1,0 +1,234 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{4.4b \ Gravitational Radiation}
+
+\begin{document}
+\maketitle
+
+Coulombの静電磁場から、Maxwellの電磁気学に移ったときの一番大きな変化は、全体が動的になったことだった。
+またそれによって、電磁波が伝搬することができる。
+Newtonの万有引力から、Einsteinの一般相対論に移ったときにも同じことが、つまり重力波が存在することが分かるようになる。
+線形近似した重力波は、ソースフリーな線形化Einstein方程式(4.4.11)、(4.4.12)から
+\begin{align}
+	\partial^a \overline{\gamma}_{ab} &= 0 \tag{4.4.25} \\
+	\partial^c \partial_c \overline{\gamma}_{ab} &= -16 \pi T_{ab} = 0 \tag{4.4.26}
+\end{align}
+に従っている。
+
+最初に式(4.4.25)を満たすようにゲージを選んだが、それでも更に$\gamma_{ab} \to \gamma_{ab} + \partial_a \xi_b + \partial_b \xi_a$のゲージ変換を施すことを考える。
+元の$\gamma^{\prime}_{ab}$から$\gamma_{ab} = \gamma^{\prime}_{ab} + \partial_a \xi_b + \partial_b \xi_a$に変更すると、
+\begin{align}
+	\gamma &= \eta^{ab} \gamma_{ab} \\
+	&= \eta^{ab} \left( \gamma^{\prime}_{ab} + \partial_a \xi_b + \partial_b \xi_a \right) \\
+	&= \gamma^{\prime} + 2\partial^a \xi_a \label{eq:gamma} \\
+	\overline{\gamma}_{ab} &= \gamma_{ab} - \frac{1}{2} \gamma \\
+	&= \gamma^{\prime}_{ab} + \partial_a \xi_b + \partial_b \xi_a - \frac{1}{2} \eta_{ab} \left( \gamma^{\prime} + 2\partial^c \xi_c \right) \\
+	&= \overline{\gamma}^{\prime}_{ab} + \partial_a \xi_b + \partial_b \xi_a - \eta_{ab} \partial^c \xi_c \label{eq:gammaBar} \\
+	\partial^a \overline{\gamma}_{ab} &= \partial^a \overline{\gamma}^{\prime}_{ab} + \partial^a \partial_a \xi_b + \partial^a \partial_b \xi_a - \partial^a \eta_{ab} \partial^c \xi_c \\
+	&= \partial^a \overline{\gamma}^{\prime}_{ab} + \partial^a \partial_a \xi_b + \partial^a \partial_b \xi_a - \partial_b \partial^c \xi_c \\
+	&= \partial^a \overline{\gamma}^{\prime}_{ab} + \partial^a \partial_a \xi_b \label{eq:pgamma}
+\end{align}
+となる。
+つまり、
+\begin{align}
+	\partial^b \partial_b \xi_a = 0 \tag{4.4.27}
+\end{align}
+を満たす$\xi^a$によるゲージ変換の自由度は残る。
+これはLorenzゲージが、ベクトルポテンシャル$A_a$を唯一定めるわけではなく、
+\begin{align}
+	\partial^a \partial_a \chi = 0 \tag{4.4.28}
+\end{align}
+を満たす、$\chi$による制限されたゲージ自由度$A_a \to A_a + \partial^a \chi$が許されることと似ている。
+電磁波を考察するには、ゲージ自由度を自由空間（$j_a = 0$）において、ある慣性系で(4.4.28)を満たしつつ、$A_0 = 0$となるように選ぶのが便利である。
+これはCoulombゲージ、もしくは放射ゲージと呼ばれている。
+これは以下のようにすると得られる。
+選んだ慣性系の$t=t_0$表面において、
+\begin{align}
+	\nabla^2 \chi = - \nabla \cdot \vec{A} \\
+	\pdif{\chi}{t} = -A_0
+\end{align}
+が満たされるように$\chi$を選ぶ（式(4.4.25)の解は、$\chi$、$\partial \chi / \partial t$の任意の初期条件でただ1つ解が定まることが、10.1節から分かる）。
+すると、関数
+\begin{align}
+	f = A_0 + \pdif{\chi}{t}
+\end{align}
+は、
+\begin{align}
+	\partial^a \partial_a A_b = -4\pi j_b \tag{4.2.32}
+\end{align}
+と式(4.4.28)より、
+\begin{align}
+	\partial^a \partial_a f = \partial^a \partial_a A_0 + \pdif{}{t} \partial^a \partial_a \chi = -4 \pi j_0 \tag{4.4.31}
+\end{align}
+を満たし、$t=t_0$では
+\begin{align}
+	f &= 0 \\
+	\pdif{f}{t} = \pdif{A_0}{t} + \pdif{^2 \chi}{t^2}
+	&= \nabla \cdot \vec{A} + \nabla^2 \chi = 0
+\end{align}
+も満たすことが分かる。
+考えている範囲（もっと正確に言うと、$t=t_0$から円錐の各点までの間に）にソースが無ければ、方程式(4.4.31)の解は$f=0$となる。
+したがって、この解を用いてゲージ変換$A_a \to A_a + \partial_a \chi$を行えば、Lorenzゲージが得られる。
+
+同じように、制限されたゲージ自由度(4.4.27)を満たしつつ、ソースフリー（$T_{ab}=0$）な領域において、$\gamma=0$、$\gamma_{0\mu}=0 (\mu=1,2,3)$となるような、線形化された重力場を用いることにする。
+また、もし全時空においてソースが無ければ、$\gamma_{00}=0$となるようにし、無限遠で良い振る舞いをするように選ぶ。
+そのために、$t=t_0$において
+\begin{align}
+	2 \left( -\pdif{\xi_0}{t} + \nabla \cdot \vec{\xi} \right) &= -\gamma \tag{4.4.34a} \\
+	2 \left[ -\nabla^2 \xi_0 + \nabla \cdot \left( \pdif{\vec{\xi}}{t} \right)\right] &= -\pdif{\gamma}{t} \tag{7.4.34b} \\
+	\pdif{\xi_{\mu}}{t} + \pdif{\xi_0}{x^{\mu}} &= -\gamma_{0\mu} \quad (\mu=1, 2, 3) \tag{4.4.34c} \\
+	\nabla^2 \xi_{\mu} + \pdif{}{x^{\mu}} \left(\pdif{\xi_0}{t}\right) &= -\pdif{\gamma_{0\mu}}{t} \quad (\mu = 1, 2, 3) \tag{4.4.34d}
+\end{align}
+を満たすように$\xi_{\mu}$を選ぶ。
+上で電磁気学においてやったのと同じことをすると、$\gamma=0$、$\gamma_{0\mu}=0$とできることが示せる。
+
+関数$f$を
+\begin{align}
+	f = \gamma + 2 \partial^a \xi_a
+\end{align}
+とすると、これは
+\begin{align}
+	\overline{\gamma} = {\overline{\gamma}^a}_a
+	= {\gamma^a}_a - \frac{1}{2} {\delta^a}_b \gamma
+	= \frac{1}{2} \gamma
+\end{align}
+であることを用いると、(4.4.26)と(4.4.27)より
+\begin{align}
+	\partial^a \partial_a f &= \partial^a \partial_a \gamma + 2 \partial^a \partial_a \partial^b \xi_b \\
+	&= 2\partial^a \partial_a \overline{\gamma} + 2 \partial^b \partial^a \partial_a \xi_b \\
+	&= -32 \pi {T^a}_a \\
+	&= 0
+\end{align}
+また$t=t_0$で
+\begin{align}
+	f &= 0 \\
+	\pdif{f}{t} &= \pdif{\gamma}{t} + 2 \pdif{}{t} ( \partial^{\mu} \xi_{\mu} ) \\
+	&= -2 \left( -\nabla^2 \xi_0 + \nabla \cdot \pdif{\vec{\xi}}{t} \right) + 2 \pdif{}{t} \left( -\pdif{\xi_0}{t} + \nabla \cdot \vec{\xi} \right) \\
+	&= 2 \left( \pdif{^2 \xi_0}{t^2} + \nabla^2 \xi_0 \right) \\
+	&= 0
+\end{align}
+となるから、ソースが無ければ、$f=0$となる。
+
+関数$g_{\mu} (\mu = 1, 2, 3)$を
+\begin{align}
+	g_{\mu} &= \gamma_{0\mu} + \partial_0 \xi_{\mu} + \partial_{\mu} \xi_0 \\
+	&= \gamma_{0\mu} + \pdif{\xi_{\mu}}{t} + \pdif{\xi_0}{x^{\mu}}
+\end{align}
+で定義すると、先と同様に
+\begin{align}
+	\partial_{\mu} \partial^{\mu} g_{\nu} = 0
+\end{align}
+となる。
+また、$t=t_0$においては
+\begin{align}
+	g_{\mu} &= 0 \\
+	\pdif{g_{\mu}}{t} &= \pdif{\gamma_{0\mu}}{t} + \pdif{^2 \xi_{\mu}}{t^2} + \pdif{}{t} \left( \pdif{\xi_0}{x^{\mu}} \right) \\
+	&= \pdif{\gamma_{0\mu}}{t} + \nabla^2 \vec{\xi_{\mu}} + \pdif{}{x^{\mu}} \left( \pdif{\xi_0}{t} \right) \\
+	&= 0
+\end{align}
+であるから、これも同様にソースがなければ、$g_{\mu}=0$となる。
+したがって、この$\xi_{\mu}$を選ぶと、$\gamma$、$\gamma_{0\mu} (\mu = 1, 2, 3)$が0になる。
+
+$\gamma_{00}$については、$\gamma=0$より、$\gamma_{ab} = \overline{\gamma}_{ab}$となるから、式(4.4.25)より
+\begin{align}
+	\partial^{\mu} \gamma_{\mu 0} = \pdif{\gamma_{00}}{t} = 0 \tag{4.4.35}
+\end{align}
+が得られる。
+したがって、線形化されたEinstein方程式(4.4.26)を用いると、全時空においてソースがないことから、
+\begin{align}
+	\partial^c \partial_c \gamma_{00} = \nabla^2 \gamma_{00} = -16 \pi T_{00} = 0 \tag{4.4.36}
+\end{align}
+が得られる。
+この解のうち、無限遠方で振る舞いが良いのは、$\gamma_{00} = {\rm const}$だけである。
+ここで、更にゲージ変換を行うと、$\gamma_{00}=0$とできる。
+
+この放射ゲージを使って、ソースフリーな場合の線形化Einstein方程式の解を求める。
+定テンソル場$H_{ab}$を用いて表される、平面波
+\begin{align}
+	\gamma_{ab} = H_{ab} \exp \left( i \sum_{\mu = o}^3 k_{\mu} x^{\mu} \right)
+\end{align}
+は、ゲージ条件(4.4.26)を
+\begin{align}
+	\sum_{\mu} k^{\mu} k_{\mu} = 0
+\end{align}
+のときのみ満たす。
+またゲージ条件(4.4.25)より
+\begin{align}
+	\partial^{\mu} \gamma_{\mu\nu} &= \partial^{\mu} H_{\mu\nu} \exp \left( i \sum_{\rho = o}^3 k_{\rho} x^{\rho} \right) \\
+	&= i k^{\rho} {\delta^{\mu}}_{\rho} H_{\mu\nu} \exp \left( i \sum_{\rho = o}^3 k_{\rho} x^{\rho} \right) = 0 \\
+	k^{\mu} H_{\mu\nu} &= 0 \tag{4.4.39a}
+\end{align}
+$\gamma_{0\mu}$より
+\begin{align}
+	\gamma_{0\mu} &= H_{0\mu} \exp \left( i \sum_{\rho = o}^3 k_{\rho} x^{\rho} \right) = 0 \\
+	H_{0\mu} = 0 \tag{4.4.39b}
+\end{align}
+$\gamma = 0$より
+\begin{align}
+	\gamma &= \sum_{\mu=0}^3 {H^{\mu}}_{\mu} \exp \left( i \sum_{\rho = o}^3 k_{\rho} x^{\rho} \right) = 0 \\
+	\sum_{\mu=0}^3 {H^{\mu}}_{\mu} &= 0 \tag{4.4.39c}
+\end{align}
+を得る。
+これは全部で9個の式だが、(4.4.39b)が満たされれば、(4.4.39a)の$\nu=0$も満たされるから、独立した式は8つである。
+$H_{\mu\nu}$の自由度は10だから、2つが残っていて、$H_{\mu\nu}$は線形独立な解を2つ持つ。
+この2つは、重力波の独立した偏極状態を表している。
+真空中の振る舞いの良い、線形化Einstein方程式の任意解はこの平面波の重ね合わせで書ける。
+
+重力波を検出するもっとも単純なものは、2つの物質の相対加速度、つまり潮汐力を見ることである。
+2つの自由落下している物体の相対加速度は測地線偏差方程式(3.3.18)によって決まる。
+\begin{align}
+	a^{a} = -{R_{cbd}}^a X^b T^c T^d \tag{3.3.18}
+\end{align}
+今の場合では、2つの物質が選んだ慣性系において、ほとんど静止していれば、$T^a$はほとんど時間軸と平行なベクトルであるから、
+\begin{align}
+	\dif{^2 X^{\mu}}{t^2} \approx \sum_{\nu} {R_{\nu00}}^{\mu} X^{\nu} \tag{4.4.40}
+\end{align}
+となる。
+放射ゲージでは、
+\begin{align}
+	{R_{\mu\nu\rho}}^{\sigma} = \pdif{}{x^{\nu}} {\Gamma^{\sigma}}_{\mu\rho} - \pdif{}{x^{\mu}} {\Gamma^{\sigma}}_{\nu\rho} + \sum_{\alpha} \left( {\Gamma^{\alpha}}_{\mu\rho} {\Gamma^{\sigma}}_{\alpha\nu} - {\Gamma^{\alpha}}_{\nu\rho} {\Gamma^{\sigma}}_{\alpha\mu} \right) \tag{3.4.4}
+\end{align}
+を用いると、
+\begin{align}
+	{\Gamma^{\mu}}_{\nu\rho} &= \sum_{\alpha} \frac{1}{2} g^{\mu\alpha} \left( \partial_{\nu} g_{\rho\alpha} + \partial_{\rho} g_{\nu\alpha} - \partial_{\alpha} g_{\nu\rho} \right) \\
+	&\simeq \sum_{\alpha} \frac{1}{2} \eta^{\mu\alpha} \left( \partial_{\nu} \gamma_{\rho\alpha} + \partial_{\rho} \gamma_{\nu\alpha} - \partial_{\alpha} \gamma_{\nu\rho} \right) \\
+	{\Gamma^0}_{\mu\nu} &= \frac{1}{2} \pdif{\gamma_{\mu\nu}}{t} \\
+	{\Gamma^{\mu}}_{\nu 0} &= \frac{1}{2} \pdif{{\gamma^{\mu}}_{\nu}}{t}
+\end{align}
+より、線形化Riemanテンソル
+\begin{align}
+	{R_{\nu 00}}^{\mu} &= \pdif{}{t} \left( \frac{1}{2} \pdif{{\gamma^{\mu}}_{\nu}}{t} \right) + \sum_{\alpha} \frac{1}{2} \pdif{{\gamma^{\alpha}}_{\nu}}{t} \cdot \frac{1}{2} \pdif{{\gamma^{\mu}}_{\alpha}}{t} \\
+	&= \frac{1}{2} \pdif{^2 {\gamma^{\mu}}_{\nu}}{t^2} + ?
+\end{align}
+を得られる。
+ここから分かることは、先程出した平面波解は、曲率が0でないため、ゲージ変換をしても消すことができない、つまり意味のあるものになっているということである。
+この計測は、支柱からぶら下げられた2つの物質が離れる様子を、正確に観測することで行うことができる。
+また代わりに、物質が自由運動できるわけではないが、固体に結びつけると、その固体に重力の干潮力による圧力がかかる。
+この重力波によって周期的な圧力が加わると、もし固体の共振振動数が重力波の振動数と近ければ、固体も振動し、それを観測することができる（考案者：Joseph Weber）。
+観測可能な振動数についての$\gamma_{\mu\nu}$は$10^{-17}$以上にはならないと考えられている。
+これは2つの物質間の距離変化比$\Delta X /X$が$10^{-17}$を超えることはないということを意味する。
+例えば2物質間の距離が1 m ならば、核の直径の1/100程度しか動かない
+したがって、この観測には非常に繊細に行わなければならない。
+
+\end{document}

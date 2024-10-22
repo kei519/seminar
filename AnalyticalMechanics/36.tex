@@ -1,0 +1,134 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{\S 36.\ オイラーの運動方程式}
+
+\begin{document}
+\maketitle
+
+\S 34で与えられた運動方程式は、静止座標系で見たものである。
+それを運動系のものに書き直すことを考えよう。
+そうすれば、慣性主軸を座標軸として選ぶことで、角運動量と角速度の成分が簡単に書けることが
+使える。
+
+まずはじめに、ベクトル$\vec{A}$が回転系において変化しない場合を考察する。
+そのとき、静止系で見れば、角速度$\vec{\Omega}$で$\vec{A}$が回転していることになる。
+したがって、静止系での$\vec{A}$の時間微分は
+\begin{align}
+	\dif{\vec{A}}{t} = {\vec{\Omega} \vec{A}}
+\end{align}
+と書けることになる。
+したがって、一般の（回転系においても$\vec{A}$が運動している）場合、
+回転系での$\vec{A}$の時間微分を$\ddif^{\prime} \vec{A} / \ddif t$と書けば、
+\begin{align}
+	\dif{\vec{A}}{t} = \dif{^{\prime}\vec{A}}{t} + [\vec{\Omega} \vec{A}]
+\end{align}
+を満たす。
+
+ここまでの考察を踏まえると、式(34.1)、(34.3)を
+\begin{align}
+	\dif{\vec{P}}{t} &= \dif{^{\prime}\vec{P}}{t} + [\vec{\Omega} \vec{P}]
+	= \vec{F} \\
+	\dif{\vec{M}}{t} &= \dif{^{\prime}\vec{M}}{t} + [\vec{\Omega} \vec{M}]
+	= \vec{K}
+\end{align}
+と書き直せることが分かる。
+これらを回転系の座標軸$(x_1, x_2, x_3)$の各成分ごとに書き直す。
+\begin{align}
+	[\vec{A} \vec{B}]_i = \epsilon_{ijl} A_j B_k
+\end{align}
+であることを用いれば、運動量に関する運動方程式は、
+$\vec{P} = \mu \vec{V}$の関係式を使うことで、
+\begin{align}
+\begin{split}
+	\mu \left( \dif{V_1}{t} + \Omega_2 V_3 - \Omega_3 V_2 \right) &= F_1 \\
+	\mu \left( \dif{V_2}{t} + \Omega_3 V_1 - \Omega_1 V_3 \right) &= F_2 \\
+	\mu \left( \dif{V_3}{t} + \Omega_1 V_2 - \Omega_2 V_1 \right) &= F_3
+\end{split} \tag{36.4}
+\end{align}
+となる。
+また角運動量似関しての運動方程式は、$M_i = I_i \Omega_i$を用いれば
+\begin{align}
+\begin{split}
+	I_1 \dif{\Omega_1}{t} + (I_3 - I_2) \Omega_2 \Omega_3 &= K_1 \\
+	I_2 \dif{\Omega_2}{t} + (I_1 - I_3) \Omega_3 \Omega_1 &= K_2 \\
+	I_3 \dif{\Omega_3}{t} + (I_2 - I_1) \Omega_1 \Omega_2 &= K_3
+\end{split} \tag{36.5}
+\end{align}
+となる。
+ここで（自分が一瞬わからなかったので）注意しておくことは、
+各$\vec{V}$、$\vec{M}$は、各成分の方向は時間によって変化するが、静止系での量である。
+
+応用例として（また）自由な対称こまを考える。
+まず対称軸を$x_3$に取ると、$I_1 = I_2$となるから、(36.5)式の3つ目の式から、
+$\Omega_3 = {\rm const}$で有ることが分かる。
+それを1,2の式に用いると、
+\begin{align}
+	\omega = \frac{I_3 - I_1}{I_1} \Omega_3
+	\tag{36.5}
+\end{align}
+を用いることで、
+\begin{align}
+	\dif{\Omega_1}{t} = -\omega \Omega_2 \\
+	\dif{\Omega_2}{t} = \omega \Omega_1
+\end{align}
+を得る。
+これはよく知られた方法で解けて、第2式に$i$を掛けて両辺を足し合わせることで、
+\begin{align}
+	\dif{}{t} (\Omega_1 + \Omega_2) = -\omega \Omega_2 + i \omega \Omega_1
+	= i \omega (\Omega_1 + i \Omega_2)
+\end{align}
+となるから、適当な初期条件（もしくは慣性主軸の選び方）の元、この解は
+\begin{align}
+	\Omega_1 + i \Omega_2 = A e^{i \omega t}
+\end{align}
+となる。
+$\Omega_1$、$\Omega_2$は共に実数であるから
+\begin{align}
+	\Omega_1 = A \cos\omega t \quad
+	\Omega_2 = A \sin\omega t
+	\tag{36.7}
+\end{align}
+を得る。
+これはつまり、$\vec{\Omega}$が$x_3$軸（対称軸）に垂直な平面内において、
+大きさ一定で（$\Omega_3 = {\rm const}$）角速度$\omega$で回転することを意味する。
+このとき、$M_1 = I_1 \Omega_1$、$M_2 = I_1 \Omega_2$だから、
+$\vec{M}$も$\vec{\Omega}$と同様に、$x_3$軸周りを回転する。
+
+これを\S 33や\S 35で見たのと同様に、$\vec{M}$の向きを$Z$軸方向とすると、
+\S 35で見たように、$Z$軸の方位角はオイラー角を用いると$\pi/2 - \psi$だから、
+$x_3$軸に垂直な平面（$x_1x_2$平面）に射影したときの角速度は$-\dot{\psi}$となる。
+ここで(35.4)式を用いると、
+\begin{align}
+	\dot{\psi} = \frac{M \cos\theta}{I_3} - \dot{\phi} \cos\theta
+	= M \cos\theta \left( \frac{1}{I_3} - \frac{1}{I_1} \right)
+	= I_3 M \cos\theta \frac{I_1 - I_3}{I_1}
+	= \Omega_3 \frac{I_1 - I_3}{I_1}
+\end{align}
+を得るが、これは
+\begin{align}
+	-\dot{\psi} = \Omega_3 \frac{I_3 - I_1}{I_1}
+\end{align}
+となり、(36.6)と一致する。
+
+\end{document}

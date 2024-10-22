@@ -1,0 +1,487 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\renewcommand{\proofname}{証明}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\newtheorem{thm}{定理}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+
+\newtheorem*{thm*}{定理}
+\newtheorem*{dfn*}{定義}
+\newtheorem*{lem*}{補題}
+\newtheorem*{prop*}{命題}
+\newtheorem*{cor*}{系}
+\newtheorem*{ass*}{仮定}
+\newtheorem*{conj*}{予想}
+
+\title{BPPまわりのこと}
+\author{}
+
+\begin{document}
+\maketitle
+
+まずはじめにStrong BPP、Weak BPPについて述べる。
+\begin{screen}
+\begin{dfn*}[Strong BPP]
+	$L \in \textrm{Strong BPP}$
+
+	$\xLeftrightarrow[]{\; \textrm{def} \;}$
+	ある多項式時間チューリングマシン$M$、多項式$q$が存在して
+	\begin{enumerate}
+		\item $x \in L$ならば
+			$\Pr_y \left[ M(x, y) \ \textrm{accepts} \right] \ge 1 - 2^{-q(n)}$
+		\item $x \notin L$ならば
+			$\Pr_y \left[ M(x, y) \ \textrm{accepts} \right] \leq 2^{-q(n)}$
+	\end{enumerate}
+	となる。
+	ただし$n = |x|$である。
+\end{dfn*}
+\end{screen}
+
+\begin{screen}
+\begin{dfn*}[Weak BPP]
+	$L \in \textrm{Weak BPP}$
+
+	$\xLeftrightarrow[]{\; \textrm{def} \;}$
+	ある多項式時間チューリングマシン$M$、多項式時間計算可能関数$s$、
+	多項式$p$が存在して
+	\begin{enumerate}
+		\item $x \in L$ならば
+			$\Pr_y \left[ M(x, y) \ \textrm{accepts} \right]
+			\ge s(n) + \frac{1}{p(n)}$
+		\item $x \notin L$ならば
+			$\Pr_y \left[ M(x, y) \ \textrm{accepts} \right] \leq s(n)$
+	\end{enumerate}
+	となる。
+	ただし$n = |x|$である。
+\end{dfn*}
+\end{screen}
+
+目標はStrong BPP$=$Weak BPPを示すことであるが、
+その前にChernoffの不等式について述べる。
+\begin{screen}
+\begin{lem}[Markovの不等式]\label{lem:Markov}
+	0以上の実数値を取る確率変数$X$の期待値を$E(X)$と書く。
+	$X$がある実数$a$以上である確率は以下の不等式で抑えられる。
+	\begin{align}
+		\Pr(X \ge a) \leq \frac{E(X)}{a}
+	\end{align}
+\end{lem}
+\end{screen}
+\begin{proof}
+	\begin{align}
+		\Pr (X \ge a) &= \sum_{x \ge a} \Pr (X = x) \\
+		&\leq \sum_{x \ge a} \frac{x}{a} \Pr (X = x)
+		\quad \left(\because \frac{x}{a} \ge 1 \right) \\
+		&= \frac{1}{a} \sum_{x \ge a} x \Pr (X = x) \\
+		&\le \frac{1}{a} \sum_{x} x\Pr (X = x) \\
+		&= \frac{E(X)}{a}
+	\end{align}
+\end{proof}
+
+\begin{screen}
+\begin{lem}\label{lem:Chernoff1}
+	実数値を取る確率変数$X$が実数$a$以上である確率は、
+	任意の実数$t > 0$について以下の不等式で抑えられる。
+	\begin{align}
+		\begin{dcases}
+			\Pr (X \ge a) \le \frac{E(e^{tX})}{e^{ta}} \\
+			\Pr (X \le a) \le \frac{E(e^{-tX})}{e^{-ta}}
+		\end{dcases}
+	\end{align}
+\end{lem}
+\end{screen}
+\begin{proof}
+	$t > 0$から
+	\begin{align}
+		\Pr (X \ge a) = \Pr \left( e^{tX} \ge e^{ta} \right)
+	\end{align}
+	であるから、補題\ref{lem:Markov}より
+	\begin{align}
+		\Pr (X \ge a) = \frac{E(e^{tX})}{e^{ta}}
+	\end{align}
+	を得る。
+	同様に
+	\begin{align}
+		\Pr (X \le a) &= \Pr (-X \ge -a) \\
+		&= \Pr \left(e^{-tX} \ge e^{-ta} \right) \\
+		&\le \frac{E(e^{-tX})}{e^{-ta}}
+	\end{align}
+\end{proof}
+
+\begin{screen}
+\begin{lem}\label{lem:Chernoff2}
+	$\{X_k\}$を実数値を取る互いに独立な確率変数、
+	その和を$X = \sum_k X_k$とすると、
+	\begin{align}
+		\begin{dcases}
+			\Pr (X \ge a) \le
+			\min_{t > 0} \ e^{-ta} \prod_k E \left( e^{tX_k} \right) \\
+			\Pr (\overline{X} \le a) \le
+			\min_{t > 0} \ e^{ta} \prod_k E \left( e^{-tX_k} \right)
+		\end{dcases}
+	\end{align}
+\end{lem}
+\end{screen}
+\begin{proof}
+	任意の実数$t > 0$について
+	\begin{align}
+		\Pr (X \ge a) &\le \frac{E \left( e^{tX} \right)}{t^{ta}} \quad
+		\left( \because \text{補題 \ref{lem:Chernoff1}}\right)\\
+		&= e^{-ta} E \left[ \exp \left( t \sum_k X_k \right)\right] \\
+		&= e^{-ta} E \left( \prod_k e^{tX_k} \right) \\
+		&= e^{-ta} \prod_k E \left( e^{tX_k} \right)
+	\end{align}
+	\begin{align}
+		\Pr (X \le a) &\le \frac{E \left( e^{-tX} \right)}{t^{-ta}} \quad
+		\left( \because \text{補題 \ref{lem:Chernoff1}}\right)\\
+		&= e^{ta} E \left[ \exp \left( -t \sum_k X_k \right)\right] \\
+		&= e^{ta} E \left( \prod_k e^{-tX_k} \right) \\
+		&= e^{ta} \prod_k E \left( e^{-tX_k} \right)
+	\end{align}
+	であるから、$t$について最小のものを選べば良い。
+\end{proof}
+
+\begin{screen}
+\begin{lem}\label{lem:Chernoff3}
+	$\{X_k\}$を$\{0, 1\}$を取る互いに独立な確率変数、
+	その和を$X = \sum_k X_k$とすると、
+	\begin{align}
+		\begin{dcases}
+			\Pr \left( X - E(X) \ge \delta E(X) \right)
+			\le \exp \left( -\frac{\delta^2}{2 + \delta} E(X) \right) \quad
+			(\delta \ge 0) \\
+			\Pr \left( X - E(X) \le -\delta E(X) \right)
+			\le \exp \left( -\frac{\delta^2}{2} E(X) \right) \quad
+			(0 \le \delta < 1)
+		\end{dcases}
+	\end{align}
+\end{lem}
+\end{screen}
+\begin{proof}
+	各確率を
+	\begin{align}
+		\Pr (X_k = 1) = p_k, \quad \Pr (X_k = 0) = 1 - p_k
+	\end{align}
+	とすると、
+	\begin{gather}
+		E(X) = \sum_k E (X_k) = \sum_k p_k \\
+		E \left( e^{\pm tX_k} \right)
+		= (1 - p_k) \cdot e^0 + p_k \cdot e^{\pm t}
+		= 1 + \left( e^{\pm t} - 1 \right) p_k
+	\end{gather}
+	である。
+	これを用いると、
+	\begin{align}
+		\Pr \left( X \ge a \right)
+		&\le \min_{t > 0} \ e^{-ta} \prod_k E \left( e^{tX_k} \right) \quad
+		\left( \because \text{補題 \ref{lem:Chernoff2} }\right) \\
+		&= \min_{t > 0} \ e^{-ta}
+		\prod_k \left[ 1 + \left( e^t - 1 \right)p_k \right] \\
+		&\le \min_{t > 0} \ e^{-ta}
+		\prod_k \exp \left[ \left( e^t - 1 \right)p_k \right] \quad
+		\left( \because 1 + x \le e^x \right) \\
+		&= \min_{t > 0} \ 
+		\exp \left[ \sum_k \left( e^t - 1 \right)p_k - ta \right] \\
+		&= \min_{t > 0} \ 
+		\exp \left[ \left( e^t - 1 \right) E(X) - ta \right]
+	\end{align}
+	となる。
+	ここで
+	\begin{align}
+		\dif{}{t} \left[ \left( e^t - 1 \right) E(X) - ta \right]
+		= E(X) e^t - a
+	\end{align}
+	であるから、$a > E(X)$ならば$t = \log (a/E(X))$において右辺は最小値を取る。
+	したがって$\delta > 0$に対して$a = (1 + \delta) E(X) > E(X)$とすることで、
+	\begin{align}
+		\Pr \left( X - E(X) \ge \delta E(X) \right)
+		&= \Pr \left( X \ge (1 + \delta) E(X) \right) \\
+		&\le \exp \left[ \left\{
+			\delta - (1 + \delta) \log \left( 1 + \delta \right)
+		\right\} E(X) \right]
+	\end{align}
+	が分かる。
+	次に$x \ge 0$のとき
+	\begin{align}
+		\log (1 + x) \ge \cfrac{x}{1 + \cfrac{x}{2}}
+	\end{align}
+	であることを用いると、
+	\begin{align}
+		\Pr \left( X - E(X) \ge \delta E(X) \right)
+		&\le \exp \left[ \left\{
+			\delta - (1 + \delta) \cfrac{\delta}{1 + \cfrac{\delta}{2}}
+		\right\} E(X) \right] \\
+		&= \exp \left( -\frac{\delta^2}{2 + \delta} E(X) \right)
+	\end{align}
+	となる。
+
+	同様に
+	\begin{align}
+		\Pr \left( X \le a \right)
+		&\le \min_{t > 0} \ e^{ta} \prod_k E \left( e^{-tX_k} \right) \quad
+		\left( \because \text{補題 \ref{lem:Chernoff2} }\right) \\
+		&= \min_{t > 0} \ e^{ta}
+		\prod_k \left[ 1 + \left( e^{-t} - 1 \right)p_k \right] \\
+		&\le \min_{t > 0} \ e^{ta}
+		\prod_k \exp \left[ \left( e^{-t} - 1 \right)p_k \right] \quad
+		\left( \because 1 + x \le e^x \right) \\
+		&= \min_{t > 0} \ 
+		\exp \left[ \sum_k \left( e^{-t} - 1 \right)p_k + ta \right] \\
+		&= \min_{t > 0} \ 
+		\exp \left[ \left( e^{-t} - 1 \right) E(X) + ta \right]
+	\end{align}
+	となる。
+	ここで
+	\begin{align}
+		\dif{}{t} \left[ \left( e^{-t} - 1 \right) E(X) + ta \right]
+		= a - E(X) e^{-t}
+	\end{align}
+	であるから、$a < E(X)$ならば$t = \log (E(X)/a)$において右辺は最小値を取る。
+	したがって$0 \le a < 1$に対して$a = (1 - \delta) E(X) < E(X)$とすることで、
+	\begin{align}
+		\Pr \left( X - E(X) \le -\delta E(X) \right)
+		&= \Pr \left( X \le (1 - \delta) E(X) \right) \\
+		&\le \exp \left[ \left\{
+			-\delta - (1 - \delta) \log \left( 1 - \delta \right)
+		\right\} E(X) \right]
+	\end{align}
+	が分かる。
+	次に$-1 \le x < 0$のとき
+	\begin{align}
+		\log (1 + x) \ge \frac{x}{\sqrt{x + 1}}
+	\end{align}
+	であることを用いると、
+	\begin{align}
+		\Pr \left( X - E(X) \ge \delta E(X) \right)
+		&\le \exp \left[ \left\{
+			-\delta + (1 - \delta) \frac{\delta}{\sqrt{1 - \delta}}
+		\right\} E(X) \right] \\
+		&= \exp \left[ \delta \left(
+			-1 + \sqrt{1 - \delta} \right)E(X) \right]
+	\end{align}
+	また
+	\begin{align}
+		\sqrt{1 - x} \le 1 - \frac{\delta}{2}
+	\end{align}
+	だから
+	\begin{align}
+		\Pr \left( X - E(X) \ge \delta E(X) \right)
+		&\le \exp \left[ \delta \left(
+			-1 + 1 - \frac{\delta}{2} \right)E(X) \right] \\
+		&= \exp \left( -\frac{\delta^2}{2} E(X) \right)
+	\end{align}
+	となる。
+\end{proof}
+
+以上を用いると次の定理が示される。
+\begin{screen}
+\begin{thm}[Chernoffの不等式]\label{thm:Chernoff}
+	$\{X_k\}_{k=1}^t$が$\{0, 1\}$を取る、
+	期待値が$\mu$の互いに独立同分布な確率変数とする。
+	ここで平均$\overline{X} = \sum_k X_k /t$を考えると、
+	\begin{align}
+		\begin{dcases}
+			\Pr \left( \overline{X} - \mu \ge \varepsilon \right)
+			\le \exp
+			\left( -\frac{\varepsilon^2 t}{2\mu + \varepsilon} \right) \quad
+			\left( \varepsilon \ge 0 \right) \\
+			\Pr \left( \overline{X} - \mu \le -\varepsilon \right)
+			\le \exp \left( -\frac{\varepsilon^2 t}{2\mu} \right) \quad
+			\left( 0 \le \varepsilon < \mu \right)
+		\end{dcases}
+	\end{align}
+	となる。
+\end{thm}
+\end{screen}
+\begin{proof}
+	確率変数$\{X_k\}_{k=1}^t$の和を$X = \sum_k X_k$とすると、
+	\begin{align}
+		\Pr \left( \overline{X} - \mu \ge \varepsilon \right)
+		&= \Pr \left( X - t\mu \ge t\varepsilon \right) \\
+		&= \Pr \left( X \ge t\mu + t\varepsilon \right) \\
+		&= \Pr \left( X - t\mu \ge \frac{\varepsilon}{\mu} t\mu \right)
+	\end{align}
+	\begin{align}
+		\Pr \left( \overline{X} - \mu \le - \varepsilon \right)
+		&= \Pr \left( X - t\mu \le - t\varepsilon \right) \\
+		&= \Pr \left( X \le t\mu - t\varepsilon \right) \\
+		&= \Pr \left( X \le t\mu - t\varepsilon \right) \\
+		&= \Pr \left( X - t\mu \le -\frac{\varepsilon}{\mu} t\mu \right)
+	\end{align}
+	である。
+	ここで$\{X_k\}_{k=1}^t$は独立同分布であったから、
+	\begin{align}
+		E(X) = \sum_{k=1}^t X(E_k) = t\mu
+	\end{align}
+	となることから、
+	$\delta = \varepsilon / \mu$として定理\ref{lem:Chernoff3}を用いると、
+	\begin{align}
+		\shortintertext{$\delta \ge 0$すなわち$\varepsilon \ge 0$ならば、}
+		\Pr \left( \overline{X} - \mu \ge \varepsilon \right)
+		&\le \exp \left(
+			-\frac{(\varepsilon / \mu)^2}{2 + \mu / \varepsilon} \mu t
+		\right) \\
+		&= \exp \left(
+			-\frac{\varepsilon^2 t}{2\mu + \varepsilon }
+		\right)
+	\end{align}
+	\begin{align}
+		\shortintertext{$0 \le \delta < 1$すなわち
+		$0 \le \varepsilon < \mu$ならば、}
+		\Pr \left( \overline{X} - \mu \le - \varepsilon \right)
+		&\le \exp \left( -\frac{(\varepsilon / \mu)^2}{2} \mu t \right) \\
+		&= \exp \left( -\frac{\varepsilon^2 t}{2\mu} \right)
+	\end{align}
+	が得られる。
+\end{proof}
+
+このことを用いると、示したかったものが示される。
+\begin{screen}
+	\begin{thm}[Amplification]\label{thm:Amplification}
+		Strong BQP = Weak BQP
+	\end{thm}
+\end{screen}
+\begin{proof}
+	まずStrong BQP $\subseteq$ Weak BQPを示す。
+	これは$s = 1/3$、$p = 3$とすれば明らか。
+
+	次にWeak BQP $\subseteq$ Strong BQPを示す。
+	$L \in \textrm{Weak BPP}$を考えると、
+	あるチューリングマシン$M(\cdot, \cdot)$、
+	多項式$p$、多項式時間計算可能関数$s$が存在して
+	\begin{align}
+		x \in L &\Rightarrow \Pr_y \left[ M(x, y) \ \text{accepts} \right]
+		\ge s(n) + \frac{1}{p(n)} \\
+		x \notin L &\Rightarrow \Pr_y \left[ M(x, y) \ \text{accepts} \right]
+		\le s(n)
+	\end{align}
+	となる。
+	ここで新たに$M$をシュミレートするチューリングマシン$M'(x)$を
+	次のように作る。
+	\begin{screen}
+		$M(x, \cdot)$が受け付ける値から独立ランダムに$t$個の
+		$y_1, \ldots, y_t$を用意する。
+		そして
+		\begin{gather}
+			z_i = M(x, y_i) , \quad
+			\overline{z} = \frac{1}{t} \sum_{i = 1}^t z_i
+		\end{gather}
+		とする。その上で
+		\begin{align}
+			\overline{z} \ge s(n) + \frac{1}{2p(n)}
+		\end{align}
+		ならば受理、そうでなければ拒否する。
+	\end{screen}
+	このとき、$x \in L$ならば
+	\begin{align}
+		\Pr \left[ M'(x) \ \text{accepts} \right]
+		= 1 - \Pr \left[ \overline{z} < s(n) + \frac{1}{2p(n)} \right]
+	\end{align}
+	ここで$x \in L$のとき$z_i$の期待値$\mu$が
+	\begin{align}
+		\mu &= 0 \times \Pr_y \left[ M(x, y) \ \text{rejects} \right]
+		+ 1 \times \Pr_y \left[ M(x, y) \ \text{accepts} \right] \\
+		&\ge s(n) + \frac{1}{p(n)}
+	\end{align}
+	であることを踏まえると、
+	\begin{align}
+		\Pr \left[ \overline{z} < s(n) + \frac{1}{2p(n)} \right]
+		&= \Pr \left[ \overline{z} \le \mu - \frac{1}{2p(n)} \right]
+		- \Pr \left[ s(n) + \frac{1}{2p(n)} \le \overline{z}
+		\le \mu - \frac{1}{2p(n)} \right] \\
+		&\le Pr \left[ \overline{z} \le \mu - \frac{1}{2p(n)} \right] \\
+		&= Pr \left[ \overline{z} - \mu \le -\frac{1}{2p(n)} \right] \\
+		&\le \exp \left( -\frac{t}{8 \mu p(n)^2} \right) \quad
+		\left( \because \text{補題\ref{thm:Chernoff}},\
+		\frac{1}{2p(n)} < s(n) + \frac{1}{p(n)} \le \mu \right)
+	\end{align}
+	となるから、
+	\begin{align}
+		\Pr \left[ M'(x) \ \text{accepts} \right]
+		\ge 1 - \exp \left( -\frac{t}{2 \mu p(n)^2} \right)
+	\end{align}
+	である。
+	したがって、多項式$q(n)$を用いて$t \ge 8 \mu p(n)^2 q(n) \log 2$とすれば、
+	多項式$t$回、多項式時間チューリングマシン$M$をシミュレートすることで
+	（これは結局多項式時間）、
+	\begin{align}
+		\Pr\left[ M'(x) \ \text{accepts} \right]
+		\ge 1 - 2^{-q(n)}
+	\end{align}
+	とできる。
+
+	また$x \notin L$ならば
+	\begin{align}
+		\Pr \left[ M'(x) \ \text{accepts} \right]
+		= \Pr \left[ \overline{z} \ge s(n) + \frac{1}{2p(n)} \right]
+	\end{align}
+	ここで$x \notin L$のとき$z_i$の期待値$\mu$が
+	\begin{align}
+		\mu &= 0 \times \Pr_y \left[ M(x, y) \ \text{rejects} \right]
+		+ 1 \times \Pr_y \left[ M(x, y) \ \text{accepts} \right] \\
+		&\le s(n)
+	\end{align}
+	であることを踏まえると、
+	\begin{align}
+		\Pr \left[ \overline{z} \ge s(n) + \frac{1}{2p(n)} \right]
+		&= \Pr \left[ \overline{z} \ge \mu + \frac{1}{2p(n)} \right]
+		- \Pr \left[ \mu + \frac{1}{2p(n)} \le \overline{z}
+		\le s(n) + \frac{1}{2p(n)} \right] \\
+		&\le \Pr \left[ \overline{z} \ge \mu + \frac{1}{2p(n)} \right] \\
+		&= \Pr \left[ \overline{z} - \mu \ge \frac{1}{2p(n)} \right] \\
+		&\le \exp \left[ -\frac{t}{2p(n) \left( 4 \mu p(n) + 1 \right)} \right]
+		\quad
+		\left( \because \text{補題\ref{thm:Chernoff}} \right)
+	\end{align}
+	したがって、
+	$t \ge 2p(n) \left( 4 \mu p(n) + 1 \right) q(n) \log 2$とすれば、
+	$x \in L$のときと同様に
+	\begin{align}
+		\Pr \left[ M'(x) \ \text{accepts} \right]
+		\le 2^{-q(n)}
+	\end{align}
+	とできる。
+\end{proof}
+
+\begin{thebibliography}{99}
+	\bibitem{bib:Chernoff}
+	Chernoffの不等式 (Chernoff限界) の導出、
+	\url{https://whyitsso.net/math/statistics/Chernoff_bound.html}
+
+	\bibitem{bib:Amplification}
+	Advanced Complexity Theory: Lecture11、
+	\url{http://people.seas.harvard.edu/~madhusudan/MIT/ST07/scribe/lect11.pdf}
+\end{thebibliography}
+
+\end{document}

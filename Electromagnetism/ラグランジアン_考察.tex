@@ -1,0 +1,211 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+
+\renewcommand{\thesubsubsection}{(\alph{subsubsection})}
+
+\title{相互作用するラグランジアンについての考察}
+\author{}
+
+\begin{document}
+\maketitle
+
+\setcounter{section}{1}
+
+\subsection{Lagrange形式}
+今節では相対論的な系において、
+場・粒子が存在してそれらが相互作用する場合を考える。
+前節と同様に、場がある場合においても作用が存在して、
+それを停留させる場、粒子の位置が実現すると考える。
+
+$M$個の場$\{A_i\}_{i=1}^{M}$、$N$個の粒子$\{z_i\}_{i=1}^N$が存在する系を
+考える。
+場は各世界点$x$に依るため、$A_i = A_i(x)$と書ける。
+粒子の位置$z_i$については少し難しく、相対論的に扱うためには、
+位置$\vec{z}_i$と時刻$t_i$を同等に扱わなければならない。
+そのため全粒子に世界点の移動を表すためのパラメータとして$\lambda_i$を導入し、
+$z_i = z_i (\lambda_i)$としておく。
+すなわち、$\{A_i\}_{i=1}^{M}$をまとめて$A$、
+$\{z_i\}_{i=1}^N$をまとめて$z$と書くことにすると、作用は
+\begin{align}
+	S = S[A(x), z(\lambda)]
+\end{align}
+と書けることになる。
+
+最終的には場と粒子が相互作用する系の作用を考えたいが、
+相互作用が存在する場合であっても、それぞれ単独の作用が消えるわけではないから、
+まずそれぞれ単独の作用を考える。
+
+\subsubsection{場が単独の項}
+場が単独の系の作用$S_\textrm{F}$は、場$A$が$x$に依るため
+ラグランジアン密度$\mathcal{L}_\textrm{F}$を用いて
+\begin{align}
+	S_\textrm{F} = \int \ddif^4 x \mathcal{L}_\textrm{F}
+\end{align}
+と書けるだろう。
+ここで$\mathcal{L}_\textrm{F}$の依存性は、
+場$A$の物理がその1階微分までで決まることから、
+\begin{align}
+	\mathcal{L}_\textrm{F} = \mathcal{L}_\textrm{F} \left(
+		A, \partial A, x
+	\right)
+\end{align}
+となることが分かる。
+ここから変分などを考えるが、場$\{A_i\}_i$はそれぞれ独立であるから、
+添字を省略して考える。
+こう書けるときに場$A$の変分を考えると、
+\begin{align}
+	\delta S_\textrm{F} &= \int \ddif^4 x \left[
+		\mathcal{L}_\textrm{F} ( A + \delta A,
+		\partial_\mu A + \delta \partial_\mu A, x)
+		- \mathcal{L}_\textrm{F} ( A , \partial_\mu A, x)
+	\right] \\
+	&= \int \ddif^4 x \left[
+		\pdif{\mathcal{L}_\textrm{F}}{A} \delta A
+		+ \pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\mu A \right)}
+		\partial_\mu \delta A + O(\delta^2)
+		\right] \\
+		&= \int \ddif^4 x \left[
+			\pdif{\mathcal{L}_\textrm{F}}{A} \delta A
+			- \partial_\mu \pdif{\mathcal{L}_\textrm{F}}
+			{\left( \partial_\mu A \right)} \delta A
+		\right]
+		+ \int \ddif S_\mu \pdif{\mathcal{L}_\textrm{F}}
+		{\left( \partial_\mu A \right)} \delta A
+		+ O(\delta^2) \\
+		&= \int \ddif^4 x \left[
+			\pdif{\mathcal{L}_\textrm{F}}{A}
+			- \partial_\mu \pdif{\mathcal{L}_\textrm{F}}
+			{\left( \partial_\mu A \right)} 
+		\right] \delta A
+		+ O(\delta^2) \quad
+		\left( \because \text{境界において} \delta A = 0\right)
+\end{align}
+であるから、作用$S_\textrm{F}$が停留する条件
+\begin{align}
+	\pdif{\mathcal{L}_\textrm{F}}{A}
+	- \partial_\mu \pdif{\mathcal{L}_\textrm{F}}
+	{\left( \partial_\mu A \right)}
+	= 0
+\end{align}
+を得る。
+これが場のEuler-Lagrange方程式である。
+さてここでNewton力学において粒子のラグランジアンに$\ddif f(\vec{z}, t) / \ddif t$
+の不定性があったことを思い出すと、
+同様に場のラグランジアンにおいても
+\begin{align}
+	\partial_\mu J^\mu \left( A, x \right)
+\end{align}
+の不定性があることが分かる。
+なぜならこのラグランジアンにおける場の変分の1次は、第2項がないときと比べて
+\begin{align}
+	\int \ddif^4 x \ \partial_\mu \left[ \pdif{}{A} \left( J^\mu
+	\left( A, x \right) \right) \delta A \right]
+	= \int \ddif S_\mu \ \pdif{}{A} \left( J^\mu \left( A, x \right)
+	\right) \delta A
+\end{align}
+しか違わないが、これは境界で積分するため0となるからである。
+注意点は、今は相対論的な系を考えているから、
+ラグランジアンはLorentz変換に対して不変（もしくはスカラー）で
+なければならないということである。
+したがって、添字は潰す必要がある。
+今後ラグランジアンの不変性を考える場合には、
+この不定性を除いて考えなければならないが、わざわざ言及しないこととする。
+
+ここまでを踏まえて、対称性からある程度ラグランジアンの形を決める。
+並進対称性はあるはずであるから、
+$x \to x + a$としたときにラグランジアンは変わらないはずである。
+そのためにはラグランジアン$\mathcal{L}_\textrm{F}$は$x$に依存していなければよい。
+つまり
+\begin{align}
+	\mathcal{L}_\textrm{F} = \mathcal{L}_\textrm{F} \left(
+		A, \partial_\mu A
+	\right)
+\end{align}
+と書ければよい。
+
+次に具体的に今回の場合として具体的に電磁場を考える。
+電磁場は4元ベクトル$A_\mu$を使って表される。
+また電磁場$A_\mu$はゲージ変換、すなわち任意関数$\chi$を用いて
+\begin{align}
+	A \to A + \partial \chi
+	\label{eq:GaugeTrans}
+\end{align}
+と変換したときに、物理が不変となる。
+したがって変換\eqref{eq:GaugeTrans}の下でラグランジアンが
+不変とならなければならない。
+このために新たに場の強さと呼ばれる量
+\begin{align}
+	F_{\mu \nu} = \partial_\mu A_\nu - \partial_\mu A_\nu
+\end{align}
+を導入する。
+
+\subsubsection{相互作用項}
+ラグランジアン密度を
+\begin{align}
+	\mathcal{L} =
+	\mathcal{L} \left( z, \dot{z}, A, \partial_\nu A, x \right)
+\end{align}
+と書く。
+
+
+
+
+
+
+$\partial_\mu j^\mu$という形で書かれるはずである。
+一般の$a$に対して考えるのは難しいため、
+まず微小量$\delta a$の場合の1次の変化を見ることにする。
+すると
+\begin{align}
+	\delta \mathcal{L}_\textrm{F}
+	&= \pdif{\mathcal{L}_\textrm{F}}{A} \pdif{A}{x_\nu} \delta a^\mu
+	+ \pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\nu A \right)}
+	\pdif{}{x_\nu} \left( \partial_\nu A \right) \delta a^\rho
+	\pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\nu A \right)}
+	+ \pdif{\mathcal{L}_\textrm{F}}{x^\mu} \delta a^\mu \\
+	&\stackrel{\textrm{(E-L eq.)}}{=} %\overset{\textrm{(E-L eq.)}}{=}
+	\partial_\nu
+	\pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\nu A \right)}
+	\partial_\nu A \delta a^\rho
+	+ \pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\nu A \right)}
+	\partial_\nu \partial_\nu A \delta a^\rho
+	+ \pdif{\mathcal{L}_\textrm{F}}{x^\mu} \delta a^\mu \\
+	&= \partial_\nu \left[
+		\pdif{\mathcal{L}_\textrm{F}}{\left( \partial_\nu A \right)}
+		\partial_\nu A \delta a^\rho
+	\right] + \pdif{\mathcal{L}_\textrm{F}}{x^\mu} \delta a^\mu
+\end{align}
+となることが分かる。
+この第1項はラグランジアンの不定性で消せるから、
+$\pdif{\mathcal{L}_\textrm{F}}{x^\mu} = 0$でなければならない。
+すなわち$\mathcal{L}_\textrm{F}$に$x$依存性はない。
+このようにすれば、微小量$\delta a$だけではなく一般の$a$についても
+ラグランジアンが不定であることが分かる。
+
+\end{document}

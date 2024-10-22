@@ -1,0 +1,360 @@
+\documentclass[12pt]{jsarticle}
+
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+\usepackage{amsmath}
+
+% サブセクションを (1),(2)にする設定
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+% (i),(ii)なら \arabic を \roman に変える。    (a),(b)なら \alph
+
+\renewcommand{\thesubsubsection}{(\alph{subsubsection})}
+
+% 大問2の3番目の計算式のラベルを (2.3) にする設定
+% 計算式の参照には \eqref{eq:hoge} を使う
+\makeatletter
+\renewcommand{\theequation}{\arabic{subsection}.\arabic{equation}}
+\@addtoreset{equation}{subsection}
+\makeatother
+
+\begin{document}
+	\begin{center}
+		\Large{ケプラー運動}
+	\end{center}
+	
+	\section{本計算}
+	中心力の問題で特に重要な，ポテンシャルが距離$r$に反比例する場合を扱う．
+	以降，角運動量$M$が$0$でない場合を考える．
+	
+	\subsection{引力の場合}
+	このとき正の数$\alpha$を用いて，
+	\[
+	U = -\frac{\alpha}{r}
+	\]
+	と書ける．
+	前節で示したように，有効ポテンシャル
+	\[
+	U_{\rm eff} = -\frac{\alpha}{r} + \frac{M^2}{2mr^2}
+	\]
+	の中を動く１粒子問題と考えられる．
+	\[
+	\frac{{\rm d}U_{\rm eff}}{{\rm d}r}
+	= \frac{\alpha}{r^2} - \frac{M^2}{mr^3}
+	= \frac{\alpha}{r^3} \left( r - \frac{M^2}{\alpha m} \right)
+	\]
+	であるから，$U_{\rm eff}$は最小値
+	\[
+	(U_{\rm eff})_{\rm min} = -\frac{\alpha^2 m}{2M^2} \ \ \ \
+	\left( r = \frac{M^2}{\alpha m} \right)
+	\]
+	を取る．
+	
+	(14.7)式より，
+	\[
+	\varphi - \varphi_0
+	= \int \frac{(M/r^2){\rm d}r}{\sqrt{2m(E-U)-\frac{M^2}{r^2}}}
+	= \int \frac{(M/r^2){\rm d}r}{\sqrt{2m(E+\frac{\alpha}{r})-\frac{M^2}{r^2}}}
+	\]
+	ここで，$\varphi_0 = {\rm const}$として左辺に移項した．
+	$x=1/r$と置くと，$-{\rm d}x = {\rm d}r/r^2$だから，
+	\begin{align*}
+	\varphi - \varphi_0
+	&= -\int \frac{{\rm d}x}{\sqrt{\frac{2mE}{M^2} + \frac{2m\alpha}{M^2}x - x^2}} \\
+	&= -\int \frac{{\rm d}x}{\sqrt{\frac{2mE}{M^2} + \frac{m^2\alpha^2}{M^4} -
+		\left( x - \frac{m\alpha}{M^2} \right)^2}} \\
+	&= -\int \frac{{\rm d}x}{\sqrt{\left( \frac{m\alpha}{M^2} \right)^2
+		\left( 1 + \frac{2EM^2}{m\alpha^2} \right) -
+		\left( x - \frac{m\alpha}{M^2} \right)^2}} \\
+	&= -\int \frac{{\rm d}x}{\sqrt{\frac{e^2}{p^2} - \left( x - \frac{1}{p} \right)^2}}
+	\end{align*}
+	ここでまた，$x-1/p = e\cos{\theta}/p$と置くと，
+	${\rm d}x = -e\sin{x}{\rm d}\theta /p$となるから，
+	\[
+	\varphi - \varphi_0 = \int\frac{{\frac{e}{p}\sin{\theta}{\rm d}\theta}}
+		{{\sqrt{\frac{e^2}{p^2} - \frac{e^2}{p^2} \cos^2{x}}}} = \theta + {\rm const}
+	\]
+	ここでまた$\varphi_0 - {\rm const}$を$\varphi_0$と取り替えると，
+	\[
+	\varphi - \varphi_0 = \theta = \arccos{\frac{px-1}{e}}
+		= \arccos\frac{{p/r-1}}{e}
+	\]
+	以上より，
+	\[
+	\frac{p}{r} = 1 + e\cos({\varphi - \varphi_0})
+	\]
+	これは二次曲線の方程式である(Appendix参照)．
+	
+	$e=0$すなわち$E=-(U_{\rm eff})_{\rm min}$のとき，円となる．
+	
+	$0<e<1$すなわち，$(U_{\rm eff})_{\rm min} < E < 0$のとき，楕円となる．
+	
+	$e=1$すなわち，$E=0$のとき，放物線となる．
+	
+	$1<e$のとき，すなわち$E>0$のとき，双曲線となる．
+	
+	全ての${\rm const}$を$0$に選ぶのは，$\varphi_0 = 0$とすることに対応し，これは$r$が最小になるとき$\varphi=0$になるように選ぶことを意味する．
+	またその最小値$r_{\rm min}$は$\varphi-\varphi_0=2n\pi$のときで，
+	\[
+	r_{\rm min} = \frac{p}{1+e}
+	\]
+	である．
+	
+	\subsubsection{楕円運動の場合}
+	粒子が円運動するときは特に述べることがないので，まず楕円運動するときを述べる．
+	Appendixで示すように，$0<e<1$であるから，楕円の長半軸$a$，短半軸$b$はそれぞれ
+	\[
+	a = \frac{p}{1-e^2}, \ \ \ \ b = \frac{p}{\sqrt{1-e^2}}
+	\]
+	となる．
+	また，$E<0$であることと$e$，$p$の定義を用いると，
+	\[
+	a = \frac{\alpha}{2|E|}, \ \ \ \ b = \frac{M}{\sqrt{2m|E|}}
+	\]
+	また$r$の最大値$r_{\rm max}$は$\varphi-\varphi_0=(2n+1)n\pi$のときで，
+	\[
+	r_{\rm max} = \frac{p}{1-e}
+	\]
+	である．
+	$r$が最大・最小値を取るときは，$\dot{r}$が$0$となるから，$E=U_{\rm eff}$の階としても得られる（Appendixに記しておく）．
+	また，長半軸$a$を用いると，
+	\[
+	r_{\rm min} = a(1-e), \ \ \ \ r_{\rm max} = a(1+e)
+	\]
+	と書ける．
+	
+	(14.3)式の両辺を時間で積分することで，$t=0$のとき$f=0$であるとすると，
+	\[
+	Mt = 2mf
+	\]
+	となる．ここで$f$は時間$t$の間に中心と粒子が掃いた面積であるから，$t$をこの楕円運動の周期$T$に選ぶと，$f=S=\pi ab$となるから，
+	\begin{align*}
+	&T = \frac{2m}{M} \pi ab = \frac{2m}{M} \pi a \sqrt{pa}
+	= 2\pi a^{3/2} \sqrt{\frac{m}{\alpha}} \\
+	&T = \frac{2m}{M} \pi \frac{\alpha}{2|E|} \frac{M}{\sqrt{2m|E|}}
+	= \pi \alpha \sqrt{\frac{m}{2|E|^3}}
+	\end{align*}
+	
+	時間と座標の関係は(14.6)から，${\rm const}$を$t_0$とし左辺に移して，$E<0$であることを用いると，
+	\begin{align*}
+	t-t_0 &= \int \frac{{\rm d}r}{\frac{2}{m}(E-U)-\frac{M^2}{m^2r^2}}
+	= \sqrt{\frac{m}{2|E|}} \int
+	\frac{r {\rm d}r}{\sqrt{-r^2 + \frac{\alpha}{|E|}r - \frac{M^2}{2|E|M}}} \\
+	&= \sqrt{\frac{ma}{\alpha}} \int 
+	\frac{r{\rm d}r}{\sqrt{a^2e^2 - (r-a)^2}}
+	\end{align*}
+	$r-a = -ae\cos{\xi}$と置くと，
+	\begin{align*}
+	t-t_0 &= \sqrt{\frac{ma}{\alpha}} \int
+	\frac{a(1-e\cos{\xi})ae\sin{\xi}{\rm d}\xi}{\sqrt{a^2e^2 - a^2e^2 \cos^2{\xi}}} \\
+	&= \sqrt{\frac{ma^3}{\alpha}}(\xi - e\sin{\xi})
+	\end{align*}
+	$t_0=0$と取るのは，
+	$r = r_{\rm min}$のときに$t=0$になるように選ぶことを意味する．
+	ここで，(15.5)式を用いると，
+	\begin{align*}
+	ex &= p - r = a(1-e^2) - a(1-e\cos{\xi}) = ae(\cos{\xi} - e) \\
+	x &= a(\cos{\xi} - e)
+	\end{align*}
+	となり，
+	\begin{align*}
+	y^2 &= r^2 - x^2 = a^2(1-e\cos{\xi})^2 - a^2(\cos{\xi} - e)^2 \\
+	&=a^2(1-2e\cos{\xi}+e^2\cos^2{\xi}-\cos^2{\xi}+2e\cos{\xi}-e^2) \\
+	&= a^2(1-e^2)(1-\cos^2{\xi}) = a^2(1-e^2)\sin^2{\xi}
+	\end{align*}
+	したがって，
+	\[
+	y = a\sqrt{1-e^2}\sin{\xi}
+	\]
+	
+	
+	\subsubsection{放物線の場合}
+	この運動は，$E=0$のときすなわち無限遠点で静止させた状態から始めた場合などである．
+	$r_{\rm min} = p/2$となり，楕円と同様に$t$と$r$の関係を求めると，$E=0$だから，
+	\begin{align*}
+	t-t_0 &= \int \frac{{\rm d}r}{\sqrt{-\frac{2}{m}U-\frac{\alpha^2}{m^2r^2}}}
+	= \sqrt{\frac{m}{2\alpha}} \int \frac{r{\rm d}r}{r-\frac{M^2}{2m\alpha}}
+	= \sqrt{\frac{m}{2\alpha}} \int \frac{r{\rm d}r}{\sqrt{r-\frac{p}{2}}} \\
+	&= \frac{1}{3}\sqrt{\frac{2m}{\alpha} \left(r-\frac{p}{2} \right)}
+	\left( r + p \right)
+	\end{align*}
+	ここで$t_0-0$と選ぶのも，$t=0$のときに$r=r_{\rm min}$となるようにすることを意味する．
+	
+	\subsubsection{双曲線の場合}
+	この運動のとき，楕円の場合と同様に，双曲線の半軸$a$として
+	\[
+	a = \frac{p}{e^2-1} = \frac{\alpha}{2E}
+	\]
+	を取ると，
+	\[
+	r_{\rm min} = \frac{p}{1+e} = a(e-1)
+	\]
+	と表せられる．
+	楕円の場合と同様に，$t$と$r$の関係を求めると，$E>0$であるから，
+	\begin{align*}
+	t-t_0 &= \int \frac{{\rm d}r}{\sqrt{\frac{2}{m}(E-U)-\frac{M^2}{m^2r^2}}}
+	= \sqrt{\frac{m}{2E}} \int
+	\frac{r{\rm d}r}{\sqrt{r^2 + \frac{\alpha}{E}r - \frac{M^2}{2Em}}} \\
+	&= \sqrt{\frac{m}{2E}} \int \frac{r{\rm d}r}{(r+a)^2-a^2e^2} \\
+	\end{align*}
+	$r+a=ae\cosh{\xi}$と置くと，${\rm d}r = ae\sinh{\xi}$
+	\begin{align*}
+	t-t_0 &= \sqrt{\frac{m}{2E}} \int 
+	\frac{a(e\cosh{\xi}-1)ae\sinh{\xi}{\rm d}\xi}{\sqrt{a^2e^2\cosh^2{\xi}-a^2e^2}} \\
+	&= \sqrt{\frac{ma^3}{\alpha}}(e\sinh{\xi}-\xi)
+	\end{align*}
+	この$t_0$を$0$に選ぶことも，$r=r_{\rm min}$のとき$t=0$になるようにすることを意味する．
+	また同様に，
+	\begin{align*}
+	ex &= p - r = a(e^2-1) - a(e\cosh{\xi}-1) = ae(e - \cosh{\xi}) \\
+	x &= a(e-\cosh{\xi}) \\
+	y^2 &= r^2 - x^2 = a^2(e\cosh{\xi}-1)^2 - a^2(e-\cosh{\xi})^2 \\
+	&= a^2(e^2\cosh^2{\xi}-2e\cosh{\xi}+1-e^2+2e\cosh{\xi}-\cosh^2{\xi}) \\
+	&= a^2(e^2-1)(\cosh^2{\xi} - 1) \\
+	y &= a\sqrt{e^2-1}\sinh{\xi}
+	\end{align*}
+	となる．
+	
+	\subsection{斥力の場合}
+	このとき正の数$\alpha$を用いて，
+	\[
+	U = \frac{\alpha}{r}
+	\]
+	と書け，有効ポテンシャルは
+	\[
+	U_{\rm eff} = \frac{\alpha}{r} + \frac{M^2}{2mr^2}
+	\]
+	となる．
+	これは常に単調減少し，正である．
+	すなわち，エネルギーも常に正であり，また運動は有界でない．
+	
+	引力の場合と同様に(14.7)式を用いると，
+	\begin{align*}
+	\varphi - \varphi_0
+	= \int \frac{(M/r^2){\rm d}r}{2m(E-U)-\frac{M^2}{r^2}}
+	= \int \frac{(M/r^2){\rm d}r}{2m(E-\frac{\alpha}{r})-\frac{M^2}{r^2}}
+	\end{align*}
+	$1/r=x$と置くと，
+	\begin{align*}
+	\varphi - \varphi_0
+	&= -\int \frac{{\rm d}x}{\sqrt{\frac{2mE}{M^2}-\frac{2m\alpha}{M^2}x-x^2}} \\
+	&= -\int \frac{{\rm d}x}
+	{\frac{2mE}{M^2}+\frac{m^2 \alpha^2}{M^4}-(x+\frac{m\alpha}{M^2})^2} \\
+	&= -\int
+	\frac{{\rm d}x}{\sqrt{\frac{m^2\alpha^2}{M^4}(1+\frac{2EM^2}{m\alpha^2})
+	-(x-\frac{m\alpha}{M^2})^2}} \\
+	&= -\int \frac{{\rm d}x}{\sqrt{\frac{e^2}{p^2}-(x+\frac{1}{p})^2}}
+	\end{align*}
+	$x+1/p=e\cos{\theta}/p$と置くと，
+	${\rm d}\theta = -e\sin{\theta}{\rm d}\theta/p$であり，
+	\begin{align*}
+	\varphi-\varphi_0
+	= \int \frac{\frac{e}{p}\sin{\theta}{\rm d}\theta}
+	{\sqrt{e^2}{p^2}-\frac{e^2}{p^2}\cos^2{\theta}}
+	= \theta + {\rm const}
+	\end{align*}
+	引力の場合と同様に$\varphi_0$を置き換えると，
+	\[
+	\varphi - \varphi_0 = \arccos{\frac{px+1}{e}} = \arccos{\frac{p/r+1}{e}}
+	\]
+	したがって，
+	\[
+	\frac{p}{r} = -1 + e\cos{(\varphi - \varphi_0)}
+	\]
+	これも二次曲線の式であるが，$E>0$であるから，双曲線を表す．
+	全ての${\rm const}$を$0$に選ぶことは，初期位置を$\varphi=0$のとき$r=p/(e-1)$に選ぶことを意味しており，またこれは$r$の最小値$r_{\rm min}$が
+	\[
+	r_{\rm min} = \frac{p}{e-1} = a(e+1)
+	\]
+	になることも意味する．この$a$は相互作用が引力で双曲線運動するときと同じく
+	\[
+	a = \frac{p}{e^2-1}
+	\]
+	で定義する．
+	また同様に$t$と$r$の関係を求めると，
+	\begin{align*}
+	t-t_0 &= \int \frac{{\rm d}r}{\sqrt{\frac{2}{m}(E-U)-\frac{M^2}{m^2r^2}}}
+	=\sqrt{\frac{m}{2E}}
+	\int \frac{r {\rm d}r}{\sqrt{r^2-\frac{\alpha}{E}r-\frac{M^2}{2Em}}} \\
+	&= \sqrt{\frac{ma}{\alpha}}
+	\int \frac{r {\rm d}r}{\sqrt{(r-a)^2-a^2e^2}}
+	\end{align*}
+	ここで$r-a=ae\cosh{\xi}$と置くと，
+	\begin{align*}
+	t-t_0
+	&= \sqrt{\frac{ma}{\alpha}} \int \frac{a(1+e\cosh{\xi})ae\sinh{\xi}{\rm d}\xi}
+	{\sqrt{a^2e^2\cosh^2{\xi}-a^2e^2}} \\
+	&= \sqrt{\frac{ma^3}{\alpha}}(e\sinh{\xi}+\xi) \\
+	ex &= p+r = a(e^2-1)+a(e\cosh{\xi}+1) = ae(\cosh{\xi}+e) \\
+	x &= a(\cosh{\xi}+e) \\
+	y^2 &= r^2 - x^2 = a^2(e\cosh{\xi}+1)^2 - a^2(\cosh{\xi}+e)^2 \\
+	&= a^2(e^2-1)(\cosh^2{\xi}-1) \\
+	y &= a\sqrt{e^2-1}\sinh{\xi}
+	\end{align*}
+	
+	\section{Appendix}
+	\subsection{離心率}
+	\begin{equation}
+	\frac{p}{r} = 1 + e\cos{\theta} \label{eq}
+	\end{equation}
+	は極座標$(r, \theta)$と$(-r, \theta+\pi)$が同一の点を表すことから，
+	\[
+	\frac{p}{-r} = 1 + e\cos{(\theta + \pi)}
+	\]
+	すなわち
+	\begin{equation}
+	\frac{p}{r} = -1 + e\cos{\theta} \label{eq'}
+	\end{equation}
+	とも書ける．
+	したがって，(\ref{eq})，(\ref{eq'})を整理するとそれぞれ
+	\begin{align}
+	r + (ex - p) = 0 \label{a} \\
+	r - (ex - p) = 0 \label{b}
+	\end{align}
+	つまり，(\ref{eq})は(\ref{a})または(\ref{b})と書き直せる．
+	以上より，
+	\begin{align*}
+	r^2 - (ex-p)^2 = 0 \\
+	(x^2 + y^2) - (e^2x^2 - 2epx +p^2) = 0 \\
+	(1-e^2)x^2 + 2epx + y^2 = p^2 \\
+	(1-e^2)\left(x + \frac{ep}{1-e^2}\right)^2 + y^2 = p^2 + \frac{e^2p^2}{1-e^2} \\
+	(1-e^2)\left(x + \frac{ep}{1-e^2}\right)^2 + y^2 = \frac{p^2}{1-e^2}
+	\end{align*}
+	すなわち
+	\begin{align}
+	\frac{(1-e^2)^2}{p^2}\left(x+\frac{ep}{1-e^2}\right)^2 + \frac{1-e^2}{p^2}y^2
+	= 1 \label{co}
+	\end{align}
+	これは明らかに$e$の値によって二次曲線の種類が変わり，
+	\begin{quote}
+		\begin{itemize}
+			\item $e=0$のとき円となる．
+			\item $0<e<1$のとき楕円となる．
+			\item $e=1$のとき放物線となる．
+			\item $1<e$のとき双曲線となる．
+		\end{itemize}
+	\end{quote}
+	となる．
+	
+	楕円すなわち$0<e<1$のとき，$0<1-e^2<1$であるから，
+	\[
+	\frac{1}{\sqrt{1-e^2}} < \frac{1}{1-e^2}
+	\]
+	となる．したがって(\ref{co})式の形から，この楕円の長軸$a$，短軸$b$はそれぞれ
+	\begin{align*}
+	a = \frac{p}{1-e^2}, \ \ \ \ b = \frac{p}{\sqrt{1-e^2}}
+	\end{align*}
+	で与えられる．
+	
+	\subsection{$r_{\rm min}$と$r_{\rm max}$の導出}
+	\begin{align*}
+	&E = U_{\rm eff} = -\frac{\alpha}{r} + \frac{M^2}{2mr^2} \\
+	&\frac{M^2}{2m}\left(\frac{1}{r}\right)^2 - \alpha \frac{1}{r} - E = 0 \\
+	&\frac{1}{r} = \frac{\alpha \pm \sqrt{\alpha^2 + \frac{2EM^2}{m}}}{\frac{M^2}{m}}
+	= \frac{\alpha m}{M^2} \left( 1 \pm \sqrt{1 + \frac{2EM^2}{m\alpha^2}} \right)
+	=\frac{1 \pm e}{p}
+	\end{align*}
+	したがって，
+	\[
+	r = \frac{p}{1 \pm e}
+	\]
+
+\end{document}

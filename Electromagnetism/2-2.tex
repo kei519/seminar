@@ -1,0 +1,351 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{\S 2-2 \ 座標変換と時間反転}
+
+\begin{document}
+\maketitle
+
+1節で見たMaxwell方程式、ローレンツ力に関しては、デカルト座標での表示を用いているが、特にどの座標系を用いているかは明示されていなかった。
+つまり、ある程度の座標変換を施した場合も、あまり気にせずそれらの式を用いることができるということである。
+そこで、座標回転、座標反転、時間反転を施したときにも、2つの式が変わらないか、つまりこの3つの変換に関して、電磁気学は対称性があるかどうかを確認する。
+
+\section{座標系の回転}
+まず簡単のため、$z$軸周りに座標軸を$\theta$だけ回転させることを考える。
+このとき、物体などの位置はそのままで、軸のみが回転をするから、物体の座標はもとから$-\theta$だけ回転させることになる。
+したがって、もとの座標系を$(x_1, x_2, x_3)$、新しい座標系を$(x_1^{\prime}, x_2^{\prime}, x_3^{\prime})$とすると、
+\begin{align}
+	x_1^{\prime} &= x_1 \cos \theta + x_2 \sin \theta \\
+	x_2^{\prime} &= - x_1 \sin \theta + x_2 \cos \theta \\
+	x_3^{\prime} &= x_3
+\end{align}
+という関係が成り立つ（流石に説明いらんよな？）。
+
+これを$z$軸に限らず、一般の場合に拡張すると、回転軸と回転角によって定まる実数$a_{ij}$を用いて、
+\begin{align}
+	x_i^{\prime} = \sum_{j=1}^3 a_{ij} x_j \label{eq:trans}
+\end{align}
+と書くことができる。
+これが線形変換になるのは、回転変換によって距離が変わらないからである。
+回転では逆変換も係数以外は同じ形で書けるはずであり、それを踏まえると、もし変換が$n$次までの項を含んでいれば、変換したものを逆変換したときに、もともとの座標がそれ自身の$n^2$次の項で表されることになってしまう。
+そして距離が不変であるから、
+\begin{align}
+	\sum_{i=1}^3 x_i^{\prime} x_i^{\prime} = \sum_{i=1}^3 x_i x_i
+\end{align}
+が成立する。
+この左辺を、\eqref{eq:trans}を用いて変形すると、
+\begin{align}
+	\sum_{i=1}^3 x_i^{\prime} x_i^{\prime}
+	&= \sum_{i=1}^3 \sum_{j=1}^3 a_{ij}x_j \sum_{k=1}^3 a_{ij} x_k \\
+	&= \sum_{j, k = 1}^3 \sum_{i=1}^3 a_{ij}a_{ik} x_j x_k
+\end{align}
+となり、右辺をクロネッカのデルタを用いて変形すると、
+\begin{align}
+	\sum_{i=1}^3 x_i x_i 
+	&= \sum_{i=1} \sum_{j=1}^3 \delta_{ij} x_j \sum_{k=1}^3 \delta_{ik} x_k \\
+	&= \sum_{j, k=1}^3 \delta_{jk} x_j x_k
+\end{align}
+となる。
+したがって任意の$x_j, x_k$について距離が不変であるためには、
+\begin{align}
+	\sum_{i=1}^3 a_{ij} a_{ik} = \delta_{jk}
+\end{align}
+が成り立たなければならない。
+これは$(i, j)$成分が$a_{ij}$である行列$A$を用いて書くと、
+\begin{align}
+	A {}^t\!A = I
+\end{align}
+である。
+この性質を用いると、\eqref{eq:trans}より、
+\begin{align}
+	\sum_{i=1}^3 a_{ik} x_i^{\prime}
+	&= \sum_{i=1}^3 \sum_{j=1}^3 a_{ik} a_{ij} x_j \\
+	&= \sum_{j=1}^3 \delta_{jk} x_j \\
+	&= x_k
+\end{align}
+であることが分かるから、逆変換は
+\begin{align}
+	x_i = \sum_{j=1}^3 a_{ji} x^{\prime}_j \label{eq:transRev}
+\end{align}
+と書ける。
+
+物理（別に物理には限らず、テンソル解析とか使うようなところ）においてベクトルは、ベクトル空間などにおけるベクトルではなく、\eqref{eq:trans}を満たすものとすることの方が多い。
+つまり、ある量$u_i(x, t)$がベクトル（場）であるとき、
+\begin{align}
+	u_i^{\prime} (x^{\prime}, t) = \sum_{j=1} a_{ij} u_i (x, t) \label{eq:vector}
+\end{align}
+を満たす。
+ここで$a_{ij}$は座標変換\eqref{eq:trans}で用いられるのと同じものである。
+また、ある量$\phi(x, t)$がスカラー（場）であるとは、
+\begin{align}
+	\phi^{\prime}(x^{\prime}, t) = \phi(x, t) \label{eq:scholor}
+\end{align}
+を満たすことを言う。
+
+物理法則が、ある座標変換において形を変えないとき、その法則はその変換に対して共変的であるという。
+力学や電磁気学の法則がベクトル解析の形で書かれていることから、回転変換に対する共変性が顕になっている。
+そのことを今から示す。
+
+まず、ベクトル場の時間微分に関しては\eqref{eq:vector}より、
+\begin{align}
+	\dif{}{t} u_i^{\prime} (x^{\prime}, t)
+	&= \dif{}{t} \sum_j a_{ij} u_j(x, t) \\
+	&= a_ij \sum_j \dif{}{t} u_j(x, t)
+\end{align}
+と書けるから、明らかにベクトル場になっている。
+スカラー場も同様である。
+また空間微分
+\begin{align}
+	\nabla = {}^t\! \left( \pdif{}{x_1}, \pdif{}{x_2}, \pdif{}{x_3} \right)
+\end{align}
+に関しては、\eqref{eq:transRev}より
+\begin{align}
+	\pdif{}{x^{\prime}_i} &= \sum_j \pdif{x_j}{x^{\prime}_i} \pdif{}{x_j} \\
+	&= \sum_j \pdif{}{x^{\prime}_i} \left( \sum_k a_{kj} x^{\prime}_k \right) \pdif{}{x_j} \\
+	&= \sum_j \sum_k a_{kj} \delta_{ik} \pdif{}{x_j} \\
+	&= \sum_j a_{ij} \pdif{}{x_j}
+\end{align}
+と書けるから、これも（偏微分を受ける関数によるが）ベクトル的に振る舞うことがわかる。
+また、外積に関しては
+\begin{align}
+	\left(\vec{u} \times \vec{v}\right)_i = \epsilon_{ijk} u_i v_k
+\end{align}
+と書けることから、
+\begin{align}
+	\sum_i a_{in} \left( \vec{u}^{\prime} \times \vec{v}^{\prime} \right)_i
+	&= \sum_{i} a_{in} \sum_{j,k} \epsilon_{ijk} u^{\prime}_j v^{\prime}_k \\
+	&= \sum_{i,j,k} a_{in} \epsilon_{ijk} \sum_{l,m} a_{jl} a_{km} u_l v_m \\
+	&= \sum_{l,m} u_l v_m \sum_{i,j,k} \epsilon_{ijk} a_{in} a_{jl} a_{km}
+\end{align}
+となるが、ここで後ろの和の部分に注目すると、
+\begin{align}
+	\sum_{i,j,k} \epsilon_{ijk} a_{in} a_{jl} a_{km}
+	&= \epsilon_{nlm} \sum_{i,j,k} \epsilon_{ijk} a_{i1} a_{j2} a_{l3} \\
+	&= \epsilon_{nlm} \det A
+\end{align}
+と書ける。
+なぜなら、$n,l,m$が$1,2,3$の偶置換の場合、$i,j,k$も同じく偶置換をすることで元の形に戻る。したがってこのとき、$\epsilon{ijk}$も$\epsilon_{nlm}$も$+1$となる。奇置換の場合はもとに戻したときに$\epsilon_{ijk}$も$\epsilon_{nlm}$も$-1$になるからである。
+ここで$\det(AB) = \det A \det B$、$A{}^t\!A=I$を用いると、$\det A=1$であることが分かるから、
+\begin{align}
+	\sum_i a_{in} \left( \vec{u}^{\prime} \times \vec{v}^{\prime} \right)_i
+	&= \sum{l,m} \epsilon_{nlm} u_l v_m \\
+	&= \left( \vec{u} \times \vec{v} \right)_n
+\end{align}
+となることが分かる。
+したがって、両辺に$a_{mn}$を書けて、$n$について1から3まで和を取ると、
+\begin{align}
+	\sum_{i,n} a_{mn} a_{in} \left( \vec{u}^{\prime} \times \vec{v}^{\prime} \right)_i
+	&= \sum_i \delta_{mi} \left( \vec{u}^{\prime} \times \vec{v}^{\prime} \right)_i \\
+	&= \left( \vec{u}^{\prime} \times \vec{v}^{\prime} \right)_m \\
+	&= \sum_{n} a_{mn} \left( \vec{u} \times \vec{v} \right)_n
+\end{align}
+となる。
+つまり、外積$\vec{u} \times \vec{v}$もまたベクトル量となる。\footnote{\url{https://blogyou.hatenablog.com/entry/2020/02/23/091120}}
+ここまでのことから、ベクトル解析の形式を用いて式を書き下すと、それは空間回転に対する共変性が目に見える形になっていることが分かる。
+
+したがってMaxwell方程式
+\begin{align}
+	\nabla \cdot \vec{D} &= \rho \\
+	\nabla \cdot \vec{B} &= 0 \\
+	\nabla \times \vec{E} &= -\pdif{\vec{B}}{t} \\
+	\nabla \times \vec{H} &= \vec{i} + \pdif{\vec{D}}{t}
+\end{align}
+は、それぞれ太字で書いたものがベクトル場、そうでないものがスカラー場であれば、すべての式において両辺がスカラーであるかベクトルであるかは一致しており、空間回転による共変性が保たれる。
+\begin{screen}
+	\underline{補足}
+
+	実際は、回転対称性があるから、そこから$\vec{E}$や$\vec{B}$がベクトル場であるという話になる気がする。
+\end{screen}
+
+
+\section{空間座標の反転}
+通常は座標系として右手系のものを選ぶが、左手系で考えることもできる。
+この右手系から左手系への座標変換のことを、空間座標の反転という。
+具体的には、
+\begin{align}
+	x^{\prime}_i = -x_i
+\end{align}
+の変換を施すことである。
+Newton力学は、この選び方に依って変わらない、つまりこの空間座標の反転に対して共変であることが知られている。
+このことを示すために、質量が$m$で時刻$t$での位置を$\vec{r}(t)$と書ける粒子の運動を考える。
+このとき、空間反転を行ったときの粒子の位置$\vec{r}^{\prime}(t)$は、明らかに
+\begin{align}
+	\vec{r}^{\prime}(t) = -\vec{r}(t)
+\end{align}
+となる。
+また、右手系での力$\vec{F}$は左手系で見ると、これもまたちょうど反対方向に働いているように見える、つまり
+\begin{align}
+	\vec{F}^{\prime} = -\vec{F}
+\end{align}
+と書けるであろうことが予想できる。
+実際にこうであるとすると、右手系での運動方程式
+\begin{align}
+	m \dif{^2 \vec{r}(t)}{t^2} = \vec{F}
+\end{align}
+から、左手系での運動方程式
+\begin{align}
+	m \dif{^2 \vec{r}^{\prime}(t)}{t^2} = \vec{F}^{\prime}
+\end{align}
+を得る。
+これは右手系と左手系で全く形を変えていない、つまりNewton力学は座標反転に対しての対称性を持っていることが分かる。
+\begin{screen}
+	\underline{補足}
+
+	実際は、現実で観測に使用する座標を反転させてみて、そのときの運動が反転させる前と変わるか変わらないかを確かめて、そこから$\vec{F}^{\prime} = -\vec{F}$としているのではないかという気がする。
+	そもそも力$\vec{F}$とかいうのがよくわからない概念というのもある。
+\end{screen}
+
+では今度は、電磁気学での空間反転はどうなるかを考えよう。
+Newton力学のときの力と同様に、電場$\vec{E}$や磁場$\vec{B}$が
+\begin{align}
+	\begin{aligned}
+		\vec{E}^{\prime}(x^{\prime}, t) &= -\vec{E}(x, t) \\
+		\vec{B}^{\prime}(x^{\prime}, t) &= -\vec{B}(x, t) \\
+	\end{aligned} \label{eq:faultTrans}
+\end{align}
+と変換するとして考えてみよう。
+Lorentz力から得られる運動方程式を取ってくると、
+\begin{align}
+	\dot{\vec{r}}^{\prime}(t) = -\dot{\vec{r}}(t)
+\end{align}
+であるから、
+右手系での運動方程式
+\begin{align}
+	m \dif{^2 \vec{r}(t)}{t^2} = e \left( \vec{E}(\vec{r}(t), t) + \dot{\vec{r}}(t) \times \vec{B}(\vec{r(t)}, t) \right)
+\end{align}
+は、左手系では
+\begin{align}
+	-m \dif{^2 \vec{r}^{\prime}(t)}{t^2} &= e \left( -\vec{E}^{\prime}(\vec{r}^{\prime}(t), t) + \dot{\vec{r}}^{\prime}(t) \times \vec{B}^{\prime}(\vec{r(t)}^{\prime}, t) \right) \\
+	m \dif{^2 \vec{r}^{\prime}(t)}{t^2} &= e \left( \vec{E}^{\prime}(\vec{r}^{\prime}(t), t) - \dot{\vec{r}}^{\prime}(t) \times \vec{B}^{\prime}(\vec{r(t)}^{\prime}, t) \right)
+\end{align}
+のように書けることになる。
+これでは空間反転に関する対称性がないことになってしまう。
+しかし実際は対称性があるので、\eqref{eq:faultTrans}ではなく、
+\begin{align}
+	\vec{E}^{\prime}(x^{\prime}, t) &= -\vec{E}(x, t) \label{eq:polar} \\
+	\vec{B}^{\prime}(x^{\prime}, t) &= \vec{B}(x, t) \label{eq:axial} \\
+\end{align}
+が成り立っているものとすれば、Lorentz力に関しては説明がつくようになる。
+このように、空間反転において、今まで説明したベクトルと同じように、式\eqref{eq:polar}で変換されるベクトルを極性ベクトルと呼び、式\eqref{eq:axial}で変換されるようなベクトルを軸性ベクトル（擬ベクトルとも）と呼ぶ。
+また、ここまでででちょうど逆のようなことが用いられているが、極性ベクトルと極性ベクトルのベクトル積（外積）は、空間反転においてその``値''を変えないため、極性ベクトルとなる。
+\begin{screen}
+	\underline{補足}
+
+	この極性ベクトルと軸性ベクトルは、実際に``存在''するかそれとも計算から出てくるかの違いがありそうだなという気分がある。
+	Maxwell方程式というか、単磁極がないという前提のもとでは、磁場は電流や電場から生まれるものであり、そのような場を作っておけば、外積で力とかを説明できるという感じがする。
+	しかし、電場は電荷から発生し、空間反転をしても実際飲む気が変わるわけではない。
+	だから、$\vec{E}^{\prime} = \vec{E}$となるのは普通だなという感じがするし、$\vec{B}^{\prime} = \vec{B}$なのかなという感じがする。
+
+	こんなことを言い出すと、そもそも磁石と磁場の相互作用ってなんなんですかねとかいう、高校生の時分から持っているような疑問に直撃する。
+	この本読んで解決したらいいなあ……。
+\end{screen}
+
+時間反転のところでも扱うが、この式\eqref{eq:axial}はAmp\`{e}reの法則からも正当性がありそうだということが分かる。
+電流は電荷の流れ、つまり
+\begin{align}
+	\vec{i}(x, t) = \rho(x, t) \dot{\vec{r}}(x, t)
+\end{align}
+で、ここで$\rho$は符号を変えないであろうことを踏まえると、
+\begin{align}
+	\vec{i}^{\prime}(x^{\prime}, t) = -\vec{i}(x, t)
+\end{align}
+ということになる。
+したがって、
+\begin{align}
+	\nabla \times \vec{B} = \mu_0 \vec{i} + \frac{1}{c^2} \pdif{\vec{E}}{t}
+\end{align}
+から、$\nabla^{\prime} = -\nabla$であることを踏まえれば、変位電流がない場合を考えることですぐに、
+\begin{align}
+	\vec{E}^{\prime} = -\vec{E}
+	\vec{B}^{\prime} = \vec{B}
+\end{align}
+とならなければ、空間反転対称性が破られることが分かる。
+そしてこの変換を用いれば、他の式についても矛盾がないことが確かめられる。
+
+((Maxwell方程式が、\eqref{eq:polar}、\eqref{eq:axial}の変換で共変か確認。))
+
+ついこの間（20世紀中頃）まで、すべての物理法則はこの空間反転に対して共変的であると考えられていた。
+しかし$\beta$崩壊など弱い相互作用が関係する現象において、この対称性が破られている事がわかった（Wuの実験）。
+
+\section{時間反転}
+次に時間反転に対して共変性があるかを書くにする。
+時間反転とは新たな時刻のとり方$t^{\prime}$を
+\begin{align}
+	t^{\prime} = -t \label{eq:transTime}
+\end{align}
+とすることである。
+
+まず例のごとくNewton力学から考える。
+時間反転を施すと、粒子の位置$\vec{r}^{\prime}$は
+\begin{align}
+	\vec{r}^{\prime}(t^{\prime}) = \vec{r}(t) = \vec{r}(-t^{\prime})
+	\label{eq:timeTransPosition}
+\end{align}
+という関係で表すことができる。
+ここで力が位置にしか依らない場合を考えると、運動方程式は
+\begin{align}
+	m \dif{^2 \vec{r}(t)}{t^2} = \vec{F}(\vec{r}(t))
+\end{align}
+と書ける。
+この式に時間反転を施すと、\eqref{eq:transTime}より
+\begin{align}
+	(-1)^2 m \dif{^2 \vec{r}^{\prime}(t^{\prime})}{{t^{\prime}}^2} = \vec{F}(\vec{r}^{\prime}(t^{\prime}))
+\end{align}
+となり、結局時間反転後の粒子も、運動方程式に従う、つまりNewton力学は時間反転に関して共変である、ということがわかる。
+
+では次に電磁気学について考える。
+点$x$における点電荷の速度は、\eqref{eq:transTime}、\eqref{eq:timeTransPosition}より
+\begin{align}
+	\dif{\vec{r}^{\prime}(x, t^{\prime})}{t^{\prime}} = -\dif{\vec{r}(x, t)}{t}
+\end{align}
+となることが分かる。
+したがって、電荷密度$\rho$の変換を位置と同じように
+\begin{align}
+	\rho^{\prime}(x, t^{\prime}) = \rho(x, t) = \rho(x, -t^{\prime})
+\end{align}
+とすれば、電流密度$\vec{i}$は
+\begin{align}
+	\vec{i}^{\prime}(x, t^{\prime})
+	&= \rho^{\prime}(x, t^{\prime}) \dot{\vec{r}}^{\prime}(x, t^{\prime}) \\
+	&= - \rho(x, t) \dot{\vec{r}}(x, t) \\
+	&= -\vec{i}(x, t)
+\end{align}
+であるから、Amp\`{e}reの法則
+\begin{align}
+	\nabla \times \vec{B}(x, t) = \mu_0 \vec{i}(x, t) + \frac{1}{c^2} \pdif{\vec{E}(x, t)}{t}
+\end{align}
+より、電場$\vec{E}$は
+\begin{align}
+	\vec{E}^{\prime}(x, t^{\prime}) = \vec{E}(x, t) = \vec{E}(x, -t^{\prime})
+\end{align}
+と変換して、磁場$\vec{B}(x, t)$は
+\begin{align}
+	\vec{B}^{\prime}(x, t^{\prime}) = -\vec{B}(x, t) = -\vec{B}(x, t)
+\end{align}
+と変換しなければ、時間反転対称性が成り立たないことが分かる。
+そこで実際に、これらの変換を用いてやると、他の法則についても矛盾がないことが分かる。
+したがって、電磁気学においても時間反転対称性が成り立つことが確かめられる。
+
+((Maxwell方程式、Lorentz力について確認。))
+
+\end{document}

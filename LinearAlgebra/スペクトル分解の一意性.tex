@@ -1,0 +1,270 @@
+\documentclass[a4paper, 10pt]{jsarticle}
+\input{preamble}
+
+\newcommand{\id}{\mathrm{id}}
+
+\title{スペクトル分解の一意性}
+\author{}
+
+\begin{document}
+\maketitle
+
+まず以下の補題について考えておく。
+
+\begin{lem}{}{完全性}
+	各射影子$P_i$（$i = 1, 2, \cdots, k$）が
+	$P_i P_j = p_i \delta_{ij}$を満たすとき、
+	\begin{align}
+		\id_V = P_1 + P_2 + \cdots + P_k
+		\iff V = P_1(V) \oplus P_2(V) \oplus \cdots \oplus P_k(V)
+	\end{align}
+\end{lem}
+\begin{proof}
+	$(\impliedby)$
+	条件より、
+	任意の$x \in V$について
+	$x = \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_k$
+	（ただし各$i$について$\vec{x}_i \in P_i(V)$）
+	とできる。
+	ここで各々の$\vec{x}_i$についてある$\vec{y}$が存在して
+	$\vec{x}_i = P_i \vec{y}_i$とできるから、
+	\begin{align}
+		P_i \vec{x}_j = P_i P_j \vec{y}_j
+		= P_i \delta_{ij} \vec{y}_j
+		= P_i \vec{y}_i \delta_{ij}
+		= \vec{x}_i \delta_{ij}
+	\end{align}
+	が成り立つ。
+	したがって
+	\begin{align}
+		P_i \vec{x}
+		&= P_i \left( \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_k \right) \\
+		&= \vec{x}_i
+	\end{align}
+	となるから、
+	任意の$\vec{x} \in V$について
+	\begin{align}
+		\vec{x}
+		&= \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_k \\
+		&= \left( P_1 + P_2 + \cdots + P_k \right) \vec{x} \\
+		&= \id_V \vec{x}
+	\end{align}
+	が得られる。
+
+	\noindent $(\implies)$
+	まず任意の$x \in V$について
+	\begin{align}
+		\vec{x}
+		&= \id_V \vec{x} \\
+		&= \left( P_1 + P_2 + \cdots + P_k \right) \vec{x} \\
+		&= \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_k
+		\qquad \left( \vec{x}_i \coloneqq P_i \vec{x} \in P_i (V) \right)
+	\end{align}
+	となるから、
+	$V = P_1(V) + P_2(V) + \cdots + P_k(V)$
+	が分かる。
+
+	次に各$\vec{x}_i \in P_i(V)$について
+	$P_i \vec{x}_i = \vec{x}_i$だから、
+	\begin{align}
+		\left( \vec{x}_i, \vec{x}_j \right)
+		&= \left( P_i \vec{x}_i, P_j \vec{x}_j \right) \\
+		&= \left( \vec{x}_i, P_i P_j \vec{x}_j \right) \\
+		&= 0
+	\end{align}
+	である。
+	したがって
+	$\vec{x} \in P_i(V) \cap \left( P_1 (V) + \cdots + P_{i-1}(V) + P_{i+1}(V)
+	+ \cdots + P_k(V) \right)$を取ってくると
+	\begin{align}
+		\left\| \vec{x} \right\|^2
+		&= \left( \vec{x}, \vec{x} \right) \\
+		&= \left( \vec{x}_i, \vec{x}_1 \right)
+		+ \left( \vec{x}_i, \vec{x}_{i-1} \right)
+		+ \left( \vec{x}_i, \vec{x}_{i+1} \right)
+		+ \left( \vec{x}_i, \vec{x}_k \right) \\
+		&= 0
+	\end{align}
+	となってしまう。
+	つまり
+	$P_i(V) \cap \left( P_1 (V) + \cdots + P_{i-1}(V) + P_{i+1}(V)
+	+ \cdots + P_k(V) \right) = \{ \vec{0} \}$
+	が得られる。
+	したがって[4.9]より
+	\begin{align}
+		P_1(V) + P_2(V) + \cdots + P_k(V)
+		= V = P_1(V) \oplus P_2(V) \oplus \cdots \oplus P_k(V)
+	\end{align}
+	である。
+\end{proof}
+
+これを踏まえて以下の定理を示す。
+
+\begin{thm}{スペクトル分解の一意性}{一意性}
+	ベクトル空間$V$上の正規変換$T$の相違なる固有値を
+	$\beta_1, \beta_2, \cdots, \beta_k$
+	とすると、
+	それらに対応する射影子
+	$P_1, P_2, \cdots, P_k$が存在して
+	\begin{gather}
+		\id_V = P_1 + P_2 + \cdots + P_k \\
+		P_i P_j = P_i \delta_{ij}
+	\end{gather}
+	を満たし、
+	$T$を
+	\begin{align}
+		T = \beta_1 P_1 + \beta_2 P_2 + \cdots + \beta_k P_k
+	\end{align}
+	と一意的に表せる。
+\end{thm}
+\begin{proof}
+	（存在性）
+	固有値$\beta_i$に対応する固有空間を$W_i$とすると、
+	$T$は正規変換だから系[2.5]より
+	\begin{align}
+		V = W_1 \oplus W_2 \oplus \cdots \oplus W_k
+	\end{align}
+	と書け、
+	異なる固有空間同士は直交する。
+	そこで$W_i$への射影子を$P_i$とすれば
+	$P_i P_j = P_i \delta_{ij}$を満たし、
+	補題\ref{lem:完全性}より
+	\begin{align}
+		\id_V = P_1 + P_2 + \cdots + P_k
+	\end{align}
+	とできる。
+	また任意の$\vec{x}$について
+	\begin{align}
+		T \vec{x}
+		&= T \left( \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_k \right)
+		\qquad \left( \vec{x}_i \coloneqq P_i \vec{x} \right) \\
+		&= \beta_1 \vec{x}_1 + \beta_2 \vec{x}_2 + \cdots
+		+ \beta_k \vec{x}_k \\
+		&= \left( \beta_1 P_1 + \beta_2 P_2 + \cdots + \beta_k P_k \right)
+		\vec{x}
+	\end{align}
+	が成り立つから
+	\begin{align}
+		T = \beta_1 P_1 + \beta_2 P_2 + \cdots + \beta_k P_k
+	\end{align}
+	とできる。
+
+	\noindent （一意性）
+	ある部分空間への射影子の組$\{ Q_i \}_{i=1}^l$が
+	\begin{gather}
+		\id_V = Q_1 + Q_2 + \cdots + Q_l \\
+		Q_i Q_j = Q_i \delta_{ij} \\
+		T = \alpha_1 Q_1 + \alpha_2 Q_2 + \cdots + \alpha_l Q_l
+	\end{gather}
+	を満たすとする。
+	このとき$i \neq j$ならば$\alpha_i \neq \alpha_j$として良い。
+	なぜならば$i \neq j$で$\alpha_i = \alpha_j$であれば
+	$Q_i \to Q_i + Q_j$としても
+	\begin{align}
+		Q_i^*
+		&\to \left( Q_i + Q_j \right)^* \\
+		&= Q_i + Q_j \\
+		Q_i^2
+		&\to \left( Q_i + Q_j \right) \left( Q_i + Q_j \right) \\
+		&= Q_i^2 + Q_i Q_j + Q_j Q_i + Q_j^2 \\
+		&= Q_i + Q_j \\
+		Q_i Q_k
+		&\to \left( Q_i + Q_j \right) Q_k \\
+		&= 0 \qquad \left( \text{ただし} k \neq i, j \right)
+	\end{align}
+	を満たすから、
+	射影演算子を取り替えることで全ての$i \neq j$について
+	$\alpha_i \neq \alpha_j$となるようにできるからである。
+
+	はじめに$\alpha_i$は固有値$\beta_i$と一致し
+	$k = l$となることを示す。
+	そのためにまず$l \leq k$であることを示す。
+	射影子の性質から$Q_i \vec{x} = \vec{x}$となる$\vec{x}$が
+	少なくとも１つ存在する。
+	その$\vec{x}$を持ってくると
+	$Q_j \vec{x} = Q_j Q_i \vec{x}
+	= Q_i \delta_{ij} \vec{x} = \vec{x} \delta_{ij}$を満たすから
+	\begin{align}
+		T \vec{x}
+		&= \left( \alpha_1 Q_1 + \cdots + \alpha_i Q_i + \cdots
+		+ \alpha_k Q_k \right) \vec{x} \\
+		&= \alpha_i \vec{x}
+	\end{align}
+	となる。
+	これは$\alpha_i$が$T$の固有値であることを意味するから、
+	ある$1 \leq j \leq k$が存在して$\alpha_i = \beta_j$となる。
+	$\beta_1, \beta_2, \cdots, \beta_k$はそれぞれ異なるから
+	この$j$はただ１つに定まる。
+	そこでその$j$を用いて$\mu_i \coloneqq j$とする。
+	すると
+	\begin{align}
+		T = \beta_{\mu_1} Q_1 + \beta_{\mu_2} Q_2 + \cdots + \beta_{\mu_l} Q_l
+	\end{align}
+	と書けることになる。
+	ここで$i \neq j$のとき$\alpha_i \neq \alpha_j$であることから
+	$\beta_{\mu_i} \neq \beta_{\mu_j}$
+	すなわち$\mu_i \neq \mu_j$でなければならない。
+	これは$l > k$であると鳩の巣原理より満たすことができないため
+	$l \leq k$でなけらばならない。
+	以上を踏まえて、
+	簡単のため$Q_i$のラベルを並べ替えて
+	\begin{align}
+		T = \beta_1 Q_1 + \beta_2 Q_2 + \cdots + \beta_l Q_l
+	\end{align}
+	となるようにしておく。
+
+	次に$l < k$とすると矛盾することを示す。
+	補題\ref{lem:完全性}より任意の$\vec{x}$は
+	$Q_i(V)$の元$\vec{x}_i$を用いて
+	\begin{align}
+		\vec{x} = \vec{x}_1 + \vec{x}_2 + \cdots + \vec{x}_l
+	\end{align}
+	と一意に表せられる。
+	したがって
+	\begin{align}
+		T \vec{x}
+		= \beta_1 \vec{x}_1 + \beta_2 \vec{x}_2 + \cdots + \beta_l \vec{x}_l
+	\end{align}
+	となるが、
+	$\vec{x}$として$T$の固有値$\beta_i$（$l+1 \leq i \leq k$）に対応する
+	固有ベクトルを取ると
+	\begin{align}
+		T \vec{x}
+		&= \beta_i \vec{x} \\
+		&= \beta_i \vec{x}_1 + \beta_i \vec{x}_2 + \cdots + \beta_i \vec{x}_l
+	\end{align}
+	ともなる。
+	ここで$\beta_j \vec{x}_j \in Q_j(V)$かつ$\beta_i \vec{j} \in Q_j(V)$で
+	あることと
+	$V = Q_1(V) \oplus Q_2(V) \oplus \cdots \oplus Q_l(V)$であることから
+	$\beta_j \vec{x}_j = \beta_i \vec{x}_j$すなわち$\beta_i = \beta_j$で
+	なければならないが、これは矛盾。
+	以上から$l = k$である。
+
+	最後に$P_i(V) = Q_i(V)$であることを示す。
+	$\vec{x} \in P_i(V)$とし
+	それを$\vec{y}_i \in Q_i(V)$を用いて
+	$\vec{x} = \vec{y}_1 + \vec{y}_2 + \cdots + \vec{y}_k$と
+	一意的に表しておく。
+	すると
+	\begin{align}
+		T \vec{x}
+		&= \left( \beta_1 P_1 + \beta_2 P_2 + \cdots + \beta_k P_k \right)
+		\vec{x}
+		= \beta_i \vec{x}
+		= \beta_i \vec{y}_1 + \beta_i \vec{y}_2 + \cdots + \beta_i \vec{y}_k \\
+		&= \left( \beta_1 Q_1 + \beta_2 Q_2 + \cdots + \beta_k Q_k \right)
+		\left( \vec{y}_1 + \vec{y}_2 + \cdots + \vec{y}_k \right)
+		= \beta_1 \vec{y}_1 + \beta_2 \vec{y}_2 + \cdots + \beta_k \vec{y}_k
+	\end{align}
+	となる。
+	この表し方は一意的だから各$j$について$\beta_i \vec{y}_j = \beta_j \vec{y}_j$
+	でなければならないが、
+	$j \neq i$については$\vec{y}_j = \vec{0}$でなければ成り立たない。
+	つまり$\vec{x} = \vec{y}_i \in Q_i(V)$とならなければならない。
+	逆に$\vec{x} \in Q_i(V)$についても同様にして$\vec{x} \in P_i(V)$が言える。
+	したがって$P_i(V) = Q_i(V)$となる。
+	以上のことから$Q_i = P_i$でなければならない。
+\end{proof}
+
+\end{document}

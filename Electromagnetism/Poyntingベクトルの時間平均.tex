@@ -1,0 +1,140 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\renewcommand{\Re}{{\rm Re}}
+\renewcommand{\Im}{{\rm Im}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{減衰波のPoyntingベクトルの平均値について}
+
+\begin{document}
+\maketitle
+
+減衰波（つまり波数に虚数成分がある）の
+Poyntingベクトルについて考えたい。
+しかしその前に一般の場合について考え方を復習しておく。
+
+自由電磁場の場合、電場は波数$\vec{k}$に垂直な方向にのみ成分を持ち、
+磁場はその両方に垂直な成分のみを持つことがわかっているから、
+$\vec{k}$の方向に$z$軸、$\vec{E}$の方向に$x$軸、
+$\vec{B}$の方向に$y$軸を取る。
+電場$\vec{E}$を
+\begin{align}
+	\vec{E} = \Re\left[ E e^{i(kz - \omega t )} \vec{e}_x \right]
+\end{align}
+と書くことにし、
+今後具体的に物理量を考えるとき以外は複素数として扱うことにする。
+するとMaxwell方程式から
+\begin{align}
+	\left( \pdif{\vec{B}}{t} \right)_i
+	&= -\left( \Rot \vec{E} \right)_i \\
+	&= -\varepsilon_{ijk} \partial_j \vec{E}_k \\
+	&= -\varepsilon_{izx} ik E e^{i(kz - \omega t)} \\
+	\vec{B} &= \frac{k}{\omega} E e^{i(kz - \omega t)} \vec{e}_y
+\end{align}
+が分かる。
+したがってこのときこの電磁場のPoyntingベクトルは、
+$\theta = kz - \omega t$と書くことにすると
+\begin{align}
+	\vec{S} &= \frac{1}{\mu_0}\Re \vec{E} \times \Re \vec{B} \\
+	&= \frac{k}{\mu_0 \omega} \Re(E e^{i\theta})
+	\Re(E e^{i\theta}) \vec{e}_z
+\end{align}
+となるがここで
+\begin{align}
+	\Re(E e^{i\theta}) &= \Re(E) \cos\theta - \Im(E) \sin\theta
+\end{align}
+であることを踏まえれば、
+\begin{align}
+	\vec{S} = \frac{k}{\mu_0 \omega} \left[
+		\Re(E)^2 \cos^2 \theta + \Im(E)^2 \sin^2 \theta
+		+ 2 \Re(E) \Im(E) \cos \theta \sin \theta
+	\right] \vec{e}_z
+\end{align}
+となり周期で平均を取ると
+\begin{align}
+	\left< \vec{S} \right> = \frac{k}{2 \mu_0 \omega} |E|^2
+\end{align}
+が得られる。
+これは
+\begin{align}
+	\left< \vec{S} \right>
+	= \frac{1}{2\mu_0} \vec{E} \times \vec{B}^*
+\end{align}
+でも得られる。
+
+次に一般に波数$k$が複素数であるときを考える。
+以後は$\theta = \Re(k)z - \omega t$とする。
+このときは$\Re(\vec{E})$は先程から$e^{-\Im(k)z}$が加わるだけで
+他に変化がないが$\Re(\vec{B})$については
+\begin{align}
+	\Re(\vec{B}) = \Re \left[ \frac{k}{\omega} E e^{-\Im(k)z}
+	e^{i\theta} \right]
+	&= \frac{e^{-\Im(k)z}}{\omega} \left[ \Re\left\{ \Re(k) E
+	e^{i\theta}\right\} + \Re\left\{ i \Im(k) E
+	e^{i\theta} \right\} \right]
+\end{align}
+となり、この$\Re(k)$の項は先の自由場のときと同じように
+\begin{align}
+	\left< \vec{S} \right> = \frac{\Re(k)}{2 \mu \omega}
+	|E|^2 e^{-2\Im(k)z}
+\end{align}
+となる。
+しかし$\Im(k)$の項については
+\begin{align}
+	\Re\left\{ i \Im(k) E e^{i\theta} \right\}
+	&= \Im(k) \Re \left\{ (i\Re(E) - \Im(E)) 
+	(cos \theta + i \sin \theta ) \right\} \\
+	&= \Im(k) \left( -\Re(E) \sin \theta - \Im(E) \cos \theta 
+	\right)
+\end{align}
+となり、これを$\Re(Ee^{i\theta})$の項と合わせると
+\begin{align}
+	\Im(k) \left[-\Re(E)\Im(E)(\cos^2 \theta - \sin^2 \theta) 
+	- ( \Re(E)^2 - \Im(E)^2 ) \sin \theta \cos \theta \right]
+\end{align}
+となって、周期平均を取れば消える。
+ここで先の自由電磁場のときのように
+\begin{align}
+	\frac{1}{2\mu} \vec{E} \times \vec{B}^*
+\end{align}
+を考えると、
+\begin{align}
+	&\frac{1}{2\mu \omega} E e^{-\Im(k)z} e^{i\theta} \cdot
+	[\Re(k) - i \Im(k)] E^* e^{-\Im(k)z} e^{-i\theta} \\
+	&= \frac{\Re(k) - i \Im(k)}{2\mu\omega} |E|^2 e^{-2\Im(k)z}
+\end{align}
+となり、周期平均で効いてくるのは実部のみであることがわかった。
+以上から先のPoyntingベクトルの表式を
+\begin{align}
+	\left< \vec{S} \right>
+	= \frac{1}{2\mu} \Re \left( \vec{E} \times \vec{B}^* \right)
+\end{align}
+と書き換えれば一定振動数で振動している場合の周期平均を考えるときには
+どんな場合にも用いることができることがわかった。
+
+\end{document}

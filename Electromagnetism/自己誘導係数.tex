@@ -1,0 +1,137 @@
+\documentclass[a4paper, 12pt]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm, driver=dvipdfm, truedimen, margin=2cm]{geometry}
+%\allowdisplaybreaks[4] 	 % 数式等のページ分割をさせる
+% 数式
+\usepackage{amsmath, amssymb, amsthm}
+\theoremstyle{definition}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx, bookmarksnumbered]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Rot}{rot}
+
+\title{円形断面導線の自己誘導係数}
+
+\begin{document}
+\maketitle
+\allowdisplaybreaks[4]
+
+断面が円形でその半径が$a$である導線が長さ$l$の閉回路をなしているとき、
+その自己誘導係数を求めることを考える。
+ここで$a \gg l$、導線内の透磁率は$\mu$であるとする。
+このときその自己誘導係数$L$を、
+導線内部の自己誘導係数$L_i$と導線に囲まれた外部の自己誘導係数$L_e$に分けて考える。
+
+まずはじめに$L_i$を求める。
+電流$I$が流れている場合、
+その分布が一様であるとき導線内において電流密度$\vec{i}_e = I/\pi a^2$となる。
+また$a \ll l$であるから局所的には円柱とみなせるから、
+円柱座標でのPoisson方程式
+\begin{align}
+    \Delta \vec{A}
+    = \frac{1}{r} \pdif{}{r} \left( r \pdif{\vec{A}}{r} \right)
+    = -\mu \vec{i}_e
+    = -\mu \frac{I}{\pi a^2} \vec{e}_z
+\end{align}
+より
+\begin{align}
+    A_z = -\frac{\mu I}{4\pi} \left( \frac{r}{a} \right)^2
+\end{align}
+となる。
+したがって
+\begin{align}
+    \vec{B} = \Rot \vec{A}
+    = -\pdif{A_z}{r} \vec{e}_\theta
+    = \frac{\mu I}{2 \pi a^2} r
+\end{align}
+であるから導線内の磁場のエネルギーは
+\begin{align}
+    W_m = \frac{1}{2 \mu} \int_V \vec{B}^2 \ddif^3 x
+    = \frac{I^2}{2} \frac{\mu l}{8 \pi}
+\end{align}
+となり、この近似のもとで
+\begin{align}
+    L_i \simeq \frac{\mu l}{8\pi}
+\end{align}
+である。
+
+次に$L_e$を求める。
+閉曲線が作る面を通る磁束$\Phi$は導線の内側の側面に沿った経路$C'$で
+\begin{align}
+    \Phi = \int_C' \vec{A} \cdot \ddif \vec{r}
+\end{align}
+と積分することで求められる。
+この積分で用いられる$\vec{A}$は導線の外のベクトルポテンシャルであるから、
+電流は導線の軸にのみ流れていると考えることができる。
+このように考えるとき、
+軸上で$\vec{A}$は発散するが曲線の長さは側面と軸上でほぼ変わらないから、
+側面でのベクトルポテンシャル$\vec{A}'$と、
+それを導線の軸上、つまり導線を線とみなした経路$C$での積分で近似し
+\begin{align}
+    \Phi \simeq \int_C \vec{A}' \cdot \ddif \vec{r}
+\end{align}
+とみなせる。
+
+次に$\vec{A}'$を近似で求めることを考える。
+これは
+\begin{align}
+    \vec{A}' (\vec{r}')
+    = \frac{\mu_0 I}{4\pi} \int_C \frac{\ddif \vec{r}}{|\vec{r} - \vec{r}'|}
+\end{align}
+で求められる。
+ここで導線を線とみなし$\vec{r}$と$\vec{r}'$の距離$R$、
+$a \ll \Delta \ll l$を満たす$\Delta$を導入し、
+積分を$R < \Delta, R > \Delta$に分けて積分する。
+まず$R > \Delta \gg a$では$|\vec{r} - \vec{r}'| \simeq R$とみなせるから、
+\begin{align}
+    \int_{R > \Delta} \frac{\ddif \vec{r}}{|\vec{r} - \vec{r}'|}
+    \simeq \int_{R > \Delta} \frac{\ddif \vec{r}}{R}
+\end{align}
+と書ける。
+$R < \Delta \ll l$では$\ddif \vec{r}$は全領域に渡って平行だとみなせ、
+それを$\vec{t}$と書くことにすると、
+\begin{align}
+    \int_{R < \Delta} \frac{\ddif \vec{r}}{|\vec{r} - \vec{r}'|}
+    &\simeq \vec{t}
+    \int_{-\Delta}^{\Delta} \frac{\ddif x}{\sqrt{a^2 + x^2}} \\
+    &= 2\vec{t}
+    \log \left[ \frac{\Delta}{a} + \sqrt{\left( \frac{\Delta}{a} \right)^2 + 1} \right] \\
+    &\simeq 2\vec{t} \log \frac{2\Delta}{a} \qquad
+    \left( \because a \ll \Delta \right) \\
+    &\simeq \int_{a/2 < R < \Delta} \frac{\ddif \vec{r}}{R}
+\end{align}
+が成り立つ。
+以上をまとめると、
+\begin{align}
+    \vec{A}' \simeq \frac{\mu_0 I}{4\pi} \int_{R > a/2} \frac{\ddif \vec{r}}{R}
+\end{align}
+と書け、
+\begin{align}
+    \Phi \simeq \frac{\mu_0 I}{4\pi} \int_C \int_{R > a/2}
+    \frac{\ddif \vec{r} \cdot \ddif \vec{r}'}{|\vec{r} - \vec{r}'|}
+\end{align}
+つまり
+\begin{align}
+    L_e \simeq \frac{\mu_0}{4\pi} \int_C \int_{R > a/2}
+    \frac{\ddif \vec{r} \cdot \ddif \vec{r}'}{|\vec{r} - \vec{r}'|}
+\end{align}
+が得られる。
+
+\end{document}

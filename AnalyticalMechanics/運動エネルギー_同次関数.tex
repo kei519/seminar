@@ -1,0 +1,33 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+\usepackage{amsmath}
+
+
+\begin{document}
+	運動エネルギー$T(q, \dot{q})$が
+	\[
+	T(q, \dot{q}) = \sum_{i,j} a_{ij}(q) \dot{q_i} \dot{q_j}
+	\]
+	で表される時，
+	\[
+	\frac{\partial T}{\partial \dot{q_k}}
+	= \sum_{i,j} a_{ij}(q) \left( \delta_{i,k} \dot{q_j} + \dot{q_i} \delta_{j,k} \right)
+	=\sum_j 2a_{kj}(q) \dot{q_j}
+	\]
+	となる．
+	ここで，$a_{ij}(q)$は対称となるように取る．
+	また，
+	\[
+	\frac{\partial \dot{q_i}}{\partial \dot{q_j}} = \delta_{i,j}
+	\]
+	であることを用いた．
+	
+	したがって，
+	\[
+	\sum_{k} \dot{q_k} \frac{\partial T}{\partial \dot{q_k}}
+	=\sum_{k,j} 2a_{kj}(q) \dot{q_k} \dot{q_j}
+	=2T(q, \dot{q})
+	\]
+	である．
+\end{document}

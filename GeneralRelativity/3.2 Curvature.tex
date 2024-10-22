@@ -1,0 +1,603 @@
+\documentclass[a4paper]{jsarticle}
+
+% 余白
+\usepackage[top=20truemm, bottom=25truemm, left=22truemm, right=22truemm]{geometry}
+% 数式
+\usepackage{amsmath, amssymb}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs,showmanualtags} 	 % 相互参照した式のみに番号を振る
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[subrefformat=parens]{subcaption}
+\captionsetup{compatibility=false}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+% コマンド定義
+\def\vec#1{\mbox{\boldmath $#1$}}
+\newcommand{\dif}[2]{\frac{{\rm d} #1}{{\rm d} #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ddif}{{\rm d}}
+
+\title{3.2\ 曲率}
+
+\begin{document}
+\maketitle
+
+a章のはじめにあったように，ベクトルを平行移動させるとき，
+その経路によって値が変わることから，曲率の定義を与える．
+そのため，はじめにベクトルに対する共変微分が交換しないことから，
+Rieman曲率テンソルを導入し，それと平行移動との関係を見る．
+
+$\nabla_a$を共変微分，$\omega_a$を双対ベクトル場，
+$f$を滑らかな関数（スカラー場）とすると，
+\begin{align}
+	\nabla_a \nabla_b \left( f \omega_c \right)
+	&= \nabla_a \left( \omega_c \nabla_b f + f \nabla_b \omega_c \right) \\
+	&= \omega_c \nabla_a \nabla_b f + \nabla_a \omega_c \nabla_b f
+	+ f \nabla_a \nabla_b \omega_c + \nabla_a f \nabla_b \omega_c
+\end{align}
+となるから，スカラー場に対する微分の交換性（捻れフリー）を用いると結局，
+\begin{align}
+	\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \left( f \omega_c \right)
+	= f \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c
+\end{align}
+だけが残る．
+前節と同じ議論を行うと
+$\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c$
+が各点の値にのみ依存することが示せる．
+\begin{itembox}[l]{\underline{補足}}
+	$n$次元で話をすすめる．
+	点$p$で値が一致する2つの双対ベクトル場
+	$\omega_a$，$\omega^{\prime}_a$を用意すると，
+	点$p$で$0$になる$n$個の双対ベクトル場$\mu^{(\alpha)}_a$と，
+	$n$個のある滑らかな関数$f_{(\alpha)}$を用いて，
+	\begin{align}
+		\omega_a - \omega^{\prime}_c
+		= \sum_{\alpha = 1}^n f_{(\alpha)} \mu^{(alpha)}_c
+	\end{align}
+	と表されるから，
+	\begin{align}
+		\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+		\left( \omega_a - \omega^{\prime}_c \right)
+		= \sum_{\alpha} f_{(\alpha)}
+		\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)\mu^{(\alpha)}_c
+	\end{align}
+	となる．
+	点$p$での値を取ると，各$\mu^{(\alpha)}_a$は点$p$において0であるから，0となる．
+	したがって，
+	\begin{align}
+		\left. \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+		\omega_c \right|_p
+		= \left. \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+		\omega^{\prime}_c \right|_p
+	\end{align}
+	であり，これは結局$\omega_a$の変化には関係なく，
+	各点での値にのみ依存していることを示している．
+\end{itembox}
+したがって，
+\begin{align}
+	\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c
+\end{align}
+は$(0, 1)$テンソル場（双対ベクトル場$\omega_c$）から，
+$(0, 3)$テンソル場への写像となる．
+これは前節と同様に，ある$(1, 3)$テンソル場${R_{abc}}^d$が存在して
+\begin{align}
+	\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c
+	= {R_{abc}}^d \omega_d
+\end{align}
+と表される．
+この${R_{abc}}^d$はRiemanテンソルと呼ばれる．
+
+閉曲線に沿ってベクトルを平行移動させて，最初の位置にベクトルを戻すと，
+大抵の場合平行移動させたベクトルは，もとのベクトルとは異なってしまう．
+そこで，そのときの変化がRiemanテンソルと関係していることを今から見る．
+
+まず点$p$からベクトルを微小閉曲線に沿って移動させることを考える．
+簡単のために，ある適当な点$p$を通る平面$S$に対して，適当な座標系$(t, s)$を選ぶ．
+これまた簡単のために点$p$の座標を$(0, 0)$としておく．
+ここで，
+\begin{enumerate}
+	\item 曲線$s=0$に沿って$t$を微小量$\Delta t$だけ増加させる
+	\item 曲線$t=\Delta t$に沿って$s$を微小量$\Delta s$だけ増加させる
+	\item 曲線$s=\Delta s$に沿って$t$を0に戻す
+	\item 曲線$t=0$に沿って$s$を0に戻す
+\end{enumerate}
+という方法で作る曲線を考えることで，微小な閉曲線を作る．
+この閉曲線に沿って点$p$上のベクトル$v^a$を平行移動させる．
+この平行移動によって，ベクトル$v^a$にどの程度の変化が起こるのか確認するために，
+適当な双対ベクトル場$\omega_a$を用意し，スカラー場$v^a \omega_a$の変化を見る．
+$i$番目の平行移動に対する$v^a \omega_a$の変化を，それぞれ$\delta_i$とする．
+すると$\delta_1$について，$v^a \omega_a$はスカラー場だから
+\begin{align}
+	\delta_1 = \left. \Delta t \pdif{}{t} \left( v^a \omega_a \right)
+	\right|_{(\Delta t/ 2, 0)}
+\end{align}
+と書ける．
+ここで曲線の中点での値を使うことで，$\Delta t$の2次までで評価している．
+\begin{itembox}[l]{\underline{補足}}
+	同様にして，
+	\begin{align}
+		&\delta_2 = \left. \Delta s \pdif{}{t} \left( v^a \omega_a \right)
+		\right|_{(\Delta t, \Delta s/2)} \\
+		& \delta_3 = -\left. \Delta t \pdif{}{t} \left( v^a \omega_a \right)
+		\right|_{(\Delta t/2, \Delta s)} \\
+		&\delta_4 = -\left. \Delta s \pdif{}{t} \left( v^a \omega_a \right)
+		\right|_{(0, \Delta s/2)} \\
+	\end{align}
+\end{itembox}
+Leibniz則を使うために，$s$が定数である曲線の接ベクトルを$T^a$として，
+\begin{align}
+	\delta_1 &= \Delta t \left. T^b \nabla_b \left( v^a \omega_a \right)
+	\right|_{(\Delta t/2, 0)} \\
+	&= \Delta t \left(
+		\omega_a \left. T^b \nabla_b v^a \right|_{(\Delta t/2, 0)}
+		+ v^a \left. T^b \nabla_b \omega_a \right|_{(\Delta t/2, 0)} 
+	\right) \\
+	&= \Delta t \ v^a \left. T^b \nabla_b \omega_a \right|_{(\Delta t/2, 0)}
+\end{align}
+と書き直しておく．
+最後の等式では，$v^a$が平行移動させたベクトルである，
+すなわち$T^b \nabla_b v^a = 0$を満たすことを用いた．
+同じような書き換えを施し，$\Delta t$の変化についての項
+$\delta_1$，$\delta_3$をまとめると，
+\begin{align}
+	\delta_1 + \delta_3 =
+	\Delta t \left[ v^a \left. T^b \nabla_b \omega_a \right|_{(\Delta t/2, 0)}
+	- v^a \left. T^b \nabla_b \omega_a \right|_{(\Delta t/2, \Delta s)} \right]
+\end{align}
+となる．
+$\Delta s$についての変化$\delta_2 + \delta_4$も同様に書ける．
+ここで特筆すべきことは，$\Delta s \rightarrow 0$としたとき，括弧の中が0になり，
+$\Delta t$の1次までにおいて$v^a \omega_a$（すなわち$v^a$）の変化が消える．
+同じことが$\Delta t \rightarrow 0$のときのも言える．
+したがって，平行移動による変化は1次では経路に依存していない，
+すなわち$\Delta t$，$\Delta s$の1次に依らず，
+2次からしか効いてこないことが分かる．
+\begin{itembox}
+	例えば，$(0, 0)$から直接$(\Delta t/2, 0)$に行くと
+	\begin{align}
+		v^a \omega_a = \left. v^a \omega_a \right|_{(0, 0)} + \delta_1
+	\end{align}
+	となり，他の2点を通ると
+	\begin{align}
+		v^a v^a \omega_a = \left. v^a \omega_a \right|_{(0, 0)}
+		- \delta_4 - \delta_3 - \delta_2
+	\end{align}
+	となるが，$\delta t$，$\delta s$の1次まででは
+	\begin{align}
+		\delta_1 - ( - \delta_4 - \delta_3 - \delta_2 ) = 0
+	\end{align}
+	となり，変化がない．
+\end{itembox}
+
+では具体的計算に入ることにする．
+$\delta_1 + \delta_3$の2次の項まで計算するには，括弧の中を1次まで計算すれば良い．
+そこで，$v^a$と$T^b \nabla_b \omega_a$について，$t=\Delta t/2$の曲線に沿って，
+点$(\Delta t/2, 0)$から点$(\Delta t/2, \Delta s)$まで平行移動させたものと，
+点$(\Delta t/2, \Delta s)$でもともと定義されていたものとの差を考える．
+平行移動させたものがどうなるかを考えると，先程述べたことから，
+ベクトル$v^a$を$(\Delta t/2, 0)$から
+$(\Delta t/2, \Delta s)$に直接平行移動したものと，
+点$(\Delta t/2, \Delta s)$での$v^a$
+（すなわち作った閉曲線に沿って平行移動させた$v^a$）
+は$\Delta s$の1次までにおいて一致する．
+したがって，$T^b \nabla_b \omega_a$の変化だけが効いてくる．
+$t$が定数であるような曲線の接ベクトルを$S^a$とすると，
+$T^b \nabla_b \omega_a$を平行移動させたものは，
+もともと点$(\Delta t/2, \Delta s)$で定義されていたものと
+\begin{align}
+	\Delta s \ S^c \nabla_c \left( T^b \nabla_b \omega_a \right)
+\end{align}
+だけ差があることになる．
+\begin{itembox}[l]{\underline{補足}}
+	$T^b \nabla_b \omega_a$を$t=\Delta t/2$（接ベクトル$S^a$）に沿って，
+	点$(\Delta t/2, 0)$から$(\Delta t/2, \Delta s)$に平行移動させたものを
+	$\left( T^b \nabla_b \omega_a \right)_{\parallel}$とすると，
+	感覚的に（他の教科書の方法では）
+	\begin{align}
+		\left. T^b \nabla_b \omega_a \right|_{(\Delta t/2, \Delta s)}
+		- \left. \left( T^b \nabla_b \omega_a  \right)_{\parallel}
+		\right|_{(\Delta t/2, 0) \rightarrow (\Delta t/2, \Delta s)}
+		= \Delta s \ S^c \nabla_c \left( T^b \nabla_b \omega_a \right)
+	\end{align}
+	となる．
+	しかし，この教科書のやり方でこれをどのように説明すればよいのかはわからない．
+\end{itembox}
+したがって結局，
+\begin{align}
+	\delta_1 + \delta_3 = -\Delta t \ \Delta s \ v^a S^c \nabla_c
+	\left( T^b \nabla_b \omega_a \right)
+\end{align}
+と書ける．
+同様に
+\begin{align}
+	\delta_2 + \delta_4 = \Delta t \ \Delta s \ v^a T^c \nabla_c
+	\left( S^b \nabla_b \omega_a \right)
+\end{align}
+と書けるから，最終的に
+\begin{align}
+	\delta \left( v^a \omega_a \right) &= \Delta t \ \Delta s \ v^a \left[
+		T^c \nabla_c \left( S^b \nabla_b \omega_a \right)
+		- S^c \nabla_c \left( T^b \nabla_b \omega_a \right)
+	\right] \\
+	&= \Delta t \ \Delta s \ v^a T^c S^b \left(
+		\nabla_c \nabla_b - \nabla_b \nabla_c
+	\right) \omega_a \\
+	&= \Delta t \ \Delta s \ v^a T^c S^b {R_{cba}}^d \omega_d \\
+	\omega_a \delta v^a &=
+	\Delta t \ \Delta s \ v^e T^c S^b {R_{cbe}}^d {\delta_d}^a \omega_a \\
+	&= \Delta t \ \Delta s \ v^d T^c S^b {R_{cbd}}^a \omega_a
+\end{align}
+となる．
+ここで2つ目の等号において，座標系を成しているベクトル場（ここでは$T^a$と$S^a$）が
+交換することを用いた．
+また3つ目の等号では，Riemanテンソルの定義を用いた．
+これが任意の$\omega_a$について成立するから，
+\begin{align}
+	\delta v^a =
+	\Delta t \ \Delta s \ v^d T^c S^b {R_{cbd}}^a
+\end{align}
+と表される．
+これは閉曲線にそってベクトルを平行移動させたときの変化が，
+Riemanテンソルと関係していることを示している．
+\begin{itembox}[l]{\underline{謎}}
+	本当は$\delta_1 + \delta_3$では
+	\begin{align}
+		v^a = \left. v^a \right|_{(\Delta t/2, 0)}
+	\end{align}
+	であり，$\delta_2 + \delta_4$では
+	\begin{align}
+		v^a = \left. v^a \right|_{(0, \Delta s/2)}
+	\end{align}
+	であるが，なぜ同じように括っているのか．
+\end{itembox}
+
+次にベクトル場$t^c$に対しての微分演算子の交換子を，Riemanテンソルによって表そう．
+それとスカラー場に対しての微分演算子の交換性を用いて，
+\begin{align}
+	0 &= \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+	\left( t^c \omega_c \right) \\
+	&= \nabla_a \left( t^c \nabla_b \omega_c + \omega_c \nabla_b t^c \right)
+	- \nabla_b \left( t^c \nabla_a \omega_c + \omega_c \nabla_a t^c \right) \\
+	&= t^c \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c
+	+ \omega_c \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) t^c \\
+	&= \left[ t^c {R_{abc}}^d
+	+ {\delta_c}^d \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) t^c
+	\right]\omega_d
+\end{align}
+が任意の$\omega_a$に対して成り立つから，
+\begin{align}
+	\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) t^c
+	= -{R_{abd}}^c t^d
+\end{align}
+となる．
+同じようなことを繰り返すことで，前節同様
+\begin{align}
+	\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+	{T^{c_1 \cdots c_k}}_{d_1 \cdots d_l} =
+	- \sum_{i=1}^k {R_{abe}}^{c_i}
+		{T^{c_1 \cdots \mathop{\check{e}}^i \cdots c_k}}_{d_1 \cdots d_l}
+	+ \sum_{j=1}^l {R_{abd_j}}^e
+		{T^{c_1 \cdots c_k}}_{d_1 \cdots \mathop{\check{e}}^j \cdots d_l}
+\end{align}
+が成立する．
+\begin{itembox}[l]{\underline{補足}}
+	帰納法で示す．
+	$(k, l)$テンソルで成り立つとすると，$(k+1, l)$テンソル
+	${T^{a_1 \cdots a_k a_{k+1}}}_{b_1 \cdots b_l}$
+	において，双対ベクトル$\omega_a$を用いると
+	\begin{align}
+		\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \left(
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots d_l} \omega_e
+		\right)
+		= \left[ - \sum_{i=1}^k {R_{abf}}^{c_i}
+			{T^{c_1 \cdots \mathop{\check{f}}^i \cdots c_k e}}_{d_1 \cdots d_l}
+		+ \sum_{j=1}^l {R_{abd_j}}^f
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots \mathop{\check{f}}^j \cdots d_l}
+		\right] \omega_e
+	\end{align}
+	かつ
+	\begin{align}
+		\quad \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \left(
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots d_l} \omega_e
+		\right)
+		&= \omega_e \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) T
+		+ T \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_e \\
+		&= \omega_e \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) T
+		+ {T^{c_1 \cdots c_k e}}_{d_1 \cdots d_l} {R_{abe}}^f \omega_f \\
+		&= \omega_e \left[ 
+			\left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots d_l}
+			+ {T^{c_1 \cdots c_k f}}_{d_1 \cdots d_l} {R_{abf}}^e
+		\right]
+	\end{align}
+	が成り立つ．
+	この$\omega_a$は任意だったから結局
+	\begin{align}
+		&\quad \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right)
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots d_l} \\
+		&= - {R_{abf}}^e {T^{c_1 \cdots c_k f}}_{d_1 \cdots d_l}
+		- \sum_{i=1}^k {R_{abf}}^{c_i}
+			{T^{c_1 \cdots \mathop{\check{f}}^i \cdots c_k e}}_{d_1 \cdots d_l}
+		+ \sum_{j=1}^l {R_{abd_j}}^f
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots \mathop{\check{f}}^j \cdots d_l}
+		\\
+		&= - \sum_{i=1}^{k+1} {R_{abf}}^{c_i}
+			{T^{c_1 \cdots \mathop{\check{f}}^i \cdots c_k e}}_{d_1 \cdots d_l}
+		+ \sum_{j=1}^l {R_{abd_j}}^f
+			{T^{c_1 \cdots c_k e}}_{d_1 \cdots \mathop{\check{f}}^j \cdots d_l}
+	\end{align}
+	となる．
+	$(k, l+1)$テンソルでも同様である．
+\end{itembox}
+
+次にRiemanテンソルの4つの主要な性質を見ていこう．
+\begin{enumerate}
+	\item 定義より，
+		\begin{align}
+			{R_{bac}}^d \omega_d
+			= \left( \nabla_b \nabla_a - \nabla_a \nabla_b \right) \omega_c
+			= - \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) \omega_c
+			= - {R_{abc}}^d \omega_d
+		\end{align}
+		つまり，
+		\begin{align}
+			{R_{abc}}^d = -{R_{bac}}^d
+		\end{align}
+		を得る．
+	\item ${R_{[abc]}}^d$の性質を見よう．
+		まず$\nabla_{[a} \nabla_b \omega_{c]}$を考えると，
+		\begin{align}
+			\nabla_a \nabla_b \omega_c = \nabla_a \left( \nabla_b \omega_c \right)
+			&= \partial_a \left( \nabla_b \omega_c \right)
+			- {\Gamma^d}_{ab} \left( \nabla_d \omega_c \right)
+			- {\Gamma^d}_{ac} \left( \nabla_b \omega_d \right) \\
+			&= \partial_a \left( \mathop{\underline{\partial_b \omega_c}}_{(1)}
+			- \mathop{\underline{{\Gamma^e}_{bc} \omega_e}}_{(2)} \right)
+			- \mathop{\underline{{\Gamma^d}_{ab}
+			\left( \partial_d \omega_c - {\Gamma^e}_{dc} \omega_e \right)}}_{(1)}
+			- \mathop{\underline{{\Gamma^d}_{ac}
+			\left( \partial_b \omega_d - {\Gamma^e}_{bd} \omega_e \right)}}_{(3)}
+		\end{align}
+		となるが，
+		$(1)$は$-\nabla_b \nabla_a \omega_c$で消える．
+		$(2)$は$-\nabla_a \nabla_c \omega_b$で消える．
+		$(3)$は$-\nabla_c \nabla_b \omega_a$で消える．
+		これは結局，$\nabla_{[a} \nabla_b \omega_{c]}=0$を意味する．
+		したがって
+		\begin{align}
+			&\nabla_{[a} \nabla_b \omega_{c ]} = 0 \\
+			&2 \nabla_{[a} \nabla_b \omega_{c ]}
+			= \nabla_{[a} \nabla_b \omega_{c ]} - \nabla_{[b} \nabla_a \omega_{c ]}
+			= {R_{[abc]}}^d \omega_d
+			= 0
+		\end{align}
+		を得る．
+	\item 計量の$\nabla_a g_{bc}=0$という性質を用いると，
+		\begin{align}
+			&0 = \left( \nabla_a \nabla_b - \nabla_b \nabla_a \right) g_{cd}
+			= {R_{abc}}^e g_{ed} + {R_{abd}}^e g_{ce}
+			= R_{abcd} + R_{abdc} \\
+			&R_{abcd} = -R_{abdc}
+		\end{align}
+		を得る．
+	\item $\nabla_{[a} {R_{bc]d}}^e = 0$が成立することを確認する．
+		\begin{align}
+			&\left( \nabla_{[a} \nabla_b - \nabla_b \nabla_a \right) \nabla_{c]} \omega_d
+			= {R_{[abc]}}^e \nabla_e \omega_d + {R_{[ab|d|}}^e \nabla_{c]} \omega_e \\
+			&\nabla_{[a} \left( \nabla_b \nabla_c - \nabla_c \nabla_{b]} \right) \omega_d
+			= \nabla_{[a} \left( {R_{bc]d}}^e \omega_e \right)
+			= \omega_e \nabla_{[a} {R_{bc]d}}^e + {R_{[bc|d|}}^e \nabla_{a]} \omega_e
+		\end{align}
+		を考えると，両方の左辺が，完全反対称の性質から等しい．
+		そこから右辺も等しいことが分かる．
+		したがって，${R_{[abc]}}^d = 0$を用いて，同じ項を消すと結局，
+		任意の$\omega_e$に対して，
+		\begin{align}
+			&\omega_e \nabla_{[a} {R_{bc]d}}^e = 0 \\
+			&\nabla_{[a} {R_{bc]d}}^e = 0
+		\end{align}
+		を得る．
+		これはビアンキの恒等式と呼ばれている．
+\end{enumerate}
+ここまでの性質から，
+\begin{align}
+	&R_{abcd} = -R_{bacd} \\
+	&R_{abcd} = -R_{abdc} \\
+	&R_{[abc]d} = 2( R_{abcd} + R_{bcad} + R_{cabd}) = 0
+\end{align}
+が分かるから，これらを用いて，
+\begin{align}
+	R_{abcd}
+	&= -( R_{bcad} + R_{cabd}) \\
+	&= R_{bcda} - R_{cabd} \\
+	&= -(R_{cdba} + R_{dbca}) - R_{cabd} \\
+	&= R_{cdab} - R_{bdac} + R_{acbd}
+\end{align}
+ここから
+\begin{align}
+	R_{abcd} - R_{cdab}  = R_{acbd} - R_{bdac}
+\end{align}
+が成り立つが，これを書き換えると
+\begin{align}
+	R_{abcd} - R_{cdab}
+	&= R_{badc} - R_{dcba} \\
+	&= R_{bdac} - R_{acbd} \\
+	&= -( R_{acbd} - R_{bdac}) \\
+	&= -( R_{abcd} - R_{cdab}) \\
+	&= 0
+\end{align}
+となるから，
+\begin{align}
+	R_{abcd} = R_{cdab}
+\end{align}
+
+次にRiemanテンソル${R_{abc}}^d$をトレースがある部分と，
+トレースフリーの（トレースが0になる）部分に分けることを考える．
+まずトレースフリーでない部分であるが，Riemanテンソルの性質
+\begin{align}
+	&R_{abcd} = -R_{bacd} \\
+	&R_{abcd} = R_{abdc}
+\end{align}
+より，Riemanテンソルの1,2個目の添字，3,4個目の添字で縮約（トレース）を取ると0になる．
+\begin{itembox}[l]{\underline{補足}}
+	実際に1,2個目もしくは3,4個目の添字で縮約を取ろうとすると，
+	\begin{align}
+		&g^{ab} {R_{abc}}^d = -g^{ab} {R_{bac}}^d = -g^{ab} {R_{abc}}^d = 0 \\
+		&{R_{abc}}^c = g^{dc} R_{abcd} = -g^{dc} R_{abdc}
+		= -{R_{abc}}^c = 0
+	\end{align}
+	となる．
+\end{itembox}
+そこで2,4個目の添字で縮約を取って，新たにRicciテンソル
+\begin{align}
+	R_{ac} = {R_{abc}}^b
+\end{align}
+を定義する．
+これは
+\begin{align}
+	R_{abcd} = R_{cdab}
+\end{align}
+より
+\begin{align}
+	R_{ac} = {R_{abc}}^b = g^{bd} R_{abcd} = g^{bd} R_{cdab} = {R_{cda}}^d
+	= R_{ca}
+\end{align}
+を満たす，すなわちRicciテンソル$R_{ab}$は対称である．
+そこでまた片方の添字を上げて，縮約を取ってスカラー曲率
+\begin{align}
+	R = g^{ab} R_{ab} = {R_a}^a
+\end{align}
+を定義する．
+\begin{itembox}[l]{\underline{補足}}
+	もし1,3個目の添字で縮約を取ることにすると，
+	\begin{align}
+		g^{ac} {R_{abc}}^d = g^{ac} g^{de} R_{abce} = g^{ac} g^{de} R_{baec}
+		= g^{de} {R_{bae}}^a = g^{de} R_{be} = {R_b}^d
+	\end{align}
+	となり，ただRicciテンソルの2個目の添字を上に上げたテンソルが出てくるだけである．
+	また1,4個目で縮約を取ると負号が，
+	2,3個目で縮約を取ると負号をつけて上に上げることになる．
+\end{itembox}
+$R_{abcd}$のトレースフリー部分はWeylテンソルと呼ばれ，$C_{abcd}$と書かれる．
+$n$次元多様体において$C_{abcd}$は
+\begin{align}
+	R_{abcd} = C_{abcd} + \frac{2}{n-2} \left(
+		g_{a[c} R_{d]b} - g_{b[c} R_{d]a}
+	\right) - \frac{2}{(n-1)(n-2)} R g_{a[c} g_{d]b}
+\end{align}
+を満たす，つまりWeylテンソル$C_{abcd}$は
+\begin{align}
+	C_{abcd} = R_{abcd} - \frac{2}{n-2} \left(
+		g_{a[c} R_{d]b} - g_{b[c} R_{d]a}
+	\right) + \frac{2}{(n-1)(n-2)} R g_{a[c} g_{d]b}
+\end{align}
+と定義される．
+このトレースが0であることを示すには，各添字について反対称であることを示せば良い．
+3,4番目の添字に関しては，見れば明らかなように反対称である．
+ここから$C_{abcd}$も$R_{abcd}$の性質(3)を満たしていることが分かる．
+1,2番目に関しても
+\begin{align}
+	C_{bacd} &= R_{bacd} - \frac{2}{n-2} \left(
+		g_{b[c} R_{d]a} - g_{a[c} R_{d]b}
+	\right) + \frac{2}{(n-1)(n-2)} R g_{b[c} g_{d]a} \\
+	&= -R_{abcd} + \frac{2}{n-2} \left(
+		g_{a[c} R_{d]b} - g_{b[c} R_{d]a}
+	\right) - \frac{2}{(n-1)(n-2)} R g_{a[c} g_{d]b} \\
+	&= - R_{abcd}
+\end{align}
+となり反対称である．
+ここから$C_{abcd}$も$R_{abcd}$の性質(1)を満たしていることが分かる．
+2,4番目に関しては
+\begin{align}
+	C_{ac} = g^{bd} C_{abcd} = g^{bd} \left[ R_{abcd} - \frac{2}{n-2} \left(
+		g_{a[c} R_{d]b} - g_{b[c} R_{d]a}
+		\right) + \frac{2}{(n-1)(n-2)} R g_{a[c} g_{d]b}
+	\right]
+\end{align}
+を計算すれば良い．
+右辺第1項はRicciテンソル$R_{ac}$の定義そのものである．
+第2項，第3項に関しては，
+\begin{align}
+	g^{bd} \left( g_{a[c} R_{d]b} - g_{b[c} R_{d]a} \right)
+	&= \frac{1}{2} g^{bd} \left(
+		g_{ac} R_{db} - g_{ad} R_{cb} - g_{bc} R_{da} + g_{bd} R_{ca}
+	\right) \\
+	&= \frac{1}{2} \left(
+		g_{ac} R - {\delta^b}_a R_{cb}
+		- {\delta^d}_c R_{da} + {\delta^b}_b R_{ca}
+	\right) \\
+	&= \frac{1}{2} \left[ R g_{ac} + (n-2) R_{ac} \right] \\
+	g^{bd} R g_{a[c} g_{d]b}
+	&= \frac{1}{2} R g^{bd} \left( g_{ac} g_{db} - g_{ad} g_{cb} \right) \\
+	&= \frac{1}{2} R \left( {\delta^b}_b g_{ac} - {\delta^b}_a g_{cb} \right) \\
+	&= \frac{1}{2} (n-1) R g_{ac}
+\end{align}
+であることを用いると，結局$C_{ac}=0$となる．
+補足から他の添字についても同じことが言える．
+したがって，与えられたWeylテンソル$C_{abcd}$はトレースフリーである．
+また，$C_{abcd}$も$R_{abcd}$の性質(2)を満たしている．
+今までの議論から性質(1)，(2)は満たすことが分かっているから，
+\begin{align}
+	C_{abcd} + C_{bcad} + C_{cabd} = 0
+\end{align}
+を示せば良い．
+第1項すなわち$R_{abcd}$が満たしていることは明らかであるから，
+第2項，第3項についてみればいい．
+第2項では全て並べれば成り立つことが分かる（他にいい方法ありそう）．
+%\begin{align}
+%	A_{abcd} = g_{a[c} R_{d]b}
+%\end{align}
+%とすれば，示したいのは
+%\begin{align}
+%	A_{abcd} + A_{bcad} + A_{cabd} - A_{bacd} - A_{acbd} - A_{cbad} = 0
+%\end{align}
+%であり，これは明らかに成り立つ．
+第3項では
+\begin{align}
+	g_{a[c} g_{d]b} + g_{b[a} g_{d]c} + g_{c[b} g_{d]a}
+	= \frac{1}{2} \left(
+		g_{ac} g_{db} - g_{ad} g_{cb} + g_{ba} g_{dc} - g_{bd} g_{ac}
+		+ g_{cb} g_{da} - g_{cd} g_{ba}
+	\right) = 0
+\end{align}
+である．
+
+ビアンキの恒等式において，$a$と$e$で縮約を取ると
+$R_{ab}$が満たす重要な方程式が得られる．
+\begin{align}
+	0 &= \nabla_{[a} {R_{bc]d}}^a \\
+	&= 2 \left(
+		\nabla_a {R_{bcd}}^a + \nabla_b {R_{cad}}^a + \nabla_c {R_{abd}}^a
+	\right)　\\
+	&= \nabla_a {R_{bcd}}^a + \nabla_b R_{cd} - \nabla_c R_{bd}
+\end{align}
+となる．
+ここで$d$を上に上げて$b$と縮約を取る（両辺に$g^{bd}$を掛ける）と，
+\begin{align}
+	g^{bd} \nabla_a {R_{bcd}}^a + \nabla_b {R_c}^b - \nabla_c R
+	&= g^{bd} g^{ae} \nabla_a R_{bcde} + \nabla_b {R_c}^b - \nabla_c R \\
+	&= g^{bd} g^{ae} \nabla_a R_{cbed} + \nabla_b {R_c}^b - \nabla_c R \\
+	&= g^{ae} \nabla_a {R_{cbe}}^b + \nabla_b {R_c}^b - \nabla_c R \\
+	&= \nabla_a {R_c}^a + \nabla_b {R_c}^b - \nabla_c R \\
+	&= \nabla_a \left( 2 {\delta_d}^a {R_c}^d - {\delta_c}^a R \right) \\
+	&= 2g^{ab} \nabla_a \left( g_{bd} {R_c}^d - \frac{1}{2} g_{bc}R \right) \\
+	&= 2\nabla^b \left( R_{bc} - \frac{1}{2} g_{bc} R \right) 
+	\qquad \left( \because R_{cb} = R_{bc} \right)\\
+	&= 0
+\end{align}
+を得る．
+そこで，Einsteinンテンソル$G_{ab}$を
+\begin{align}
+	G_{ab} = R_{ab} - \frac{1}{2}R g_{ab}
+\end{align}
+と定義すると，
+\begin{align}
+	\nabla^a G_{ab} = 0
+\end{align}
+が成立する．
+
+\end{document}
